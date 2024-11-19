@@ -45,5 +45,4 @@ public class CorrespondentSqlFunction extends SqlFunction<Correspondent> {
         return rowMapper.mapRow(rs, rowNum);
     }
 
-
 }
