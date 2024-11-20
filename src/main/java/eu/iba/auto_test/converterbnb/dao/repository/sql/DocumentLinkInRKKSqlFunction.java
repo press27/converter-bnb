@@ -37,7 +37,7 @@ public class DocumentLinkInRKKSqlFunction extends SqlFunction<DocumentLink> {
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("nextId", Types.OTHER));
+        declareParameter(new SqlParameter("nextId", Types.BIGINT));
     }
 
     @Override

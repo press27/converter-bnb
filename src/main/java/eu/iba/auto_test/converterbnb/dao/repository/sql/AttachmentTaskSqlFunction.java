@@ -47,11 +47,11 @@ public class AttachmentTaskSqlFunction extends SqlFunction<AttachmentDocument> {
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("attachType", Types.OTHER));
-        declareParameter(new SqlParameter("taskId", Types.OTHER));
+        declareParameter(new SqlParameter("attachType", Types.VARCHAR));
+        declareParameter(new SqlParameter("taskId", Types.BIGINT));
 
         if (paramMap.containsKey("name")){
-            declareParameter(new SqlParameter("name", Types.OTHER));
+            declareParameter(new SqlParameter("name", Types.VARCHAR));
         }
 
     }

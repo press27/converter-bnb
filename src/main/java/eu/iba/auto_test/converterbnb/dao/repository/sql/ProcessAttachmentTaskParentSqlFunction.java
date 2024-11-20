@@ -38,7 +38,7 @@ public class ProcessAttachmentTaskParentSqlFunction extends SqlFunction<TaskGene
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("docCardIds", Types.OTHER));
+        declareParameter(new SqlParameter("docCardIds", Types.BIGINT));
     }
 
     @Override

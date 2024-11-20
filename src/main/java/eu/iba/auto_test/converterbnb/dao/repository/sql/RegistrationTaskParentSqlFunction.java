@@ -39,7 +39,7 @@ public class RegistrationTaskParentSqlFunction extends SqlFunction<TaskGeneral> 
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("rkkId", Types.OTHER));
+        declareParameter(new SqlParameter("rkkId", Types.BIGINT));
     }
 
     @Override

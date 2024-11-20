@@ -57,7 +57,7 @@ public class DocumentIncomingSqlFunction extends SqlFunction<Document> {
 //        if (paramMap.containsKey("rkkIds")){
 //            declareParameter(new SqlParameter("rkkIds", Types.OTHER));
 //        }
-        declareParameter(new SqlParameter("nextId", Types.OTHER));
+        declareParameter(new SqlParameter("nextId", Types.BIGINT));
     }
 
     @Override

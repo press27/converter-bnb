@@ -41,7 +41,7 @@ public class SignatureSqlFunction extends SqlFunction<Signature> {
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("docCardId", Types.OTHER));
+        declareParameter(new SqlParameter("docCardId", Types.BIGINT));
     }
 
     @Override

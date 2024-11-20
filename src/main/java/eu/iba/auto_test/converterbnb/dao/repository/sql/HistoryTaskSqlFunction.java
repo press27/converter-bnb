@@ -40,7 +40,7 @@ public class HistoryTaskSqlFunction extends SqlFunction<History> {
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("taskId", Types.OTHER));
+        declareParameter(new SqlParameter("taskId", Types.BIGINT));
     }
 
     @Override

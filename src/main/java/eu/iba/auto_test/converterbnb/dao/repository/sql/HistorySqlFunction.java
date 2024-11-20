@@ -40,8 +40,8 @@ public class HistorySqlFunction extends SqlFunction<History> {
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("referenceTypeId", Types.OTHER));
-        declareParameter(new SqlParameter("srcRecId", Types.OTHER));
+        declareParameter(new SqlParameter("referenceTypeId", Types.BIGINT));
+        declareParameter(new SqlParameter("srcRecId", Types.BIGINT));
     }
 
     @Override
