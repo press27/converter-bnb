@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class DocumentLinkInRKKSqlFunction extends SqlFunction<DocumentLink> {
 
-    private static final String SQL ="SELECT DISTINCT TOP(10) link.Analit as id, link.RKK as docRkkLinkId " +
+    private static final String SQL ="SELECT DISTINCT TOP(10) link.XRecID as id, link.RKK as docRkkLinkId " +
             "FROM MBAnalit link " +
             "WHERE link.RKK IS NOT NULL " +
             "AND link.XRecID > :nextId ORDER BY link.XRecID ";

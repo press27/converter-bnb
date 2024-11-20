@@ -13,10 +13,10 @@ public class CorrespondentRowMapper implements RowMapper<Correspondent> {
         try {
             Correspondent model = new Correspondent();
             model.setId(rs.getLong("id"));
-            model.setName(rs.getString("nameCorrespondent").trim());
-            model.setFullName(rs.getString("fullNameCorrespondent").trim());
-            model.setUnp(rs.getString("unp").trim());
-            model.setAddress(rs.getString("address").trim());
+            model.setName(rs.getString("nameCorrespondent"));
+            model.setFullName(rs.getString("fullNameCorrespondent"));
+            model.setUnp(rs.getString("unp"));
+            model.setAddress(rs.getString("address"));
             return model;
         } catch (Exception e) {
             throw new SQLException(e);

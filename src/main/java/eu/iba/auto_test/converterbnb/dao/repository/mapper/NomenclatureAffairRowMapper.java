@@ -20,7 +20,7 @@ public class NomenclatureAffairRowMapper implements RowMapper<NomenclatureAffair
             model.setNameAffair(rs.getString("nameAffair"));
             model.setStoragePeriodId(rs.getLong("storagePeriodId"));
             model.setStoragePeriodName(rs.getString("storagePeriodName"));
-            model.setIndex(rs.getString("indexAffair").trim());
+            model.setIndex(rs.getString("indexAffair"));
             Timestamp collectingStart = rs.getTimestamp("collectingStart");
             if(collectingStart != null){
                 model.setCollectingStart(collectingStart.toInstant());
@@ -29,7 +29,7 @@ public class NomenclatureAffairRowMapper implements RowMapper<NomenclatureAffair
             if(collectingEnd != null){
                 model.setCollectingEnd(collectingEnd.toInstant());
             }
-            model.setNote(rs.getString("note").trim());
+            model.setNote(rs.getString("note"));
             return model;
         } catch (Exception e){
             throw new SQLException(e);
