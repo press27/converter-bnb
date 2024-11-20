@@ -40,10 +40,12 @@ public class UploadService {
         headers.setBearerAuth(getToken());
         HttpEntity<Correspondent> entity = new HttpEntity<>(correspondent, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        logger.info("Process correspondent with id: " + correspondent.getId() + " status: " + response.getStatusCode()+" body "+response.getBody());
+        if(!response.getStatusCode().is2xxSuccessful()) {
+            logger.info("Process correspondent with id: " + correspondent.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+        }
     }
 
-    public void uploadNomenclatureAffair(NomenclatureAffair nomenclatureAffair){
+    public void uploadNomenclatureAffair(NomenclatureAffair nomenclatureAffair) {
         String url = host + "/api/migration/nomenclature-affair";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -51,10 +53,12 @@ public class UploadService {
         headers.setBearerAuth(getToken());
         HttpEntity<NomenclatureAffair> entity = new HttpEntity<>(nomenclatureAffair, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        logger.info("Process nomenclature affair with id: " + nomenclatureAffair.getId() + " status: " + response.getStatusCode()+" body "+response.getBody());
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            logger.info("Process nomenclature affair with id: " + nomenclatureAffair.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+        }
     }
 
-    public void uploadDocument(Document document){
+    public void uploadDocument(Document document) {
         String url = host + "/api/migration/document";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -62,11 +66,13 @@ public class UploadService {
         headers.setBearerAuth(getToken());
         HttpEntity<Document> entity = new HttpEntity<>(document, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        logger.info("Process document with id: " + document.getId() + " status: " + response.getStatusCode()+" body "+response.getBody());
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            logger.info("Process document with id: " + document.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+        }
     }
 
 
-    public void uploadDocumentLink(DocumentLink documentLink){
+    public void uploadDocumentLink(DocumentLink documentLink) {
         String url = host + "/api/migration/document-link";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -74,7 +80,9 @@ public class UploadService {
         headers.setBearerAuth(getToken());
         HttpEntity<DocumentLink> entity = new HttpEntity<>(documentLink, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        logger.info("Process document link with id: " + documentLink.getId() + " status: " + response.getStatusCode()+" body "+response.getBody());
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            logger.info("Process document link with id: " + documentLink.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+        }
     }
 
     public String getBearerToken(){

@@ -14,7 +14,7 @@ public class DocumentLinkRowMapper implements RowMapper<DocumentLink> {
         Long id = rs.getLong("id");
         Long docRkkId = rs.getObject("docRkkId", Long.class);
         Long docRkkLinkId = rs.getObject("docRkkLinkId", Long.class);
-        Long documentLinkTypeId = rs.getObject("documentLinkTypeId", Long.class);
+        //Long documentLinkTypeId = rs.getObject("documentLinkTypeId", Long.class);
         if(docRkkId != null && docRkkLinkId != null) {
             DocumentLink documentLink = new DocumentLink();
             documentLink.setId(id);

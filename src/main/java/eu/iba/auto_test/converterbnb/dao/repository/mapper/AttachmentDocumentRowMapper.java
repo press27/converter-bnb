@@ -20,7 +20,7 @@ public class AttachmentDocumentRowMapper implements RowMapper<AttachmentDocument
             if(id != null){
                 model.setId(id);
             }
-            model.setDocRkkId(rs.getLong("docRkkId"));
+            model.setDocCardId(rs.getLong("docCardId"));
 
             Author author = new Author();
             Long authorId = rs.getObject("authorId", Long.class);

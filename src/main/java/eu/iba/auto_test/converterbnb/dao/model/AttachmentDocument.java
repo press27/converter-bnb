@@ -12,8 +12,8 @@ public class AttachmentDocument {
     // Id карточки документа
     private Long docCardId;
 
-    // Id ркк
-    private Long docRkkId;
+//    // Id ркк
+//    private Long docRkkId;
 
     // Id Задачи
     private Long taskId;
@@ -59,15 +59,6 @@ public class AttachmentDocument {
 
     public AttachmentDocument setDocCardId(Long docCardId) {
         this.docCardId = docCardId;
-        return this;
-    }
-
-    public Long getDocRkkId() {
-        return docRkkId;
-    }
-
-    public AttachmentDocument setDocRkkId(Long docRkkId) {
-        this.docRkkId = docRkkId;
         return this;
     }
 
@@ -157,11 +148,11 @@ public class AttachmentDocument {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AttachmentDocument that = (AttachmentDocument) o;
-        return Objects.equals(id, that.id) && Objects.equals(docCardId, that.docCardId) && Objects.equals(docRkkId, that.docRkkId) && Objects.equals(taskId, that.taskId) && Objects.equals(author, that.author) && Objects.equals(uploadDate, that.uploadDate) && Objects.equals(name, that.name) && Objects.equals(contentType, that.contentType) && Objects.equals(size, that.size) && Objects.equals(data, that.data) && Objects.equals(crc, that.crc) && Objects.equals(signatures, that.signatures);
+        return Objects.equals(id, that.id) && Objects.equals(docCardId, that.docCardId) && Objects.equals(taskId, that.taskId) && Objects.equals(author, that.author) && Objects.equals(uploadDate, that.uploadDate) && Objects.equals(name, that.name) && Objects.equals(contentType, that.contentType) && Objects.equals(size, that.size) && Objects.equals(data, that.data) && Objects.equals(crc, that.crc) && Objects.equals(signatures, that.signatures);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, docCardId, docRkkId, taskId, author, uploadDate, name, contentType, size, data, crc, signatures);
+        return Objects.hash(id, docCardId, taskId, author, uploadDate, name, contentType, size, data, crc, signatures);
     }
 }

@@ -47,7 +47,7 @@ public class AttachmentDocumentServiceDaoImpl implements AttachmentDocumentServi
             param.put("taskId", data.getTaskId()); //task
         }
         if(data.getName() != null && !data.getName().isEmpty()) {
-            param.put("name", "%" + data.getName() + "%") ; //task
+            param.put("name", "%" + data.getName() + "%") ; //name для Листа ознакомления
         }
         return param;
     }

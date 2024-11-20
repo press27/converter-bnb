@@ -20,7 +20,10 @@ public class NomenclatureAffairRowMapper implements RowMapper<NomenclatureAffair
             model.setNameAffair(rs.getString("nameAffair"));
             model.setStoragePeriodId(rs.getLong("storagePeriodId"));
             model.setStoragePeriodName(rs.getString("storagePeriodName"));
-            model.setIndex(rs.getString("indexAffair"));
+            String indexAffair = rs.getString("indexAffair");
+            if(indexAffair != null && !indexAffair.isEmpty()) {
+                model.setIndex(indexAffair.trim());
+            }
             Timestamp collectingStart = rs.getTimestamp("collectingStart");
             if(collectingStart != null){
                 model.setCollectingStart(collectingStart.toInstant());

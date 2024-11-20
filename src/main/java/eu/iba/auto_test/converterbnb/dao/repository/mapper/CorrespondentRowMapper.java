@@ -15,7 +15,10 @@ public class CorrespondentRowMapper implements RowMapper<Correspondent> {
             model.setId(rs.getLong("id"));
             model.setName(rs.getString("nameCorrespondent"));
             model.setFullName(rs.getString("fullNameCorrespondent"));
-            model.setUnp(rs.getString("unp"));
+            String unp = rs.getString("unp");
+            if(unp != null && !unp.isEmpty()){
+                model.setUnp(unp.trim());
+            }
             model.setAddress(rs.getString("address"));
             return model;
         } catch (Exception e) {

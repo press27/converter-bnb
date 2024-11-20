@@ -16,7 +16,7 @@ public class AttachmentTaskRowMapper implements RowMapper<AttachmentDocument> {
         try {
             AttachmentDocument model = new AttachmentDocument();
             model.setId(rs.getLong("id"));
-            model.setDocRkkId(rs.getLong("docRkkId"));
+            model.setDocCardId(rs.getLong("docCardId"));
             model.setTaskId(rs.getLong("taskId"));
 
             Author author = new Author();
