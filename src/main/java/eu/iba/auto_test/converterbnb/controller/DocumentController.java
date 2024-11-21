@@ -1,15 +1,10 @@
 package eu.iba.auto_test.converterbnb.controller;
 
-import eu.iba.auto_test.converterbnb.controller.data.DocumentData;
-import eu.iba.auto_test.converterbnb.dao.model.Document;
-import eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants;
 import eu.iba.auto_test.converterbnb.dao.services.DocumentServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/bnb/document")
@@ -26,6 +21,13 @@ public class DocumentController {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getCollection() {
         documentServiceDao.saveAll();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/v2", produces = "application/json")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getCollectionV2() {
+        documentServiceDao.saveAllV2();
         return ResponseEntity.ok().build();
     }
 

@@ -1,6 +1,7 @@
 package eu.iba.auto_test.converterbnb.dao.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -45,6 +46,8 @@ public class Task {
 
     // Id родительского поручения
     private Long parentId;
+
+    private List<Task> childTasks = new ArrayList<>();
 
     // Список исполнителей
     private Set<TaskExecutors> taskExecutors;
@@ -185,6 +188,15 @@ public class Task {
 
     public Task setTaskHistory(List<History> taskHistory) {
         this.taskHistory = taskHistory;
+        return this;
+    }
+
+    public List<Task> getChildTasks() {
+        return childTasks;
+    }
+
+    public Task setChildTasks(List<Task> childTasks) {
+        this.childTasks = childTasks;
         return this;
     }
 }
