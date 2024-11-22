@@ -2,8 +2,6 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.Author;
 import eu.iba.auto_test.converterbnb.dao.model.History;
-import eu.iba.auto_test.converterbnb.dao.model.UserType;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -29,17 +27,14 @@ public class HistoryRowMapper implements RowMapper<History> {
                 model.setDateAction(dateAction.toInstant());
             }
 
-            Author author = new Author();
             Long authorId = rs.getObject("authorId", Long.class);
-            if(authorId != null) {
+            if(authorId != null && authorId > 0) {
+                Author author = new Author();
                 author.setAuthorId(authorId);
                 author.setAuthorFullName(rs.getString("authorFullName"));
                 author.setAuthorLoginAD(rs.getString("authorLoginAD"));
-                author.setUserType(UserUtils.getUserType(authorId));
-            } else {
-                author.setUserType(UserType.SYSTEM);
+                model.setAuthor(author);
             }
-            model.setAuthor(author);
 
             String action = convertAction(rs.getString("action"));
             model.setAction(action);

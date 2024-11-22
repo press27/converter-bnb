@@ -1,7 +1,8 @@
 package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
-import eu.iba.auto_test.converterbnb.dao.model.*;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
+import eu.iba.auto_test.converterbnb.dao.model.Employee;
+import eu.iba.auto_test.converterbnb.dao.model.TaskExecutors;
+import eu.iba.auto_test.converterbnb.dao.model.TaskExecutorsStatusDirectum;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -36,17 +37,14 @@ public class TaskExecutorsRowMapper implements RowMapper<TaskExecutors> {
             }
             model.setStampText(rs.getString("stampText"));
 
-            Employee executor = new Employee();
             Long employeeId = rs.getObject("employeeId", Long.class);
-            if(employeeId != null) {
+            if(employeeId != null && employeeId > 0) {
+                Employee executor = new Employee();
                 executor.setEmployeeId(employeeId);
                 executor.setEmployeeFullName(rs.getString("employeeFullName"));
                 executor.setEmployeeLoginAD(rs.getString("employeeLoginAD"));
-                executor.setUserType(UserUtils.getUserType(employeeId));
-            } else {
-                executor.setUserType(UserType.SYSTEM);
+                model.setExecutor(executor);
             }
-            model.setExecutor(executor);
 
             model.setTaskExecutorsStatusDirectum(convertStatus(rs.getString("taskExecutorsStatusDirectum")));
             model.setNumber(rs.getLong("number"));

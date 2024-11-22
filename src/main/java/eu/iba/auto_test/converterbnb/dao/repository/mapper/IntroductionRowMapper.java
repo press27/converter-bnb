@@ -1,7 +1,8 @@
 package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
-import eu.iba.auto_test.converterbnb.dao.model.*;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
+import eu.iba.auto_test.converterbnb.dao.model.Author;
+import eu.iba.auto_test.converterbnb.dao.model.Employee;
+import eu.iba.auto_test.converterbnb.dao.model.Introduction;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -20,34 +21,28 @@ public class IntroductionRowMapper implements RowMapper<Introduction> {
                 model.setCreateDate(createDate.toInstant());
             }
 
-            Author author = new Author();
             Long authorId = rs.getObject("authorId", Long.class);
-            if(authorId != null) {
+            if(authorId != null && authorId > 0) {
+                Author author = new Author();
                 author.setAuthorId(authorId);
                 author.setAuthorFullName(rs.getString("authorFullName"));
                 author.setAuthorLoginAD(rs.getString("authorLoginAD"));
-                author.setUserType(UserUtils.getUserType(authorId));
-            } else {
-                author.setUserType(UserType.SYSTEM);
+                model.setAuthor(author);
             }
-            model.setAuthor(author);
 
             Timestamp introductionDate = rs.getTimestamp("introductionDate");
             if(introductionDate != null){
                 model.setIntroductionDate(introductionDate.toInstant());
             }
 
-            Employee executor = new Employee();
             Long employeeId = rs.getObject("employeeId", Long.class);
-            if(employeeId != null) {
+            if(employeeId != null && employeeId > 0) {
+                Employee executor = new Employee();
                 executor.setEmployeeId(employeeId);
                 executor.setEmployeeFullName(rs.getString("employeeFullName"));
                 executor.setEmployeeLoginAD(rs.getString("employeeLoginAD"));
-                executor.setUserType(UserUtils.getUserType(employeeId));
-            } else {
-                executor.setUserType(UserType.SYSTEM);
+                model.setIntroductionStampAuthor(executor);
             }
-            model.setIntroductionStampAuthor(executor);
 
             model.setComment(rs.getString("comment"));
             return model;

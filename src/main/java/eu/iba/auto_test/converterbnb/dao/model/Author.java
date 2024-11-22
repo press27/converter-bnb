@@ -11,9 +11,6 @@ public class Author {
     // Логин Active Directory
     private String authorLoginAD;
 
-    // Тип пользователя
-    private UserType userType;
-
     public Author() {
     }
 
@@ -41,15 +38,6 @@ public class Author {
 
     public Author setAuthorLoginAD(String authorLoginAD) {
         this.authorLoginAD = authorLoginAD;
-        return this;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public Author setUserType(UserType userType) {
-        this.userType = userType;
         return this;
     }
 }

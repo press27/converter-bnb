@@ -11,9 +11,6 @@ public class Employee {
     // Логин Active Directory
     private String employeeLoginAD;
 
-    // Тип пользователя
-    private UserType userType;
-
     public Employee() {
     }
 
@@ -44,12 +41,4 @@ public class Employee {
         return this;
     }
 
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public Employee setUserType(UserType userType) {
-        this.userType = userType;
-        return this;
-    }
 }

@@ -2,7 +2,6 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.*;
 import eu.iba.auto_test.converterbnb.utils.DocumentUtils;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -25,17 +24,14 @@ public class DocumentInternRowMapper implements RowMapper<Document> {
             documentType.setDocumentType(rs.getString("documentType"));
             model.setDocumentType(documentType);
 
-            Author author = new Author();
             Long authorId = rs.getObject("authorId", Long.class);
-            if(authorId != null) {
+            if(authorId != null && authorId > 0) {
+                Author author = new Author();
                 author.setAuthorId(authorId);
                 author.setAuthorFullName(rs.getString("authorFullName"));
                 author.setAuthorLoginAD(rs.getString("authorLoginAD"));
-                author.setUserType(UserUtils.getUserType(authorId));
-            } else {
-                author.setUserType(UserType.SYSTEM);
+                model.setAuthor(author);
             }
-            model.setAuthor(author);
 
             model.setRegNumber(rs.getString("regNumber"));
             Timestamp regDate = rs.getTimestamp("regDate");
@@ -52,17 +48,14 @@ public class DocumentInternRowMapper implements RowMapper<Document> {
             }
             model.setNomenclatureAffairDocument(nomenclatureAffairDocument);
 
-            Employee employee = new Employee();
             Long employeeId = rs.getObject("employeeId", Long.class);
-            if(employeeId != null) {
+            if(employeeId != null && employeeId > 0) {
+                Employee employee = new Employee();
                 employee.setEmployeeId(employeeId);
                 employee.setEmployeeFullName(rs.getString("employeeFullName"));
                 employee.setEmployeeLoginAD(rs.getString("employeeLoginAD"));
-                employee.setUserType(UserUtils.getUserType(employeeId));
-            } else {
-                employee.setUserType(UserType.SYSTEM);
+                model.setWhoSigned(employee);
             }
-            model.setWhoSigned(employee);
             return model;
         } catch (Exception e) {
             throw new SQLException(e);

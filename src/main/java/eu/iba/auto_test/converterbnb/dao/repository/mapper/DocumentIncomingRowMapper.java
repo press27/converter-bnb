@@ -2,7 +2,6 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.*;
 import eu.iba.auto_test.converterbnb.utils.DocumentUtils;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -38,17 +37,14 @@ public class DocumentIncomingRowMapper implements RowMapper<Document> {
             documentType.setDocumentType(rs.getString("documentType"));
             model.setDocumentType(documentType);
 
-            Author author = new Author();
             Long authorId = rs.getObject("authorId", Long.class);
-            if(authorId != null) {
+            if(authorId != null && authorId > 0) {
+                Author author = new Author();
                 author.setAuthorId(authorId);
                 author.setAuthorFullName(rs.getString("authorFullName"));
                 author.setAuthorLoginAD(rs.getString("authorLoginAD"));
-                author.setUserType(UserUtils.getUserType(authorId));
-            } else {
-                author.setUserType(UserType.SYSTEM);
+                model.setAuthor(author);
             }
-            model.setAuthor(author);
 
             model.setRegNumber(rs.getString("regNumber"));
             Timestamp regDate = rs.getTimestamp("regDate");

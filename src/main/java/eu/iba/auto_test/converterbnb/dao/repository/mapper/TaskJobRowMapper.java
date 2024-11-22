@@ -1,9 +1,7 @@
 package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.Employee;
-import eu.iba.auto_test.converterbnb.dao.model.UserType;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.model.TaskJobGeneral;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -18,17 +16,14 @@ public class TaskJobRowMapper implements RowMapper<TaskJobGeneral> {
             model.setId(rs.getLong("id"));
             model.setTaskId(rs.getLong("taskId"));
 
-            Employee employee = new Employee();
             Long employeeId = rs.getObject("employeeId", Long.class);
-            if(employeeId != null) {
+            if(employeeId != null && employeeId > 0) {
+                Employee employee = new Employee();
                 employee.setEmployeeId(employeeId);
                 employee.setEmployeeFullName(rs.getString("employeeFullName"));
                 employee.setEmployeeLoginAD(rs.getString("employeeLoginAD"));
-                employee.setUserType(UserUtils.getUserType(employeeId));
-            } else {
-                employee.setUserType(UserType.SYSTEM);
+                model.setEmployee(employee);
             }
-            model.setEmployee(employee);
 
             return model;
         } catch (Exception e) {

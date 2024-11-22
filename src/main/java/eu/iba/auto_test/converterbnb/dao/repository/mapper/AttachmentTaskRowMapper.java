@@ -2,8 +2,6 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.AttachmentDocument;
 import eu.iba.auto_test.converterbnb.dao.model.Author;
-import eu.iba.auto_test.converterbnb.dao.model.UserType;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -19,17 +17,14 @@ public class AttachmentTaskRowMapper implements RowMapper<AttachmentDocument> {
             model.setDocCardId(rs.getLong("docCardId"));
             model.setTaskId(rs.getLong("taskId"));
 
-            Author author = new Author();
             Long authorId = rs.getObject("authorId", Long.class);
-            if(authorId != null) {
+            if(authorId != null && authorId > 0) {
+                Author author = new Author();
                 author.setAuthorId(authorId);
                 author.setAuthorFullName(rs.getString("authorFullName"));
                 author.setAuthorLoginAD(rs.getString("authorLoginAD"));
-                author.setUserType(UserUtils.getUserType(authorId));
-            } else {
-                author.setUserType(UserType.SYSTEM);
+                model.setAuthor(author);
             }
-            model.setAuthor(author);
 
             Timestamp uploadDate = rs.getTimestamp("uploadDate");
             if(uploadDate != null){

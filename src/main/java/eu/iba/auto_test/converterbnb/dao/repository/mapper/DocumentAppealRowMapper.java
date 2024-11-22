@@ -1,20 +1,17 @@
 package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.*;
-import eu.iba.auto_test.converterbnb.utils.DocumentUtils;
-import eu.iba.auto_test.converterbnb.utils.UserUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 public class DocumentAppealRowMapper implements RowMapper<Document> {
 
-    private final Long AUTHOR_ID = 194823L;
-    private final String AUTHOR_FULL_NAME = "Кондаурова Елена Владимировна";
-    private final String AUTHOR_LOGIN_AD = "AKandaurava";
+//    private final Long AUTHOR_ID = 194823L;
+//    private final String AUTHOR_FULL_NAME = "Кондаурова Елена Владимировна";
+//    private final String AUTHOR_LOGIN_AD = "AKandaurava";
 
     @Override
     public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -36,20 +33,20 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
                 model.setCitizenType(citizenType);
             }
 
-            Author author = new Author();
             Long authorId = rs.getObject("authorId", Long.class);
-            if(authorId != null) {
+            if(authorId != null && authorId > 0) {
+                Author author = new Author();
                 author.setAuthorId(authorId);
                 author.setAuthorFullName(rs.getString("authorFullName"));
                 author.setAuthorLoginAD(rs.getString("authorLoginAD"));
-                author.setUserType(UserUtils.getUserType(authorId));
-            } else {
-                author.setAuthorId(AUTHOR_ID);
-                author.setAuthorFullName(AUTHOR_FULL_NAME);
-                author.setAuthorLoginAD(AUTHOR_LOGIN_AD);
-                author.setUserType(UserType.USER);
+                model.setAuthor(author);
             }
-            model.setAuthor(author);
+//            else {
+//                author.setAuthorId(AUTHOR_ID);
+//                author.setAuthorFullName(AUTHOR_FULL_NAME);
+//                author.setAuthorLoginAD(AUTHOR_LOGIN_AD);
+//                author.setUserType(UserType.USER);
+//            }
 
             model.setRegNumber(rs.getString("regNumber"));
 
