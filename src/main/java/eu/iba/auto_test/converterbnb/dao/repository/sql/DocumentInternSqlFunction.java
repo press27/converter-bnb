@@ -25,7 +25,8 @@ public class DocumentInternSqlFunction extends SqlFunction<Document> {
             "FROM MBAnalit rkk " +
             "LEFT JOIN MBAnalit dk ON rkk.DocumentKind = dk.Analit and dk.Vid = 3153 " +
             "LEFT JOIN MBAnalit author ON rkk.Polzovatel = author.Analit and author.Vid = 3119 " +
-            "LEFT JOIN MBAnalit whoSigned ON rkk.FIO3 = whoSigned.Analit and whoSigned.Vid = 3119 " +
+            "LEFT JOIN MBAnalit whoSignedLink ON rkk.FIO3 = whoSignedLink.Analit and whoSignedLink.Vid = 288 " +
+            "LEFT JOIN MBAnalit whoSigned ON whoSignedLink.Polzovatel = whoSigned.Analit and whoSigned.Vid = 3119 " +
             "LEFT JOIN MBAnalit na ON rkk.Delo = na.Analit and na.Vid = 3162 " +
             "WHERE rkk.PriznDok = 'У' AND rkk.Vid = 3174 " +
             "AND rkk.XRecID > :nextId ORDER BY rkk.XRecID ";

@@ -28,7 +28,8 @@ public class DocumentOutgoingSqlFunction extends SqlFunction<Document> {
             "LEFT JOIN MBAnalit addressee ON rkk.Org = addressee.Analit and addressee.Vid = 266 " +
             "LEFT JOIN MBAnalit dk ON rkk.DocumentKind = dk.Analit and dk.Vid = 3153 " +
             "LEFT JOIN MBAnalit author ON rkk.Polzovatel = author.Analit and author.Vid = 3119 " +
-            "LEFT JOIN MBAnalit whoSigned ON rkk.FIO3 = whoSigned.Analit and whoSigned.Vid = 3119 " +
+            "LEFT JOIN MBAnalit whoSignedLink ON rkk.FIO3 = whoSignedLink.Analit and whoSignedLink.Vid = 288 " +
+            "LEFT JOIN MBAnalit whoSigned ON whoSignedLink.Polzovatel = whoSigned.Analit and whoSigned.Vid = 3119 " +
             "LEFT JOIN MBAnalit na ON rkk.Delo = na.Analit and na.Vid = 3162 " +
             "LEFT JOIN MBAnalit delivery ON rkk.SposobDost = delivery.Analit and delivery.Vid = 3195 " +
             "WHERE rkk.PriznDok = 'И' AND rkk.Vid = 3174 " +
