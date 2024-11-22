@@ -3,6 +3,7 @@ package eu.iba.auto_test.converterbnb.dao.services.impl;
 import eu.iba.auto_test.converterbnb.controller.data.AttachmentData;
 import eu.iba.auto_test.converterbnb.dao.model.AttachmentDocument;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.AttachmentDocumentSqlFunction;
+import eu.iba.auto_test.converterbnb.dao.repository.sql.AttachmentTaskSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.AttachmentDocumentServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class AttachmentDocumentServiceDaoImpl implements AttachmentDocumentServi
     @Override
     public Set<AttachmentDocument> findAllInTask(AttachmentData data) {
         Map<String, Object> param = createParamSql(data);
-        List<AttachmentDocument> sourceList = new AttachmentDocumentSqlFunction(ds, param).executeByNamedParam(param);
+        List<AttachmentDocument> sourceList = new AttachmentTaskSqlFunction(ds, param).executeByNamedParam(param);
         return new HashSet<>(sourceList);
     }
 
