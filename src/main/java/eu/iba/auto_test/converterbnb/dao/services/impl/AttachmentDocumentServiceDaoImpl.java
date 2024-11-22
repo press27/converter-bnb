@@ -3,15 +3,12 @@ package eu.iba.auto_test.converterbnb.dao.services.impl;
 import eu.iba.auto_test.converterbnb.controller.data.AttachmentData;
 import eu.iba.auto_test.converterbnb.dao.model.AttachmentDocument;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.AttachmentDocumentSqlFunction;
-import eu.iba.auto_test.converterbnb.dao.repository.sql.AttachmentTaskSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.AttachmentDocumentServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AttachmentDocumentServiceDaoImpl implements AttachmentDocumentServiceDao {
@@ -26,13 +23,15 @@ public class AttachmentDocumentServiceDaoImpl implements AttachmentDocumentServi
     @Override
     public Set<AttachmentDocument> findAll(AttachmentData data) {
         Map<String, Object> param = createParamSql(data);
-        return (Set<AttachmentDocument>) new AttachmentDocumentSqlFunction(ds, param).executeByNamedParam(param);
+        List<AttachmentDocument> sourceList = new AttachmentDocumentSqlFunction(ds, param).executeByNamedParam(param);
+        return new HashSet<>(sourceList);
     }
 
     @Override
     public Set<AttachmentDocument> findAllInTask(AttachmentData data) {
         Map<String, Object> param = createParamSql(data);
-        return (Set<AttachmentDocument>) new AttachmentTaskSqlFunction(ds, param).executeByNamedParam(param);
+        List<AttachmentDocument> sourceList = new AttachmentDocumentSqlFunction(ds, param).executeByNamedParam(param);
+        return new HashSet<>(sourceList);
     }
 
     private Map<String, Object> createParamSql(AttachmentData data) {
