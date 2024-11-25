@@ -2,6 +2,7 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.Author;
 import eu.iba.auto_test.converterbnb.dao.model.History;
+import eu.iba.auto_test.converterbnb.utils.HistoryUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -38,13 +39,16 @@ public class HistoryRowMapper implements RowMapper<History> {
 
             String action = convertAction(rs.getString("action"));
             model.setAction(action);
+            StringBuilder builder = new StringBuilder();
+            if(!action.isEmpty()){
+                builder.append(action);
+            }
             String detail = rs.getString("detail");
             model.setDetail(detail);
             if(detail != null && !detail.isEmpty()){
-                StringBuilder builder = new StringBuilder();
-                builder.append(action).append(":");
+                builder.append(":");
                 builder.append("\n");
-                builder.append(" ").append(detail);
+                builder.append(" ").append(HistoryUtils.textFormattingGeneralHistory(detail));
                 model.setText(builder.toString());
             }
             return model;
@@ -55,7 +59,7 @@ public class HistoryRowMapper implements RowMapper<History> {
 
     private String convertAction(String action) {
         return switch (action) {
-            case "C" -> "Создание";
+            case "С" -> "Создание";
             case "И" -> "Изменение";
             case "У" -> "Удаление";
             default -> "";

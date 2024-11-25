@@ -1,5 +1,7 @@
 package eu.iba.auto_test.converterbnb.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -13,6 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class HistoryUtils {
+
+    public static final Logger log = LoggerFactory.getLogger(HistoryUtils.class);
 
     public static String textFormattingGeneralHistory(String text){
         if (text.contains("<H>")) {
@@ -39,6 +43,7 @@ public class HistoryUtils {
                     }
                 }
             } catch (ParserConfigurationException | SAXException | IOException ex) {
+                log.error(ex.getMessage(),ex);
                 return text;
             }
             return builder.toString();
@@ -92,6 +97,7 @@ public class HistoryUtils {
                     }
                 }
             } catch (ParserConfigurationException | SAXException | IOException ex) {
+                log.error(ex.getMessage(),ex);
                 return text;
             }
             return builder.toString();

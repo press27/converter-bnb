@@ -21,8 +21,7 @@ public class HistoryTaskSqlFunction extends SqlFunction<History> {
             "taskProtocol.ActionType as action, taskProtocol.Detail as detail, taskProtocol.DetailInfo as detailInfo " +
             "FROM SBTaskProtocol taskProtocol " +
             "LEFT JOIN MBAnalit p ON taskProtocol.UserID = p.Analit and p.Vid = 3119 " +
-            "WHERE " +
-            "taskProtocol.TaskID = (:taskId) ";
+            "WHERE taskProtocol.TaskID = (:taskId) ";
 
     private final HistoryTaskRowMapper rowMapper;
 

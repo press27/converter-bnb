@@ -33,11 +33,14 @@ public class HistoryDocumentRowMapper implements RowMapper<History> {
 
             String action = convertAction(rs.getString("action"));
             model.setAction(action);
+            StringBuilder builder = new StringBuilder();
+            if(!action.isEmpty()){
+                builder.append(action);
+            }
             String detail = rs.getString("detail");
             model.setDetail(detail);
             if(detail != null && !detail.isEmpty()){
-                StringBuilder builder = new StringBuilder();
-                builder.append(action).append(":");
+                builder.append(":");
                 builder.append("\n");
                 builder.append(HistoryUtils.textFormattingGeneralHistory(detail));
                 model.setText(builder.toString());
@@ -54,6 +57,8 @@ public class HistoryDocumentRowMapper implements RowMapper<History> {
             case "1" -> "Экспорт без блокировки";
             case "2" -> "Блокировка";
             case "3" -> "Импорт с разблокировкой";
+            case "6" -> "Пусто"; //TODO как узнаю заменить
+            case "7" -> "Пусто"; //TODO как узнаю заменить
             case "A" -> "Изменение прав доступа";
             case "B" -> "Изменение видимости версии";
             case "C" -> "Создание";
