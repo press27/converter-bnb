@@ -152,9 +152,9 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             while (!documents.isEmpty()) {
                 for (Document document : documents) {
                     if (document.getId() != null) {
-                        AttachmentData attachmentData = new AttachmentData();
-                        attachmentData.setRkkId(document.getId());
-                        Set<AttachmentDocument> attachmentDocuments = attachmentDocumentServiceDao.findAll(attachmentData);
+//                        AttachmentData attachmentData = new AttachmentData();
+//                        attachmentData.setRkkId(document.getId());
+//                        Set<AttachmentDocument> attachmentDocuments = attachmentDocumentServiceDao.findAll(attachmentData);
 
                         HistoryData historyData = new HistoryData();
                         if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
@@ -182,14 +182,14 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                                     taskIntroductionIds.add(introduction.getTaskId());
                                 }
                             }
-                            for (Long taskId : taskIntroductionIds) {
-                                AttachmentData attachmentIntroductionData = new AttachmentData();
-                                attachmentIntroductionData.setAttachType(AttachType.E);
-                                attachmentIntroductionData.setTaskId(taskId);
-                                attachmentIntroductionData.setName("Лист ознакомления");
-                                Set<AttachmentDocument> introductionSheets = attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData);
-                                attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
-                            }
+//                            for (Long taskId : taskIntroductionIds) {
+//                                AttachmentData attachmentIntroductionData = new AttachmentData();
+//                                attachmentIntroductionData.setAttachType(AttachType.E);
+//                                attachmentIntroductionData.setTaskId(taskId);
+//                                attachmentIntroductionData.setName("Лист ознакомления");
+//                                Set<AttachmentDocument> introductionSheets = attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData);
+//                                attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
+//                            }
                         }
 
                         TaskData taskData = new TaskData();
@@ -218,23 +218,23 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.setTasks(treeTask); // сохраняю поручения в док.
                         }
 
-                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
-                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
-                        ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
-                        if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
-                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
-                        }
+//                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
+//                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
+//                        ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
+//                        if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
+//                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
+//                        }
 
-                        for (AttachmentDocument attachmentDocument : attachmentDocuments) {
-                            SignatureData signatureData = new SignatureData();
-                            signatureData.setDocCardId(attachmentDocument.getDocCardId());
-                            List<Signature> signatures = signatureServiceDao.findAll(signatureData);
-                            if (!signatures.isEmpty()) {
-                                attachmentDocument.setSignatures(signatures);
-                            }
-                        }
+//                        for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+//                            SignatureData signatureData = new SignatureData();
+//                            signatureData.setDocCardId(attachmentDocument.getDocCardId());
+//                            List<Signature> signatures = signatureServiceDao.findAll(signatureData);
+//                            if (!signatures.isEmpty()) {
+//                                attachmentDocument.setSignatures(signatures);
+//                            }
+//                        }
 
-                        document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
+//                        document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
                         uploadService.uploadDocument(document);
                         nextId = document.getId();
                     }

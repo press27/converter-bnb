@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class DocumentAppealRowMapper implements RowMapper<Document> {
 
@@ -78,10 +79,19 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
                 model.setReceiptDate(receiptDate.toInstant());
             }
             model.setFullAddress(rs.getString("fullAddress"));
+            model.setCollective(convertTypeAppeal(rs.getString("collective")));
+            model.setAnonymous(convertTypeAppeal(rs.getString("anonymous")));
             return model;
         } catch (Exception e) {
             throw new SQLException(e);
         }
 
+    }
+
+    private Boolean convertTypeAppeal(String type){
+        if(Objects.equals(type, "Д")){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

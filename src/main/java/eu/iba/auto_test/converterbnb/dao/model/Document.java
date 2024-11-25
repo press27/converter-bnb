@@ -69,6 +69,12 @@ public class Document {
     // Номенклатуры в которые списано ркк (предварительно у них (БНБ) только одна)
     private NomenclatureAffairDocument nomenclatureAffairDocument;
 
+    // Признак коллективного обращения
+    private Boolean collective = false;
+
+    // Признак анонимного обращения
+    private Boolean anonymous = false;
+
     // Вложения документа
     private Set<AttachmentDocument> attachmentDocuments = new HashSet<>();
 
@@ -324,16 +330,34 @@ public class Document {
         return this;
     }
 
+    public Boolean getCollective() {
+        return collective;
+    }
+
+    public Document setCollective(Boolean collective) {
+        this.collective = collective;
+        return this;
+    }
+
+    public Boolean getAnonymous() {
+        return anonymous;
+    }
+
+    public Document setAnonymous(Boolean anonymous) {
+        this.anonymous = anonymous;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Document document = (Document) o;
-        return Objects.equals(id, document.id) && documentCategoryConstants == document.documentCategoryConstants && Objects.equals(documentType, document.documentType) && Objects.equals(citizenType, document.citizenType) && Objects.equals(shortSummary, document.shortSummary) && Objects.equals(author, document.author) && Objects.equals(correspondent, document.correspondent) && Objects.equals(addressee, document.addressee) && Objects.equals(outRegNumber, document.outRegNumber) && Objects.equals(outRegDate, document.outRegDate) && Objects.equals(regNumber, document.regNumber) && Objects.equals(regDate, document.regDate) && Objects.equals(whoSigned, document.whoSigned) && Objects.equals(inDocSigners, document.inDocSigners) && Objects.equals(deliveryMethod, document.deliveryMethod) && declarantType == document.declarantType && Objects.equals(receiptDate, document.receiptDate) && Objects.equals(fullAddress, document.fullAddress) && Objects.equals(fioApplicant, document.fioApplicant) && Objects.equals(organization, document.organization) && Objects.equals(nomenclatureAffairDocument, document.nomenclatureAffairDocument) && Objects.equals(attachmentDocuments, document.attachmentDocuments) && Objects.equals(histories, document.histories) && Objects.equals(tasks, document.tasks) && Objects.equals(introductions, document.introductions) && Objects.equals(employeesAccess, document.employeesAccess);
+        return Objects.equals(id, document.id) && documentCategoryConstants == document.documentCategoryConstants && Objects.equals(documentType, document.documentType) && Objects.equals(citizenType, document.citizenType) && Objects.equals(shortSummary, document.shortSummary) && Objects.equals(author, document.author) && Objects.equals(correspondent, document.correspondent) && Objects.equals(addressee, document.addressee) && Objects.equals(outRegNumber, document.outRegNumber) && Objects.equals(outRegDate, document.outRegDate) && Objects.equals(regNumber, document.regNumber) && Objects.equals(regDate, document.regDate) && Objects.equals(whoSigned, document.whoSigned) && Objects.equals(inDocSigners, document.inDocSigners) && Objects.equals(deliveryMethod, document.deliveryMethod) && declarantType == document.declarantType && Objects.equals(receiptDate, document.receiptDate) && Objects.equals(fullAddress, document.fullAddress) && Objects.equals(fioApplicant, document.fioApplicant) && Objects.equals(organization, document.organization) && Objects.equals(nomenclatureAffairDocument, document.nomenclatureAffairDocument) && Objects.equals(collective, document.collective) && Objects.equals(anonymous, document.anonymous) && Objects.equals(attachmentDocuments, document.attachmentDocuments) && Objects.equals(histories, document.histories) && Objects.equals(tasks, document.tasks) && Objects.equals(introductions, document.introductions) && Objects.equals(employeesAccess, document.employeesAccess);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, documentCategoryConstants, documentType, citizenType, shortSummary, author, correspondent, addressee, outRegNumber, outRegDate, regNumber, regDate, whoSigned, inDocSigners, deliveryMethod, declarantType, receiptDate, fullAddress, fioApplicant, organization, nomenclatureAffairDocument, attachmentDocuments, histories, tasks, introductions, employeesAccess);
+        return Objects.hash(id, documentCategoryConstants, documentType, citizenType, shortSummary, author, correspondent, addressee, outRegNumber, outRegDate, regNumber, regDate, whoSigned, inDocSigners, deliveryMethod, declarantType, receiptDate, fullAddress, fioApplicant, organization, nomenclatureAffairDocument, collective, anonymous, attachmentDocuments, histories, tasks, introductions, employeesAccess);
     }
 }

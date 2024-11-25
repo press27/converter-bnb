@@ -22,7 +22,7 @@ public class DocumentAppealSqlFunction extends SqlFunction<Document> {
             "author.NameAn as authorFullName, author.Dop as authorLoginAD, rkk.Dop as regNumber, rkk.DataTime as regDate, " +
             "rkk.Soder2 as fioApplicant, rkk.Org as organizationId, citizenOrg.NameAn as organizationName, " +
             "rkk.ClaimFile as citizenNomenclatureAffairId, citizenNa.NameAn as citizenNomenclatureAffairName, " +
-            "rkk.Date2 as receiptDate, rkk.Dop4 as fullAddress " +
+            "rkk.Date2 as receiptDate, rkk.Dop4 as fullAddress, rkk.YesNo3 as collective, rkk.YesNo4 as anonymous " +
             "FROM MBAnalit rkk " +
             "LEFT JOIN MBAnalit ct ON rkk.ClaimType = ct.Analit and ct.Vid = 3336 " +
             "LEFT JOIN MBAnalit author ON rkk.Polzovatel = author.Analit and author.Vid = 3119 " +
