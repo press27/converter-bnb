@@ -45,7 +45,7 @@ public class IntroductionSqlFunction extends SqlFunction<Introduction> {
     }
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
-        declareParameter(new SqlParameter("rkkId", Types.BIGINT));
+        declareParameter(new SqlParameter("rkkId", Types.INTEGER));
     }
 
     @Override
