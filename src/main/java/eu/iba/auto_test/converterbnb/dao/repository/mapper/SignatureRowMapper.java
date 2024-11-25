@@ -17,7 +17,7 @@ public class SignatureRowMapper implements RowMapper<Signature> {
             Signature model = new Signature();
             model.setId(rs.getLong("id"));
             model.setDocCardId(rs.getLong("docCardId"));
-            model.setRkkId(rs.getLong("rkkId"));
+            //model.setRkkId(rs.getLong("rkkId"));
 
             Long authorId = rs.getObject("authorId", Long.class);
             if(authorId != null && authorId > 0) {
