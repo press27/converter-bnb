@@ -19,10 +19,13 @@ public class DocumentInternRowMapper implements RowMapper<Document> {
 
             model.setShortSummary(rs.getString("shortSummary"));
 
-            DocumentType documentType = new DocumentType();
-            documentType.setDocumentTypeId(rs.getLong("documentTypeId"));
-            documentType.setDocumentType(rs.getString("documentType"));
-            model.setDocumentType(documentType);
+            Long documentTypeId = rs.getObject("documentTypeId", Long.class);
+            if(documentTypeId != null && documentTypeId > 0) {
+                DocumentType documentType = new DocumentType();
+                documentType.setDocumentTypeId(documentTypeId);
+                documentType.setDocumentType(rs.getString("documentType"));
+                model.setDocumentType(documentType);
+            }
 
             Long authorId = rs.getObject("authorId", Long.class);
             if(authorId != null && authorId > 0) {
@@ -39,14 +42,17 @@ public class DocumentInternRowMapper implements RowMapper<Document> {
                 model.setRegDate(regDate.toInstant());
             }
 
-            NomenclatureAffairDocument nomenclatureAffairDocument = new NomenclatureAffairDocument();
-            nomenclatureAffairDocument.setNomenclatureAffairId(rs.getLong("nomenclatureAffairId"));
-            nomenclatureAffairDocument.setNomenclatureAffairName(rs.getString("nomenclatureAffairName"));
-            Timestamp nomenclatureAffairDate = rs.getTimestamp("nomenclatureAffairDate");
-            if(nomenclatureAffairDate != null){
-                nomenclatureAffairDocument.setNomenclatureAffairDate(nomenclatureAffairDate.toInstant());
+            Long nomenclatureAffairDocumentId = rs.getObject("nomenclatureAffairId", Long.class);
+            if(nomenclatureAffairDocumentId != null && nomenclatureAffairDocumentId > 0) {
+                NomenclatureAffairDocument nomenclatureAffairDocument = new NomenclatureAffairDocument();
+                nomenclatureAffairDocument.setNomenclatureAffairId(nomenclatureAffairDocumentId);
+                nomenclatureAffairDocument.setNomenclatureAffairName(rs.getString("nomenclatureAffairName"));
+                Timestamp nomenclatureAffairDate = rs.getTimestamp("nomenclatureAffairDate");
+                if (nomenclatureAffairDate != null) {
+                    nomenclatureAffairDocument.setNomenclatureAffairDate(nomenclatureAffairDate.toInstant());
+                }
+                model.setNomenclatureAffairDocument(nomenclatureAffairDocument);
             }
-            model.setNomenclatureAffairDocument(nomenclatureAffairDocument);
 
             Long employeeId = rs.getObject("employeeId", Long.class);
             if(employeeId != null && employeeId > 0) {

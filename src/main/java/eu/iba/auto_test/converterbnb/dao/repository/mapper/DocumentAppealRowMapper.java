@@ -58,7 +58,7 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
             model.setFioApplicant(rs.getString("fioApplicant"));
 
             Long organizationId = rs.getObject("organizationId", Long.class);
-            if(organizationId != null){
+            if(organizationId != null && organizationId > 0){
                 OrganizationDocument organizationDocument = new OrganizationDocument();
                 organizationDocument.setOrganizationId(organizationId);
                 organizationDocument.setOrganizationName(rs.getString("organizationName"));
@@ -66,7 +66,7 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
             }
 
             Long citizenNomenclatureAffairId = rs.getObject("citizenNomenclatureAffairId", Long.class);
-            if(citizenNomenclatureAffairId != null){
+            if(citizenNomenclatureAffairId != null && citizenNomenclatureAffairId > 0){
                 NomenclatureAffairDocument nomenclatureAffairDocument = new NomenclatureAffairDocument();
                 nomenclatureAffairDocument.setNomenclatureAffairId(citizenNomenclatureAffairId);
                 nomenclatureAffairDocument.setNomenclatureAffairName(rs.getString("citizenNomenclatureAffairName"));

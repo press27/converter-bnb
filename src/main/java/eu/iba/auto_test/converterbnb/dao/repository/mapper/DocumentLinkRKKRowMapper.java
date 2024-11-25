@@ -13,7 +13,7 @@ public class DocumentLinkRKKRowMapper implements RowMapper<DocumentLink> {
     public DocumentLink mapRow(ResultSet rs, int rowNum) throws SQLException {
         Long id = rs.getLong("id");
         Long docRkkLinkId = rs.getObject("docRkkLinkId", Long.class);
-        if(docRkkLinkId != null) {
+        if(docRkkLinkId != null && docRkkLinkId > 0) {
             DocumentLink documentLink = new DocumentLink();
             documentLink.setId(id);
             documentLink.setDocRkkId(id);
