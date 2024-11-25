@@ -42,7 +42,7 @@ public class Task {
     private TaskStatus taskStatus;
 
     // Автор поручения
-    private Author author;
+    private Employee author;
 
     // Id родительского поручения
     private Long parentId;
@@ -155,11 +155,11 @@ public class Task {
         return this;
     }
 
-    public Author getAuthor() {
+    public Employee getAuthor() {
         return author;
     }
 
-    public Task setAuthor(Author author) {
+    public Task setAuthor(Employee author) {
         this.author = author;
         return this;
     }

@@ -90,16 +90,6 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
         }
     }
 
-    private void saveEmployee(Set<Employee> employeesAccess, Author author){
-        if(author != null){
-            Employee employee = new Employee();
-            employee.setEmployeeId(author.getAuthorId());
-            employee.setEmployeeFullName(author.getAuthorFullName());
-            employee.setEmployeeLoginAD(author.getAuthorLoginAD());
-            employeesAccess.add(employee);
-        }
-    }
-
     private void saveEmployee(Set<Employee> employeesAccess, Employee employee){
         if(employee != null){
             employeesAccess.add(employee);

@@ -38,10 +38,10 @@ public class DocumentOutgoingRowMapper implements RowMapper<Document> {
 
             Long authorId = rs.getObject("authorId", Long.class);
             if(authorId != null && authorId > 0) {
-                Author author = new Author();
-                author.setAuthorId(authorId);
-                author.setAuthorFullName(rs.getString("authorFullName"));
-                author.setAuthorLoginAD(rs.getString("authorLoginAD"));
+                Employee author = new Employee();
+                author.setEmployeeId(authorId);
+                author.setEmployeeFullName(rs.getString("authorFullName"));
+                author.setEmployeeLoginAD(rs.getString("authorLoginAD"));
                 model.setAuthor(author);
             }
 

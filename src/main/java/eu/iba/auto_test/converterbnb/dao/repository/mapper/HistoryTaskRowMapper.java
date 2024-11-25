@@ -1,6 +1,6 @@
 package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
-import eu.iba.auto_test.converterbnb.dao.model.Author;
+import eu.iba.auto_test.converterbnb.dao.model.Employee;
 import eu.iba.auto_test.converterbnb.dao.model.History;
 import eu.iba.auto_test.converterbnb.utils.HistoryUtils;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,10 +24,10 @@ public class HistoryTaskRowMapper implements RowMapper<History> {
 
             Long authorId = rs.getObject("authorId", Long.class);
             if(authorId != null && authorId > 0) {
-                Author author = new Author();
-                author.setAuthorId(authorId);
-                author.setAuthorFullName(rs.getString("authorFullName"));
-                author.setAuthorLoginAD(rs.getString("authorLoginAD"));
+                Employee author = new Employee();
+                author.setEmployeeId(authorId);
+                author.setEmployeeFullName(rs.getString("authorFullName"));
+                author.setEmployeeLoginAD(rs.getString("authorLoginAD"));
                 model.setAuthor(author);
             }
 

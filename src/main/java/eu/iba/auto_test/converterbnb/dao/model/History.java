@@ -28,7 +28,7 @@ public class History {
     private Instant dateAction;
 
     // Автор действия
-    private Author author;
+    private Employee author;
 
     // Подробности. Значения основных полей (ИД записи, Имя, Заголовок)
     private String detail;
@@ -109,11 +109,11 @@ public class History {
         return this;
     }
 
-    public Author getAuthor() {
+    public Employee getAuthor() {
         return author;
     }
 
-    public History setAuthor(Author author) {
+    public History setAuthor(Employee author) {
         this.author = author;
         return this;
     }

@@ -19,7 +19,7 @@ public class AttachmentDocument {
     private Long taskId;
 
     // Автор
-    private Author author;
+    private Employee author;
 
     // Дата загрузки/дата создания
     private Instant uploadDate;
@@ -71,11 +71,12 @@ public class AttachmentDocument {
         return this;
     }
 
-    public Author getAuthor() {
+
+    public Employee getAuthor() {
         return author;
     }
 
-    public AttachmentDocument setAuthor(Author author) {
+    public AttachmentDocument setAuthor(Employee author) {
         this.author = author;
         return this;
     }

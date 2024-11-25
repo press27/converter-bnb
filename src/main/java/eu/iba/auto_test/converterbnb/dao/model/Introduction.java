@@ -17,7 +17,7 @@ public class Introduction {
     private Instant createDate;
 
     // Автор создания ознакомления
-    private Author author;
+    private Employee author;
 
     // Дата ознакомления
     private Instant introductionDate;
@@ -59,11 +59,11 @@ public class Introduction {
         return this;
     }
 
-    public Author getAuthor() {
+    public Employee getAuthor() {
         return author;
     }
 
-    public Introduction setAuthor(Author author) {
+    public Introduction setAuthor(Employee author) {
         this.author = author;
         return this;
     }

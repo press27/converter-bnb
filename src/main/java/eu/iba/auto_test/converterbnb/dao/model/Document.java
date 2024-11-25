@@ -22,7 +22,7 @@ public class Document {
     private String shortSummary;
 
     // Автор РКК
-    private Author author;
+    private Employee author;
 
     // Корреспондент
     private CorrespondentDocument correspondent;
@@ -141,11 +141,11 @@ public class Document {
         return this;
     }
 
-    public Author getAuthor() {
+    public Employee getAuthor() {
         return author;
     }
 
-    public Document setAuthor(Author author) {
+    public Document setAuthor(Employee author) {
         this.author = author;
         return this;
     }

@@ -15,7 +15,7 @@ public class Signature {
     private Long rkkId;
 
     // Автор подписи электронного документа
-    private Author author;
+    private Employee author;
 
     // Дата подписания
     private Instant signDate;
@@ -74,11 +74,11 @@ public class Signature {
         return this;
     }
 
-    public Author getAuthor() {
+    public Employee getAuthor() {
         return author;
     }
 
-    public Signature setAuthor(Author author) {
+    public Signature setAuthor(Employee author) {
         this.author = author;
         return this;
     }

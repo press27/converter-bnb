@@ -1,6 +1,6 @@
 package eu.iba.auto_test.converterbnb.dao.repository.sql.model;
 
-import eu.iba.auto_test.converterbnb.dao.model.Author;
+import eu.iba.auto_test.converterbnb.dao.model.Employee;
 
 import java.util.Objects;
 import java.util.Set;
@@ -11,7 +11,7 @@ public class TaskGeneral {
 
     private Long parentLeaderId;
 
-    private Author author;
+    private Employee author;
 
     Set<TaskGeneral> taskChildList;
 
@@ -36,11 +36,11 @@ public class TaskGeneral {
         return this;
     }
 
-    public Author getAuthor() {
+    public Employee getAuthor() {
         return author;
     }
 
-    public TaskGeneral setAuthor(Author author) {
+    public TaskGeneral setAuthor(Employee author) {
         this.author = author;
         return this;
     }
