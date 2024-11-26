@@ -26,7 +26,7 @@ public class IntroductionSqlFunction extends SqlFunction<Introduction> {
             "LEFT JOIN SBTask task ON introduction.TaskID = task.XRecID " +
             "LEFT JOIN MBAnalit executor ON introduction.Executor = executor.Analit and executor.Vid = 3119 " +
             "LEFT JOIN MBAnalit p ON task.Author = p.Analit and p.Vid = 3119 " +
-            "LEFT JOIN MBAnalit rkk ON task.XRecID = rkk.Dop4 " +
+            "LEFT JOIN MBAnalit rkk ON task.XRecID = (:introductionId) " +
             "WHERE introduction.State = 'D' AND rkk.XRecID = (:rkkId) ";
 
     private final IntroductionRowMapper rowMapper;
@@ -46,6 +46,7 @@ public class IntroductionSqlFunction extends SqlFunction<Introduction> {
 
     private void declareParameterCustom(Map<String, Object> paramMap) throws InvalidDataAccessApiUsageException {
         declareParameter(new SqlParameter("rkkId", Types.BIGINT));
+        declareParameter(new SqlParameter("introductionId", Types.BIGINT));
     }
 
     @Override

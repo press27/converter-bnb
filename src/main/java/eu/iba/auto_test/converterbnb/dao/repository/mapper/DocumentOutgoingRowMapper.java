@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
 
 public class DocumentOutgoingRowMapper implements RowMapper<Document> {
 
@@ -76,6 +78,20 @@ public class DocumentOutgoingRowMapper implements RowMapper<Document> {
                 employee.setEmployeeFullName(rs.getString("employeeFullName"));
                 employee.setEmployeeLoginAD(rs.getString("employeeLoginAD"));
                 model.setWhoSigned(employee);
+            }
+
+            String ids = rs.getString("introductionIds");
+            if(ids != null && !ids.isEmpty()) {
+                List<Long> introductionIds = model.getIntroductionIds();
+                String[] stringIds = ids.split(",");
+                for (String stringId : stringIds) {
+                    if(stringId != null && !stringId.isEmpty()) {
+                        Long longId = Long.parseLong(stringId.trim());
+                        introductionIds.add(longId);
+                    }
+                }
+                Collections.sort(introductionIds);
+                model.setIntroductionIds(introductionIds);
             }
             return model;
         } catch (Exception e) {

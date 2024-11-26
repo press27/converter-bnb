@@ -6,4 +6,6 @@ public interface DocumentServiceDao {
 
     void saveAllV2();
 
+    void saveAllV3();
+
 }

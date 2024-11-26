@@ -23,7 +23,7 @@ public class DocumentIncomingSqlFunction extends SqlFunction<Document> {
             "rkk.Soder as shortSummary, rkk.DocumentKind as documentTypeId, dk.NameAn as documentType, rkk.Polzovatel as authorId, " +
             "author.NameAn as authorFullName, author.Dop as authorLoginAD, rkk.Dop as regNumber, rkk.DataTime as regDate, " +
             "rkk.Delo as nomenclatureAffairId, na.NameAn as nomenclatureAffairName, rkk.Data7 as nomenclatureAffairDate, " +
-            "rkk.Stroka3 as inDocSigners, delivery.NameAn as deliveryMethod " +
+            "rkk.Stroka3 as inDocSigners, delivery.NameAn as deliveryMethod, rkk.Dop4 as introductionIds " +
             "FROM MBAnalit rkk " +
             "LEFT JOIN MBAnalit correspondent ON rkk.Org = correspondent.Analit and correspondent.Vid = 266 " +
             "LEFT JOIN MBAnalit dk ON rkk.DocumentKind = dk.Analit and dk.Vid = 3153 " +

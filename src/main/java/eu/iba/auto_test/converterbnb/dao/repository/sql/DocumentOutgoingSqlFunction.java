@@ -23,7 +23,7 @@ public class DocumentOutgoingSqlFunction extends SqlFunction<Document> {
             "rkk.Soder as shortSummary, rkk.DocumentKind as documentTypeId, dk.NameAn as documentType, rkk.Polzovatel as authorId, " +
             "author.NameAn as authorFullName, author.Dop as authorLoginAD, rkk.Dop as regNumber, rkk.DataTime as regDate, " +
             "rkk.Delo as nomenclatureAffairId, na.NameAn as nomenclatureAffairName, rkk.Data7 as nomenclatureAffairDate, " +
-            "rkk.FIO3 as employeeId, whoSigned.NameAn as employeeFullName, whoSigned.Dop as employeeLoginAD " +
+            "rkk.FIO3 as employeeId, whoSigned.NameAn as employeeFullName, whoSigned.Dop as employeeLoginAD, rkk.Dop4 as introductionIds " +
             "FROM MBAnalit rkk " +
             "LEFT JOIN MBAnalit addressee ON rkk.Org = addressee.Analit and addressee.Vid = 266 " +
             "LEFT JOIN MBAnalit dk ON rkk.DocumentKind = dk.Analit and dk.Vid = 3153 " +

@@ -19,15 +19,22 @@ public class DocumentController {
 
     @GetMapping(produces = "application/json")
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getCollection() {
+    public ResponseEntity<?> saveAll() {
         documentServiceDao.saveAll();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/v2", produces = "application/json")
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getCollectionV2() {
+    public ResponseEntity<?> saveAllV2() {
         documentServiceDao.saveAllV2();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/v3", produces = "application/json")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> saveAllV3() {
+        documentServiceDao.saveAllV3();
         return ResponseEntity.ok().build();
     }
 
