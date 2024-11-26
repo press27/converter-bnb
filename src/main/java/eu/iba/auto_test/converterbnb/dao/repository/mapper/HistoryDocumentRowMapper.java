@@ -3,6 +3,8 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 import eu.iba.auto_test.converterbnb.dao.model.Employee;
 import eu.iba.auto_test.converterbnb.dao.model.History;
 import eu.iba.auto_test.converterbnb.utils.HistoryUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -10,6 +12,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class HistoryDocumentRowMapper implements RowMapper<History> {
+
+    public static final Logger log = LoggerFactory.getLogger(HistoryDocumentRowMapper.class);
+
     @Override
     public History mapRow(ResultSet rs, int rowNum) throws SQLException {
         try {
@@ -52,41 +57,49 @@ public class HistoryDocumentRowMapper implements RowMapper<History> {
     }
 
     private String convertAction(String action) {
-        return switch (action) {
-            case "0" -> "Просмотр теневой копии";
-            case "1" -> "Экспорт без блокировки";
-            case "2" -> "Блокировка";
-            case "3" -> "Импорт с разблокировкой";
-            case "6" -> "Пусто"; //TODO как узнаю заменить
-            case "7" -> "Пусто"; //TODO как узнаю заменить
-            case "A" -> "Изменение прав доступа";
-            case "B" -> "Изменение видимости версии";
-            case "C" -> "Создание";
-            case "D" -> "Удаление";
-            case "E" -> "Изменение";
-            case "F" -> "Шифрование сертификатом";
-            case "G" -> "Подписание";
-            case "H" -> "Удаление версии";
-            case "I" -> "Импорт без разблокировки";
-            case "J" -> "Изменение стадии жизненного цикла";
-            case "K" -> "Изменение карточки";
-            case "L" -> "Шифрование паролем и сертификатом";
-            case "M" -> "Изменение состояния версии";
-            case "N" -> "Отключение шифрования";
-            case "O" -> "Изменение пароля";
-            case "P" -> "Шифрование паролем";
-            case "Q" -> "Восстановление из локальной копии";
-            case "R" -> "Просмотр";
-            case "S" -> "Отправка по почте";
-            case "T" -> "Изменение хранилища";
-            case "U" -> "Разблокировка";
-            case "V" -> "Создание версии";
-            case "W" -> "Изменение вида документа";
-            case "X" -> "Экспорт с блокировкой";
-            case "Y" -> "Изменение типа карточки";
-            case "Z" -> "Копирование";
-            default -> "";
-        };
+        try {
+            if (action != null && !action.isEmpty()) {
+                return switch (action) {
+                    case "0" -> "Просмотр теневой копии";
+                    case "1" -> "Экспорт без блокировки";
+                    case "2" -> "Блокировка";
+                    case "3" -> "Импорт с разблокировкой";
+                    case "6" -> "Запрещение передачи прав доступа";
+                    case "7" -> "Разрешение передачи прав доступа";
+                    case "A" -> "Изменение прав доступа";
+                    case "B" -> "Изменение видимости версии";
+                    case "C" -> "Создание";
+                    case "D" -> "Удаление";
+                    case "E" -> "Изменение";
+                    case "F" -> "Шифрование сертификатом";
+                    case "G" -> "Подписание";
+                    case "H" -> "Удаление версии";
+                    case "I" -> "Импорт без разблокировки";
+                    case "J" -> "Изменение стадии жизненного цикла";
+                    case "K" -> "Изменение карточки";
+                    case "L" -> "Шифрование паролем и сертификатом";
+                    case "M" -> "Изменение состояния версии";
+                    case "N" -> "Отключение шифрования";
+                    case "O" -> "Изменение пароля";
+                    case "P" -> "Шифрование паролем";
+                    case "Q" -> "Восстановление из локальной копии";
+                    case "R" -> "Просмотр";
+                    case "S" -> "Отправка по почте";
+                    case "T" -> "Изменение хранилища";
+                    case "U" -> "Разблокировка";
+                    case "V" -> "Создание версии";
+                    case "W" -> "Изменение вида документа";
+                    case "X" -> "Экспорт с блокировкой";
+                    case "Y" -> "Изменение типа карточки";
+                    case "Z" -> "Копирование";
+                    default -> "Неизвестное действие";
+                };
+            }
+            return "Неизвестное действие";
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+            return "Неизвестное действие";
+        }
     }
 
 }

@@ -3,6 +3,8 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 import eu.iba.auto_test.converterbnb.dao.model.Employee;
 import eu.iba.auto_test.converterbnb.dao.model.TaskExecutors;
 import eu.iba.auto_test.converterbnb.dao.model.TaskExecutorsStatusDirectum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -11,6 +13,9 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 public class TaskExecutorsRowMapper implements RowMapper<TaskExecutors> {
+
+    public static final Logger log = LoggerFactory.getLogger(TaskExecutorsRowMapper.class);
+
     @Override
     public TaskExecutors mapRow(ResultSet rs, int rowNum) throws SQLException {
         try {
@@ -56,12 +61,20 @@ public class TaskExecutorsRowMapper implements RowMapper<TaskExecutors> {
     }
 
     private TaskExecutorsStatusDirectum convertStatus(String status) {
-        return switch (status) {
-            case "I" -> TaskExecutorsStatusDirectum.I;
-            case "W" -> TaskExecutorsStatusDirectum.W;
-            case "K" -> TaskExecutorsStatusDirectum.K;
-            case "N" -> TaskExecutorsStatusDirectum.N;
-            default -> TaskExecutorsStatusDirectum.C;
-        };
+        try {
+            if (status != null && !status.isEmpty()) {
+                return switch (status) {
+                    case "I" -> TaskExecutorsStatusDirectum.I;
+                    case "W" -> TaskExecutorsStatusDirectum.W;
+                    case "K" -> TaskExecutorsStatusDirectum.K;
+                    case "N" -> TaskExecutorsStatusDirectum.N;
+                    default -> TaskExecutorsStatusDirectum.C;
+                };
+            }
+            return TaskExecutorsStatusDirectum.C;
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+            return TaskExecutorsStatusDirectum.C;
+        }
     }
 }

@@ -1,6 +1,8 @@
 package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -13,6 +15,8 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
 //    private final Long AUTHOR_ID = 194823L;
 //    private final String AUTHOR_FULL_NAME = "Кондаурова Елена Владимировна";
 //    private final String AUTHOR_LOGIN_AD = "AKandaurava";
+
+    public static final Logger log = LoggerFactory.getLogger(DocumentAppealRowMapper.class);
 
     @Override
     public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -88,10 +92,17 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
 
     }
 
-    private Boolean convertTypeAppeal(String type){
-        if(Objects.equals(type, "Д")){
-            return Boolean.TRUE;
+    private Boolean convertTypeAppeal(String type) {
+        try {
+            if (type != null && !type.isEmpty()) {
+                if (Objects.equals(type, "Д")) {
+                    return Boolean.TRUE;
+                }
+            }
+            return Boolean.FALSE;
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+            return Boolean.FALSE;
         }
-        return Boolean.FALSE;
     }
 }

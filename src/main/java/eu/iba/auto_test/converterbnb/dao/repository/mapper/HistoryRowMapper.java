@@ -3,6 +3,8 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 import eu.iba.auto_test.converterbnb.dao.model.Employee;
 import eu.iba.auto_test.converterbnb.dao.model.History;
 import eu.iba.auto_test.converterbnb.utils.HistoryUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -10,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class HistoryRowMapper implements RowMapper<History> {
+
+    public static final Logger log = LoggerFactory.getLogger(HistoryRowMapper.class);
 
     @Override
     public History mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -58,12 +62,20 @@ public class HistoryRowMapper implements RowMapper<History> {
     }
 
     private String convertAction(String action) {
-        return switch (action) {
-            case "С" -> "Создание";
-            case "И" -> "Изменение";
-            case "У" -> "Удаление";
-            default -> "";
-        };
+        try {
+            if (action != null && !action.isEmpty()) {
+                return switch (action) {
+                    case "С" -> "Создание";
+                    case "И" -> "Изменение";
+                    case "У" -> "Удаление";
+                    default -> "Неизвестное действие";
+                };
+            }
+            return "Неизвестное действие";
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+            return "Неизвестное действие";
+        }
     }
 
 }

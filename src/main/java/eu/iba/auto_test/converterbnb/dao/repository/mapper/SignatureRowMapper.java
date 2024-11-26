@@ -2,6 +2,8 @@ package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.Employee;
 import eu.iba.auto_test.converterbnb.dao.model.Signature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -9,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class SignatureRowMapper implements RowMapper<Signature> {
+
+    public static final Logger log = LoggerFactory.getLogger(SignatureRowMapper.class);
 
     @Override
     public Signature mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -51,12 +55,20 @@ public class SignatureRowMapper implements RowMapper<Signature> {
     }
 
     private String convertSignatureType(String signatureType) {
-        return switch (signatureType) {
-            case "В" -> "Визирующая";
-            case "У" -> "Утверждающая";
-            case "Н" -> "Нет";
-            default -> "";
-        };
+        try {
+            if (signatureType != null && !signatureType.isEmpty()) {
+                return switch (signatureType) {
+                    case "В" -> "Визирующая";
+                    case "У" -> "Утверждающая";
+                    case "Н" -> "Нет";
+                    default -> "Неизвестный тип";
+                };
+            }
+            return "Неизвестный тип";
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+            return "Неизвестный тип";
+        }
     }
 
 }

@@ -1,6 +1,8 @@
 package eu.iba.auto_test.converterbnb.dao.repository.mapper;
 
 import eu.iba.auto_test.converterbnb.dao.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -8,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class TaskRowMapper implements RowMapper<Task> {
+
+    public static final Logger log = LoggerFactory.getLogger(TaskRowMapper.class);
+
     @Override
     public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
         try {
@@ -58,21 +63,37 @@ public class TaskRowMapper implements RowMapper<Task> {
     }
 
     private TaskTypeDirectum convertType(String type) {
-        return switch (type) {
-            case "S" -> TaskTypeDirectum.S;
-            case "P" -> TaskTypeDirectum.P;
-            case "C" -> TaskTypeDirectum.C;
-            default -> TaskTypeDirectum.R;
-        };
+        try {
+            if (type != null && !type.isEmpty()) {
+                return switch (type) {
+                    case "S" -> TaskTypeDirectum.S;
+                    case "P" -> TaskTypeDirectum.P;
+                    case "C" -> TaskTypeDirectum.C;
+                    default -> TaskTypeDirectum.R;
+                };
+            }
+            return TaskTypeDirectum.R;
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+            return TaskTypeDirectum.R;
+        }
     }
 
     private TaskStatusDirectum convertStatus(String status) {
-        return switch (status) {
-            case "I" -> TaskStatusDirectum.I;
-            case "W" -> TaskStatusDirectum.W;
-            case "K" -> TaskStatusDirectum.K;
-            case "N" -> TaskStatusDirectum.N;
-            default -> TaskStatusDirectum.C;
-        };
+        try {
+            if (status != null && !status.isEmpty()) {
+                return switch (status) {
+                    case "I" -> TaskStatusDirectum.I;
+                    case "W" -> TaskStatusDirectum.W;
+                    case "K" -> TaskStatusDirectum.K;
+                    case "N" -> TaskStatusDirectum.N;
+                    default -> TaskStatusDirectum.C;
+                };
+            }
+            return TaskStatusDirectum.C;
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+            return TaskStatusDirectum.C;
+        }
     }
 }
