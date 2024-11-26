@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class TaskExecutorsServiceDaoImpl implements TaskExecutorsServiceDao {
@@ -25,7 +23,8 @@ public class TaskExecutorsServiceDaoImpl implements TaskExecutorsServiceDao {
     @Override
     public Set<TaskExecutors> findAll(TaskExecutorsData data) {
         Map<String, Object> param = createParamSql(data);
-        return (Set<TaskExecutors>) new TaskExecutorsSqlFunction(ds, param).executeByNamedParam(param);
+        List<TaskExecutors> taskExecutorsList = new TaskExecutorsSqlFunction(ds, param).executeByNamedParam(param);
+        return new HashSet<>(taskExecutorsList);
     }
 
     private Map<String, Object> createParamSql(TaskExecutorsData data) {
