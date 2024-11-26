@@ -31,6 +31,7 @@ public class IntroductionServiceDaoImpl implements IntroductionServiceDao {
     private Map<String, Object> createParamSql(IntroductionData data) {
         Map<String, Object> param = new HashMap<>();
         param.put("rkkId", data.getRkkId());
+        param.put("introductionId", data.getIntroductionId());
         return param;
     }
 }
