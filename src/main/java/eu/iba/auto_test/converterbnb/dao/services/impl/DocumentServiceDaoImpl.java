@@ -51,7 +51,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     if (document.getId() != null) {
                         AttachmentData attachmentData = new AttachmentData();
                         attachmentData.setRkkId(document.getId());
-                        Set<AttachmentDocument> attachmentDocuments = attachmentDocumentServiceDao.findAll(attachmentData);
+                        Set<AttachmentDocument> attachmentDocuments = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
 
                         HistoryData historyData = new HistoryData();
                         if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
@@ -88,7 +88,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                                         attachmentIntroductionData.setAttachType(AttachType.E);
                                         attachmentIntroductionData.setTaskId(taskId);
                                         attachmentIntroductionData.setName("Лист ознакомления");
-                                        Set<AttachmentDocument> introductionSheets = attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData);
+                                        Set<AttachmentDocument> introductionSheets = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
                                         attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
                                     }
                                 }
@@ -132,7 +132,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
-                            List<Signature> signatures = signatureServiceDao.findAll(signatureData);
+                            List<Signature> signatures = deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
                             if (!signatures.isEmpty()) {
                                 attachmentDocument.setSignatures(signatures);
                             }
@@ -275,7 +275,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     if (document.getId() != null) {
                         AttachmentData attachmentData = new AttachmentData();
                         attachmentData.setRkkId(document.getId());
-                        Set<AttachmentDocument> attachmentDocuments = attachmentDocumentServiceDao.findAll(attachmentData);
+                        Set<AttachmentDocument> attachmentDocuments = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
 
                         HistoryData historyData = new HistoryData();
                         if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
@@ -312,7 +312,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                                         attachmentIntroductionData.setAttachType(AttachType.E);
                                         attachmentIntroductionData.setTaskId(taskId);
                                         attachmentIntroductionData.setName("Лист ознакомления");
-                                        Set<AttachmentDocument> introductionSheets = attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData);
+                                        Set<AttachmentDocument> introductionSheets = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
                                         attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
                                     }
                                 }
@@ -356,7 +356,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
-                            List<Signature> signatures = signatureServiceDao.findAll(signatureData);
+                            List<Signature> signatures = deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
                             if (!signatures.isEmpty()) {
                                 attachmentDocument.setSignatures(signatures);
                             }
@@ -405,5 +405,25 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
         }
         data.setDocCardIds(docCardIds);
         return data;
+    }
+
+    private Set<AttachmentDocument> deleteAttachmentWithNullData(Set<AttachmentDocument> attachmentDocumentSet){
+        Set<AttachmentDocument> attachmentDocuments = new HashSet<>();
+        for (AttachmentDocument attachmentDocument: attachmentDocumentSet){
+            if(attachmentDocument.getData() != null){
+                attachmentDocuments.add(attachmentDocument);
+            }
+        }
+        return attachmentDocuments;
+    }
+
+    private List<Signature> deleteSignatureWithNullData(List<Signature> signatures){
+        List<Signature> signatureList = new ArrayList<>();
+        for (Signature signature: signatures){
+            if(signature.getData() != null){
+                signatureList.add(signature);
+            }
+        }
+        return signatureList;
     }
 }

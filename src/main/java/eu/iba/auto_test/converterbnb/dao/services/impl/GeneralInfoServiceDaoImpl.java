@@ -86,7 +86,7 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
 
     private void saveAttachment(Document document, Set<AttachmentDocument> attachmentDocuments){
         if(attachmentDocuments != null){
-            document.getAttachmentDocuments().addAll(attachmentDocuments);
+            document.getAttachmentDocuments().addAll(deleteAttachmentWithNullData(attachmentDocuments));
         }
     }
 
@@ -121,5 +121,15 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
             param.put("rkkId", data.getRkkId());
         }
         return param;
+    }
+
+    private Set<AttachmentDocument> deleteAttachmentWithNullData(Set<AttachmentDocument> attachmentDocumentSet){
+        Set<AttachmentDocument> attachmentDocuments = new HashSet<>();
+        for (AttachmentDocument attachmentDocument: attachmentDocumentSet){
+            if(attachmentDocument.getData() != null){
+                attachmentDocuments.add(attachmentDocument);
+            }
+        }
+        return attachmentDocuments;
     }
 }
