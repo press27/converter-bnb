@@ -46,6 +46,7 @@ public class HistoryRowMapper implements RowMapper<History> {
             StringBuilder builder = new StringBuilder();
             if(!action.isEmpty()){
                 builder.append(action);
+                model.setText(builder.toString());
             }
             String detail = rs.getString("detail");
             model.setDetail(detail);
