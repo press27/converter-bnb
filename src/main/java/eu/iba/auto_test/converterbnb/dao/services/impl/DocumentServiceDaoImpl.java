@@ -1,14 +1,22 @@
 package eu.iba.auto_test.converterbnb.dao.services.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.iba.auto_test.converterbnb.controller.data.*;
 import eu.iba.auto_test.converterbnb.dao.model.*;
+import eu.iba.auto_test.converterbnb.dao.repository.mapper.DocumentAppealRowMapper;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.*;
 import eu.iba.auto_test.converterbnb.dao.services.*;
 import eu.iba.auto_test.converterbnb.utils.TaskUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants.*;
@@ -16,6 +24,8 @@ import static eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants.
 
 @Service
 public class DocumentServiceDaoImpl implements DocumentServiceDao {
+
+    public static final Logger log = LoggerFactory.getLogger(DocumentServiceDaoImpl.class);
 
     private final DataSource ds;
     private final AttachmentDocumentServiceDao attachmentDocumentServiceDao;
@@ -266,7 +276,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
     public void saveAllV3() {
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
-            int index = 20;
+            int index = 5;
             int count = 0;
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
@@ -363,6 +373,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
 
                         document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
+                        saveJson(document.getId().toString(), document);
                         uploadService.uploadDocument(document);
                         nextId = document.getId();
                     }
@@ -425,5 +436,18 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             }
         }
         return signatureList;
+    }
+
+    public static void saveJson(String file_prefix, Object request) {
+        try {
+            Path filePath = Paths.get("c:\\json\\" + file_prefix + ".json");
+            if (!Files.exists(filePath.getParent())) {
+                Files.createDirectories(filePath.getParent());
+            }
+            ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+            Files.write(filePath, mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(request), java.nio.file.StandardOpenOption.APPEND, java.nio.file.StandardOpenOption.CREATE);
+        } catch (Exception ex){
+            log.error(ex.getMessage(),ex);
+        }
     }
 }

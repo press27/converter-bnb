@@ -31,7 +31,7 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
             model.setShortSummary(rs.getString("shortSummary"));
 
             Long citizenTypeId = rs.getObject("citizenTypeId", Long.class);
-            if(citizenTypeId != null){
+            if(citizenTypeId != null && citizenTypeId > 0){
                 CitizenType citizenType = new CitizenType();
                 citizenType.setCitizenTypeId(citizenTypeId);
                 citizenType.setCitizenType(rs.getString("citizenType"));
