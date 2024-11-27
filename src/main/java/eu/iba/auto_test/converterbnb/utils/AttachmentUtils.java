@@ -2,7 +2,6 @@ package eu.iba.auto_test.converterbnb.utils;
 
 public class AttachmentUtils {
 
-
     public static String bytesToHex(byte[] bytes) {
         if (bytes == null || bytes.length == 0){
             return null;

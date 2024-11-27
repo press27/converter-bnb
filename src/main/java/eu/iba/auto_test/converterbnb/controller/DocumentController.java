@@ -38,11 +38,4 @@ public class DocumentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/v4", produces = "application/json")
-    @Transactional(readOnly = true)
-    public ResponseEntity<?> saveAllV4() {
-        documentServiceDao.saveAllV4();
-        return ResponseEntity.ok().build();
-    }
-
 }

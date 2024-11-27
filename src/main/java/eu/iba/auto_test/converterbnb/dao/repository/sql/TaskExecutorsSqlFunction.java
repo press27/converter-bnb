@@ -15,6 +15,7 @@ import java.sql.Types;
 import java.util.Map;
 
 // Исполнители поручения
+//TODO LEFT JOIN executor.Vid = 3119 возможно не тот справочник
 public class TaskExecutorsSqlFunction extends SqlFunction<TaskExecutors> {
 
     private static final String SQL ="SELECT DISTINCT taskExecutor.XRecID as id, taskExecutor.Analit as taskId, " +

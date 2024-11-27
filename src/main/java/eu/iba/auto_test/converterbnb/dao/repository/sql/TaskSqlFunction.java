@@ -15,6 +15,7 @@ import java.sql.Types;
 import java.util.Map;
 
 // Поручения по ркк
+//TODO task.Polzovatel а в LEFT JOIN MBAnalit p ON  ->>>>> task.Author ИСПРАВИТЬ на правильный
 public class TaskSqlFunction extends SqlFunction<Task> {
 
     private static final String SQL ="SELECT DISTINCT task.XRecID as id, task.HighLvl as rkkId, task.MainClaim as rkkCitizenId, " +

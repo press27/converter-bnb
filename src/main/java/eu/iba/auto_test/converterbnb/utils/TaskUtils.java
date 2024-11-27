@@ -12,7 +12,7 @@ public class TaskUtils {
         if(!allTask.isEmpty()) {
             List<Task> treeTasksList = new ArrayList<>();
             for (Task task : allTask) {
-                if (task.getParentId() == null){
+                if (task != null && (task.getParentId() == null || task.getParentId() == 0)){
                     treeTasksList.add(task);
                     searchChildTask(task, allTask);
                 }
