@@ -15,7 +15,6 @@ import java.sql.Types;
 import java.util.Map;
 
 // Исполнители поручения
-//TODO LEFT JOIN executor.Vid = 3119 возможно не тот справочник
 public class TaskExecutorsSqlFunction extends SqlFunction<TaskExecutors> {
 
     private static final String SQL ="SELECT DISTINCT taskExecutor.XRecID as id, taskExecutor.Analit as taskId, " +
@@ -24,7 +23,8 @@ public class TaskExecutorsSqlFunction extends SqlFunction<TaskExecutors> {
             "executor.NameAn as employeeFullName, executor.Dop as employeeLoginAD, taskExecutor.AssignmentStatusT as taskExecutorsStatusDirectum, " +
             "taskExecutor.NumStr as number, task.MainRRCAssignment as parentTaskId " +
             "FROM MBAnValR taskExecutor " +
-            "LEFT JOIN MBAnalit executor ON taskExecutor.PerformerT = executor.Analit and executor.Vid = 3119 " +
+            "LEFT JOIN MBAnalit executorLink ON taskExecutor.PerformerT = executorLink.Analit and executorLink.Vid = 288 " +
+            "LEFT JOIN MBAnalit executor ON executorLink.Polzovatel = executor.Analit and executor.Vid = 3119 " +
             "LEFT JOIN MBAnalit task ON taskExecutor.Analit = task.Analit and task.Vid = 3342 " +
             "WHERE " +
             "taskExecutor.Analit = (:taskId) ";

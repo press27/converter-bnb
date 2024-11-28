@@ -12,10 +12,6 @@ import java.util.Objects;
 
 public class DocumentAppealRowMapper implements RowMapper<Document> {
 
-//    private final Long AUTHOR_ID = 194823L;
-//    private final String AUTHOR_FULL_NAME = "Кондаурова Елена Владимировна";
-//    private final String AUTHOR_LOGIN_AD = "AKandaurava";
-
     public static final Logger log = LoggerFactory.getLogger(DocumentAppealRowMapper.class);
 
     @Override
@@ -46,12 +42,6 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
                 author.setEmployeeLoginAD(rs.getString("authorLoginAD"));
                 model.setAuthor(author);
             }
-//            else {
-//                author.setAuthorId(AUTHOR_ID);
-//                author.setAuthorFullName(AUTHOR_FULL_NAME);
-//                author.setAuthorLoginAD(AUTHOR_LOGIN_AD);
-//                author.setUserType(UserType.USER);
-//            }
 
             model.setRegNumber(rs.getString("regNumber"));
 
@@ -85,11 +75,24 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
             model.setFullAddress(rs.getString("fullAddress"));
             model.setCollective(convertTypeAppeal(rs.getString("collective")));
             model.setAnonymous(convertTypeAppeal(rs.getString("anonymous")));
+            model.setDeclarantType(convertDeclarantType(rs.getString("declarantType")));
             return model;
         } catch (Exception e) {
             throw new SQLException(e);
         }
 
+    }
+
+    private DeclarantType convertDeclarantType(String type) {
+        if(type != null && !type.isEmpty()){
+            if(type.equals("O")){
+                return DeclarantType.ENTITY;
+            }
+            if(type.equals("C")){
+                return DeclarantType.INDIVIDUAL;
+            }
+        }
+        return null;
     }
 
     private Boolean convertTypeAppeal(String type) {

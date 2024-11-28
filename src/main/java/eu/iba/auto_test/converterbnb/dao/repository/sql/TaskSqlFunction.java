@@ -15,7 +15,6 @@ import java.sql.Types;
 import java.util.Map;
 
 // Поручения по ркк
-//TODO task.Polzovatel а в LEFT JOIN MBAnalit p ON  ->>>>> task.Author ИСПРАВИТЬ на правильный
 public class TaskSqlFunction extends SqlFunction<Task> {
 
     private static final String SQL ="SELECT DISTINCT task.XRecID as id, task.HighLvl as rkkId, task.MainClaim as rkkCitizenId, " +
@@ -23,7 +22,7 @@ public class TaskSqlFunction extends SqlFunction<Task> {
             "task.Date2 as planedDateEnd, task.Date3 as realDateEnd, task.AssignmentStatus as taskStatus, task.Polzovatel as authorId, " +
             "p.NameAn as authorFullName, p.Dop as authorLoginAD, task.MainRRCAssignment as parentId " +
             "FROM MBAnalit task " +
-            "LEFT JOIN MBAnalit p ON task.Author = p.Analit and p.Vid = 3119 " +
+            "LEFT JOIN MBAnalit p ON task.Polzovatel = p.Analit and p.Vid = 3119 " +
             "WHERE " +
             "task.Vid = 3342 " +
             "AND (task.HighLvl = (:rkkId) or task.MainClaim = (:rkkId)) " +
