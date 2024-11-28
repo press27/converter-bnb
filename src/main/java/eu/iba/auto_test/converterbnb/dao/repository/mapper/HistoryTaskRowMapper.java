@@ -48,7 +48,7 @@ public class HistoryTaskRowMapper implements RowMapper<History> {
             if(detail != null && !detail.isEmpty()){
                 builder.append(":");
                 builder.append("\n");
-                builder.append(HistoryUtils.textFormattingGeneralHistory(detail));
+                builder.append(HistoryUtils.textFormattingTaskHistory(detail));
                 model.setText(builder.toString());
             }
             String detailInfo = rs.getString("detailInfo");
@@ -56,7 +56,7 @@ public class HistoryTaskRowMapper implements RowMapper<History> {
             if(detailInfo != null && !detailInfo.isEmpty()){
                 builder.append(":");
                 builder.append("\n");
-                builder.append(HistoryUtils.textFormattingTaskHistory(detailInfo));
+                builder.append(HistoryUtils.textFormattingGeneralHistory(detailInfo));
                 model.setText(builder.toString());
             }
             return model;
