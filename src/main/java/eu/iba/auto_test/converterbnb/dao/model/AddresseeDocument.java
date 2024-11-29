@@ -13,6 +13,9 @@ public class AddresseeDocument {
     // Полное Наименование адресата
     private String addresseeFullName;
 
+    // СМДО код
+    private String addresseeSmdoCode;
+
     // Кому отправить
     private String toPeople;
 
@@ -77,5 +80,13 @@ public class AddresseeDocument {
     public AddresseeDocument setDateSend(Instant dateSend) {
         this.dateSend = dateSend;
         return this;
+    }
+
+    public String getAddresseeSmdoCode() {
+        return addresseeSmdoCode;
+    }
+
+    public void setAddresseeSmdoCode(String addresseeSmdoCode) {
+        this.addresseeSmdoCode = addresseeSmdoCode;
     }
 }

@@ -17,9 +17,9 @@ import java.util.Map;
 public class CorrespondentSqlFunction extends SqlFunction<Correspondent> {
 
     private static final String SQL ="SELECT DISTINCT TOP(10) c.XRecID as id, c.NameAn as nameCorrespondent, c.LongString5 as fullNameCorrespondent, " +
-            "c.INN as unp, c.Soder2 as address " +
+            "c.INN as unp, c.Soder2 as address, c.NOVSmdoCode as smdoCode " +
             "FROM MBAnalit c " +
-            "WHERE c.Vid = 266 AND c.NOVSmdoCode IS NULL AND c.XRecID > :nextId ORDER BY c.XRecID ";
+            "WHERE c.Vid = 266 AND c.XRecID > :nextId ORDER BY c.XRecID ";
 
     private final CorrespondentRowMapper rowMapper;
 

@@ -1,7 +1,6 @@
 package eu.iba.auto_test.converterbnb.dao.services.impl;
 
 import eu.iba.auto_test.converterbnb.dao.model.NomenclatureAffair;
-import eu.iba.auto_test.converterbnb.dao.repository.sql.CorrespondentSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.NomenclatureAffairSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.NomenclatureAffairServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;

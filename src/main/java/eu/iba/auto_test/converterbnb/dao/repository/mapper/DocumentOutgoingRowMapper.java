@@ -25,6 +25,7 @@ public class DocumentOutgoingRowMapper implements RowMapper<Document> {
                 addresseeDocument.setAddresseeId(addresseeId);
                 addresseeDocument.setAddresseeName(rs.getString("addresseeName"));
                 addresseeDocument.setAddresseeFullName(rs.getString("addresseeFullName"));
+                addresseeDocument.setAddresseeSmdoCode(rs.getString("addresseeSmdoCode"));
                 addresseeDocument.setToPeople(rs.getString("toPeople"));
                 addresseeDocument.setDeliveryMethod(rs.getString("deliveryMethod"));
                 Timestamp dateSend = rs.getTimestamp("dateSend");

@@ -1,5 +1,7 @@
 package eu.iba.auto_test.converterbnb.dao.model;
 
+import java.util.Objects;
+
 public class Employee {
 
     // Id пользователя
@@ -41,4 +43,16 @@ public class Employee {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(employeeId, employee.employeeId) && Objects.equals(employeeFullName, employee.employeeFullName) && Objects.equals(employeeLoginAD, employee.employeeLoginAD);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeId, employeeFullName, employeeLoginAD);
+    }
 }

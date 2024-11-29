@@ -19,6 +19,8 @@ public class Correspondent {
     //Юридический адрес
     private String address;
 
+    private String smdoCode;
+
     public Correspondent() {
     }
 
@@ -67,16 +69,24 @@ public class Correspondent {
         return this;
     }
 
+    public String getSmdoCode() {
+        return smdoCode;
+    }
+
+    public void setSmdoCode(String smdoCode) {
+        this.smdoCode = smdoCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Correspondent that = (Correspondent) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(fullName, that.fullName) && Objects.equals(unp, that.unp) && Objects.equals(address, that.address);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(fullName, that.fullName) && Objects.equals(unp, that.unp) && Objects.equals(address, that.address) && Objects.equals(smdoCode, that.smdoCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, fullName, unp, address);
+        return Objects.hash(id, name, fullName, unp, address, smdoCode);
     }
 }

@@ -19,7 +19,7 @@ public class DocumentOutgoingSqlFunction extends SqlFunction<Document> {
 
     private static final String SQL ="SELECT DISTINCT TOP(10) rkk.XRecID as id, rkk.PriznDok as documentCategoryConstants, " +
             "rkk.Org as addresseeId, addressee.NameAn as addresseeName, addressee.LongString5 as addresseeFullName, " +
-            "rkk.Kod2 as toPeople, delivery.NameAn as deliveryMethod, rkk.Date6 as dateSend, " +
+            "addressee.NOVSmdoCode as addresseeSmdoCode, rkk.Kod2 as toPeople, delivery.NameAn as deliveryMethod, rkk.Date6 as dateSend, " +
             "rkk.Soder as shortSummary, rkk.DocumentKind as documentTypeId, dk.NameAn as documentType, rkk.Polzovatel as authorId, " +
             "author.NameAn as authorFullName, author.Dop as authorLoginAD, rkk.Dop as regNumber, rkk.DataTime as regDate, " +
             "rkk.Delo as nomenclatureAffairId, na.NameAn as nomenclatureAffairName, rkk.Data7 as nomenclatureAffairDate, " +

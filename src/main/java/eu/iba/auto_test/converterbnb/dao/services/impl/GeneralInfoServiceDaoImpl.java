@@ -81,8 +81,8 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
             for (TaskGeneral taskChild : taskChildren) {
                 saveEmployee(document.getEmployeesAccess(), taskChild.getAuthor());
                 log.info("findAllTaskChildren -> saveEmployee -> document.getEmployeesAccess() -> count: {}", document.getEmployeesAccess().size());
-                saveAttachment(document, attachmentDocumentServiceDao.findAllInTask(new AttachmentData(taskParent.getId(), AttachType.E)));
-                getInfoTaskJob(document, taskParent.getId());
+                saveAttachment(document, attachmentDocumentServiceDao.findAllInTask(new AttachmentData(taskChild.getId(), AttachType.E)));
+                getInfoTaskJob(document, taskChild.getId());
                 findAllTaskChildren(document, taskChild);
             }
         }

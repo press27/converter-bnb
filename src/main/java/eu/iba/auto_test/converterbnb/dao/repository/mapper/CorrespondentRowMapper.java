@@ -20,6 +20,7 @@ public class CorrespondentRowMapper implements RowMapper<Correspondent> {
                 model.setUnp(unp.trim());
             }
             model.setAddress(rs.getString("address"));
+            model.setSmdoCode(rs.getString("smdoCode"));
             return model;
         } catch (Exception e) {
             throw new SQLException(e);
