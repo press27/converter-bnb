@@ -57,11 +57,17 @@ public class DocumentInternRowMapper implements RowMapper<Document> {
             }
 
             Long employeeId = rs.getObject("employeeId", Long.class);
+            Long additionalEmployeeId = rs.getObject("additionalEmployeeId", Long.class);
             if(employeeId != null && employeeId > 0) {
                 Employee employee = new Employee();
                 employee.setEmployeeId(employeeId);
                 employee.setEmployeeFullName(rs.getString("employeeFullName"));
                 employee.setEmployeeLoginAD(rs.getString("employeeLoginAD"));
+                model.setWhoSigned(employee);
+            } else if(additionalEmployeeId != null && additionalEmployeeId > 0){
+                Employee employee = new Employee();
+                employee.setEmployeeId(additionalEmployeeId);
+                employee.setEmployeeFullName(rs.getString("additionalEmployeeFullName"));
                 model.setWhoSigned(employee);
             }
 

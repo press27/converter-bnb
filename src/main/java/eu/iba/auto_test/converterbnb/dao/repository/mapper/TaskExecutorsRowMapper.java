@@ -43,11 +43,17 @@ public class TaskExecutorsRowMapper implements RowMapper<TaskExecutors> {
             model.setStampText(rs.getString("stampText"));
 
             Long employeeId = rs.getObject("employeeId", Long.class);
+            Long additionalEmployeeId = rs.getObject("additionalEmployeeId", Long.class);
             if(employeeId != null && employeeId > 0) {
                 Employee executor = new Employee();
                 executor.setEmployeeId(employeeId);
                 executor.setEmployeeFullName(rs.getString("employeeFullName"));
                 executor.setEmployeeLoginAD(rs.getString("employeeLoginAD"));
+                model.setExecutor(executor);
+            } else if(additionalEmployeeId != null && additionalEmployeeId > 0){
+                Employee executor = new Employee();
+                executor.setEmployeeId(additionalEmployeeId);
+                executor.setEmployeeFullName(rs.getString("additionalEmployeeFullName"));
                 model.setExecutor(executor);
             }
 

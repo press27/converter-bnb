@@ -19,9 +19,10 @@ public class TaskExecutorsSqlFunction extends SqlFunction<TaskExecutors> {
 
     private static final String SQL ="SELECT DISTINCT taskExecutor.XRecID as id, taskExecutor.Analit as taskId, " +
             "task.HighLvl as rkkId, task.MainClaim as rkkCitizenId, task.DateOper as createDate, taskExecutor.YesNoT as responsible, " +
-            "taskExecutor.DataT as executedDate, taskExecutor.DopT as stampText, taskExecutor.PerformerT as employeeId, " +
+            "taskExecutor.DataT as executedDate, taskExecutor.DopT as stampText, executor.Analit as employeeId, " +
             "executor.NameAn as employeeFullName, executor.Dop as employeeLoginAD, taskExecutor.AssignmentStatusT as taskExecutorsStatusDirectum, " +
-            "taskExecutor.NumStr as number, task.MainRRCAssignment as parentTaskId " +
+            "taskExecutor.NumStr as number, task.MainRRCAssignment as parentTaskId, executorLink.Analit as additionalEmployeeId, " +
+            "executorLink.NameAn as additionalEmployeeFullName " +
             "FROM MBAnValR taskExecutor " +
             "LEFT JOIN MBAnalit executorLink ON taskExecutor.PerformerT = executorLink.Analit and executorLink.Vid = 288 " +
             "LEFT JOIN MBAnalit executor ON executorLink.Polzovatel = executor.Analit and executor.Vid = 3119 " +

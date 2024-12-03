@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 
 import static eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants.*;
@@ -69,6 +70,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
                         historyData.setSrcRecId(document.getId());
                         List<History> histories = historyServiceDao.findHistory(historyData);
+                        document.setCreateDate(findCreateDate(histories)); // ищем в истории дату создания если не нашли сохраняем текущую
                         HistoryDocumentData historyDocumentData = new HistoryDocumentData();
                         historyDocumentData.setRkkId(document.getId());
                         List<History> historiesDocument = historyServiceDao.findHistoryDocument(historyDocumentData);
@@ -293,6 +295,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
                         historyData.setSrcRecId(document.getId());
                         List<History> histories = historyServiceDao.findHistory(historyData);
+                        document.setCreateDate(findCreateDate(histories)); // ищем в истории дату создания если не нашли сохраняем текущую
                         HistoryDocumentData historyDocumentData = new HistoryDocumentData();
                         historyDocumentData.setRkkId(document.getId());
                         List<History> historiesDocument = historyServiceDao.findHistoryDocument(historyDocumentData);
@@ -434,6 +437,18 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             }
         }
         return signatureList;
+    }
+
+    private Instant findCreateDate(List<History> histories) {
+        if(!histories.isEmpty()){
+            histories.sort(Comparator.comparing(History::getDateAction));
+            for (History history: histories) {
+                if(history.getAction().equals("С")){
+                    return history.getDateAction();
+                }
+            }
+        }
+        return Instant.now();
     }
 
     //TODO после всех тестов убрать со всех мест где вызывается
