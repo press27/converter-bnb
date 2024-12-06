@@ -22,12 +22,14 @@ public class DocumentAppealSqlFunction extends SqlFunction<Document> {
             "author.NameAn as authorFullName, author.Dop as authorLoginAD, rkk.Dop as regNumber, rkk.DataTime as regDate, " +
             "rkk.Soder2 as fioApplicant, rkk.Org as organizationId, citizenOrg.NameAn as organizationName, " +
             "rkk.ClaimFile as citizenNomenclatureAffairId, citizenNa.NameAn as citizenNomenclatureAffairName, " +
-            "rkk.Date2 as receiptDate, rkk.Dop4 as fullAddress, rkk.YesNo3 as collective, rkk.YesNo4 as anonymous, rkk.ClaimKind as declarantType " +
+            "rkk.Date2 as receiptDate, rkk.Dop4 as fullAddress, rkk.YesNo3 as collective, rkk.YesNo4 as anonymous, " +
+            "rkk.ClaimKind as declarantType, delivery.NameAn as deliveryMethod " +
             "FROM MBAnalit rkk " +
             "LEFT JOIN MBAnalit ct ON rkk.ClaimType = ct.Analit and ct.Vid = 3336 " +
             "LEFT JOIN MBAnalit author ON rkk.Polzovatel = author.Analit and author.Vid = 3119 " +
             "LEFT JOIN MBAnalit citizenOrg ON rkk.Org = citizenOrg.Analit and citizenOrg.Vid = 266 " +
             "LEFT JOIN MBAnalit citizenNa ON rkk.ClaimFile = citizenNa.Analit and citizenNa.Vid = 3162 " +
+            "LEFT JOIN MBAnalit delivery ON rkk.ClaimGettingMethod = delivery.Analit and delivery.Vid = 3334 " +
             "WHERE rkk.Vid = 3329 " +
             "AND rkk.ClaimKind IS NOT NULL " +
             "AND rkk.XRecID > :nextId ORDER BY rkk.XRecID ";

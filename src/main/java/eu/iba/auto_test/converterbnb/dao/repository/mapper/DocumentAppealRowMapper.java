@@ -76,6 +76,7 @@ public class DocumentAppealRowMapper implements RowMapper<Document> {
             model.setCollective(convertTypeAppeal(rs.getString("collective")));
             model.setAnonymous(convertTypeAppeal(rs.getString("anonymous")));
             model.setDeclarantType(convertDeclarantType(rs.getString("declarantType")));
+            model.setDeliveryMethod(rs.getString("deliveryMethod"));
             return model;
         } catch (Exception e) {
             throw new SQLException(e);
