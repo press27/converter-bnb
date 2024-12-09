@@ -30,22 +30,24 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
     private final AttachmentDocumentServiceDao attachmentDocumentServiceDao;
     private final HistoryServiceDao historyServiceDao;
     private final IntroductionServiceDao introductionServiceDao;
-    private final TaskServiceDao taskServiceDao;
+    private final TaskDocumentServiceDao taskDocumentServiceDao;
     private final TaskExecutorsServiceDao taskExecutorsServiceDao;
     private final GeneralInfoServiceDao generalInfoServiceDao;
     private final SignatureServiceDao signatureServiceDao;
+    private final TaskCommentServiceDao taskCommentServiceDao;
     private final UploadService uploadService;
 
     @Autowired
-    public DocumentServiceDaoImpl(DataSource ds, AttachmentDocumentServiceDao attachmentDocumentServiceDao, HistoryServiceDao historyServiceDao, IntroductionServiceDao introductionServiceDao, TaskServiceDao taskServiceDao, TaskExecutorsServiceDao taskExecutorsServiceDao, GeneralInfoServiceDao generalInfoServiceDao, SignatureServiceDao signatureServiceDao, UploadService uploadService) {
+    public DocumentServiceDaoImpl(DataSource ds, AttachmentDocumentServiceDao attachmentDocumentServiceDao, HistoryServiceDao historyServiceDao, IntroductionServiceDao introductionServiceDao, TaskDocumentServiceDao taskDocumentServiceDao, TaskExecutorsServiceDao taskExecutorsServiceDao, GeneralInfoServiceDao generalInfoServiceDao, SignatureServiceDao signatureServiceDao, TaskCommentServiceDao taskCommentServiceDao, UploadService uploadService) {
         this.ds = ds;
         this.attachmentDocumentServiceDao = attachmentDocumentServiceDao;
         this.historyServiceDao = historyServiceDao;
         this.introductionServiceDao = introductionServiceDao;
-        this.taskServiceDao = taskServiceDao;
+        this.taskDocumentServiceDao = taskDocumentServiceDao;
         this.taskExecutorsServiceDao = taskExecutorsServiceDao;
         this.generalInfoServiceDao = generalInfoServiceDao;
         this.signatureServiceDao = signatureServiceDao;
+        this.taskCommentServiceDao = taskCommentServiceDao;
         this.uploadService = uploadService;
     }
 
@@ -108,7 +110,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
                         TaskData taskData = new TaskData();
                         taskData.setRkkId(document.getId());
-                        List<Task> tasks = taskServiceDao.findAll(taskData); // поручения
+                        List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
                         if(tasks != null) {
                             for (Task task : tasks) {
                                 TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
@@ -149,6 +151,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
 
                         document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
+
+                        List<TaskComment> comments = taskCommentServiceDao.findAllByRkkId(document.getId());
+                        if(comments != null && !comments.isEmpty()) {
+                            document.setTaskComments(comments);
+                        }
+
                         uploadService.uploadDocument(document);
                         nextId = document.getId();
                     }
@@ -218,7 +226,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
                         TaskData taskData = new TaskData();
                         taskData.setRkkId(document.getId());
-                        List<Task> tasks = taskServiceDao.findAll(taskData); // поручения
+                        List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
                         if(tasks != null && !tasks.isEmpty()) {
                             for (Task task : tasks) {
                                 TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
@@ -333,7 +341,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
                         TaskData taskData = new TaskData();
                         taskData.setRkkId(document.getId());
-                        List<Task> tasks = taskServiceDao.findAll(taskData); // поручения
+                        List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
                         if(tasks != null && !tasks.isEmpty()) {
                             for (Task task : tasks) {
                                 TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
@@ -374,6 +382,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
 
                         document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
+
+                        List<TaskComment> comments = taskCommentServiceDao.findAllByRkkId(document.getId());
+                        if(comments != null && !comments.isEmpty()) {
+                            document.setTaskComments(comments);
+                        }
+
                         saveJson(document.getId().toString(), document);
                         uploadService.uploadDocument(document);
                         nextId = document.getId();

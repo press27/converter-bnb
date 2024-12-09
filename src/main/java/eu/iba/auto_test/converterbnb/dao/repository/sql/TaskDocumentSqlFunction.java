@@ -1,7 +1,7 @@
 package eu.iba.auto_test.converterbnb.dao.repository.sql;
 
 import eu.iba.auto_test.converterbnb.dao.model.Task;
-import eu.iba.auto_test.converterbnb.dao.repository.mapper.TaskRowMapper;
+import eu.iba.auto_test.converterbnb.dao.repository.mapper.TaskDocumentRowMapper;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -15,7 +15,7 @@ import java.sql.Types;
 import java.util.Map;
 
 // Поручения по ркк
-public class TaskSqlFunction extends SqlFunction<Task> {
+public class TaskDocumentSqlFunction extends SqlFunction<Task> {
 
     private static final String SQL ="SELECT DISTINCT task.XRecID as id, task.HighLvl as rkkId, task.MainClaim as rkkCitizenId, " +
             "task.RRCAssignmentType as taskType, task.Recv4 as taskNumber, task.DateOper as createDate, task.Prim as taskText, " +
@@ -31,11 +31,11 @@ public class TaskSqlFunction extends SqlFunction<Task> {
             "   FROM MBAnalit excludeTask " +
             "   WHERE excludeTask.Vid = 3342 AND (excludeTask.HighLvl = (:rkkId) OR excludeTask.MainClaim = (:rkkId)) AND excludeTask.IntNumber2 IS NOT NULL) ";
 
-    private final TaskRowMapper rowMapper;
+    private final TaskDocumentRowMapper rowMapper;
 
-    public TaskSqlFunction(DataSource ds, Map<String, Object> mapParam) {
+    public TaskDocumentSqlFunction(DataSource ds, Map<String, Object> mapParam) {
         super(ds, SQL);
-        this.rowMapper = new TaskRowMapper();
+        this.rowMapper = new TaskDocumentRowMapper();
         changeSql(mapParam);
     }
 

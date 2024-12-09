@@ -90,8 +90,8 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
 
     private void getInfoTaskJob(Document document, Long taskId){
         Map<String, Object> param = createParamTaskJobSql(taskId);
-        List<TaskJobGeneral> taskJobGenerals = new TaskJobSqlFunction(ds, param).executeByNamedParam(param);
-        log.info("getInfoTaskJob -> TaskJobSqlFunction -> taskJobGenerals -> count: {}", taskJobGenerals.size());
+        List<TaskJobGeneral> taskJobGenerals = new TaskJobEmployeeSqlFunction(ds, param).executeByNamedParam(param);
+        log.info("getInfoTaskJob -> TaskJobEmployeeSqlFunction -> taskJobGenerals -> count: {}", taskJobGenerals.size());
         for (TaskJobGeneral taskJob : taskJobGenerals) {
             saveEmployee(document.getEmployeesAccess(), taskJob.getEmployee());
             log.info("getInfoTaskJob -> saveEmployee -> document.getEmployeesAccess() -> count: {}", document.getEmployeesAccess().size());

@@ -9,9 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-public class TaskRowMapper implements RowMapper<Task> {
+public class TaskDocumentRowMapper implements RowMapper<Task> {
 
-    public static final Logger log = LoggerFactory.getLogger(TaskRowMapper.class);
+    public static final Logger log = LoggerFactory.getLogger(TaskDocumentRowMapper.class);
 
     @Override
     public Task mapRow(ResultSet rs, int rowNum) throws SQLException {

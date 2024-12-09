@@ -8,6 +8,5 @@ public class ConverterBnbApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ConverterBnbApplication.class, args);
-
     }
 }
