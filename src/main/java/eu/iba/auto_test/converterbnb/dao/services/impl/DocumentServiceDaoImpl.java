@@ -155,6 +155,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         List<TaskComment> comments = taskCommentServiceDao.findAllByRkkId(document.getId());
                         if(comments != null && !comments.isEmpty()) {
                             document.setTaskComments(comments);
+                            Set<Employee> employees = new HashSet<>();
+                            for (TaskComment taskComment : comments) {
+                                employees.add(taskComment.getAuthor());
+                            }
+                            document.getEmployeesAccess().addAll(employees);
                         }
 
                         uploadService.uploadDocument(document);
@@ -284,7 +289,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
     public void saveAllV3() {
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
-            int index = 5;
+            int index = 10;
             int count = 0;
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
@@ -386,6 +391,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         List<TaskComment> comments = taskCommentServiceDao.findAllByRkkId(document.getId());
                         if(comments != null && !comments.isEmpty()) {
                             document.setTaskComments(comments);
+                            Set<Employee> employees = new HashSet<>();
+                            for (TaskComment taskComment : comments) {
+                                employees.add(taskComment.getAuthor());
+                            }
+                            document.getEmployeesAccess().addAll(employees);
                         }
 
                         saveJson(document.getId().toString(), document);

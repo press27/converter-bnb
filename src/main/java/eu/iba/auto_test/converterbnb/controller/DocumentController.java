@@ -37,5 +37,12 @@ public class DocumentController {
         documentServiceDao.saveAllV3();
         return ResponseEntity.ok().build();
     }
+//
+//    @GetMapping(value = "/{rkkId}", produces = "application/json")
+//    @Transactional(readOnly = true)
+//    public ResponseEntity<?> saveOne(@PathVariable Long rkkId) {
+//        documentServiceDao.saveOne(rkkId);
+//        return ResponseEntity.ok().build();
+//    }
 
 }
