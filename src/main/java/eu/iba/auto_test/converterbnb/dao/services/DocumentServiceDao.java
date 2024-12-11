@@ -7,5 +7,7 @@ public interface DocumentServiceDao {
     void saveAllV2();
 
     void saveAllV3();
+//
+//    void saveOne(Long rkkId);
 
 }
