@@ -23,7 +23,7 @@ public class TaskSqlFunction extends SqlFunction<Task> {
             "LEFT JOIN MBAnalit p ON task.Author = p.Analit AND p.Vid = 3119 " +
             "LEFT JOIN SBTaskAttach taskAttach ON task.XRecID = taskAttach.TaskID " +
             "LEFT JOIN SBEDoc document ON taskAttach.AttachID = document.XRecID " +
-            "WHERE document.XRecID = (SELECT DestID from SBLinks link WHERE SourceID = (:rkkId) and SourceType = 'R' and DestType = 'E') ";
+            "WHERE document.XRecID IN (SELECT DestID from SBLinks link WHERE SourceID = (:rkkId) and SourceType = 'R' and DestType = 'E') ";
 
     private final TaskRowMapper rowMapper;
 
