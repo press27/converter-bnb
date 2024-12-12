@@ -39,6 +39,10 @@ public class TaskExecutorsRowMapper implements RowMapper<TaskExecutors> {
             Timestamp executedDate = rs.getTimestamp("executedDate");
             if(executedDate != null){
                 model.setExecutedDate(executedDate.toInstant());
+            } else {
+                if(createDate != null){
+                    model.setExecutedDate(createDate.toInstant());
+                }
             }
             model.setStampText(rs.getString("stampText"));
 

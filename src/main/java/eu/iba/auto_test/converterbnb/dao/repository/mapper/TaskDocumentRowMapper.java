@@ -33,15 +33,28 @@ public class TaskDocumentRowMapper implements RowMapper<Task> {
             if(createDate != null){
                 model.setCreateDate(createDate.toInstant());
             }
-            model.setTaskText(rs.getString("taskText"));
+            String taskText = rs.getString("taskText");
+            if(taskText != null && !taskText.isEmpty()) {
+                model.setTaskText(rs.getString("taskText"));
+            } else {
+                model.setTaskText("Поручение");
+            }
 
             Timestamp planedDateEnd = rs.getTimestamp("planedDateEnd");
             if(planedDateEnd != null){
                 model.setPlanedDateEnd(planedDateEnd.toInstant());
+            } else {
+                if(createDate != null){
+                    model.setPlanedDateEnd(createDate.toInstant());
+                }
             }
             Timestamp realDateEnd = rs.getTimestamp("realDateEnd");
             if(realDateEnd != null){
                 model.setRealDateEnd(realDateEnd.toInstant());
+            } else {
+                if(createDate != null){
+                    model.setRealDateEnd(createDate.toInstant());
+                }
             }
             model.setTaskStatusDirectum(convertStatus(rs.getString("taskStatus")));
             model.setTaskStatus(TaskStatus.EXECUTED);
