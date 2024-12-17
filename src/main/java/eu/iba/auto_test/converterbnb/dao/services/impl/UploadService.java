@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +33,7 @@ public class UploadService {
         this.password = password;
     }
 
+    @Retryable
     public void uploadCorrespondent(Correspondent correspondent){
         String url = host + "/api/migration/correspondent";
         HttpHeaders headers = new HttpHeaders();
@@ -45,6 +47,7 @@ public class UploadService {
         }
     }
 
+    @Retryable
     public void uploadNomenclatureAffair(NomenclatureAffair nomenclatureAffair) {
         String url = host + "/api/migration/nomenclature-affair";
         HttpHeaders headers = new HttpHeaders();
@@ -58,6 +61,7 @@ public class UploadService {
         }
     }
 
+    @Retryable
     public void uploadDocument(Document document) {
         String url = host + "/api/migration/document";
         HttpHeaders headers = new HttpHeaders();
@@ -71,7 +75,7 @@ public class UploadService {
         }
     }
 
-
+    @Retryable
     public void uploadDocumentLink(DocumentLink documentLink) {
         String url = host + "/api/migration/document-link";
         HttpHeaders headers = new HttpHeaders();
