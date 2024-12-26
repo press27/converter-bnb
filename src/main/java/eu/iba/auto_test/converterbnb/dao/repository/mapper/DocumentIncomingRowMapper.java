@@ -63,8 +63,8 @@ public class DocumentIncomingRowMapper implements RowMapper<Document> {
 
             String regNumber = rs.getString("regNumber");
             if(regDate != null && (regNumber == null || regNumber.isEmpty())){
-                model.setRegNumber("б/н");
                 model.setSkipRegistration(Boolean.TRUE);
+                model.setRegDate(null);
             } else {
                 model.setRegNumber(regNumber);
             }
