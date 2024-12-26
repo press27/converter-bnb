@@ -54,10 +54,18 @@ public class DocumentOutgoingRowMapper implements RowMapper<Document> {
                 model.setAuthor(author);
             }
 
-            model.setRegNumber(rs.getString("regNumber"));
             Timestamp regDate = rs.getTimestamp("regDate");
             if(regDate != null){
                 model.setRegDate(regDate.toInstant());
+                model.setCreateDate(regDate.toInstant());
+            }
+
+            String regNumber = rs.getString("regNumber");
+            if(regDate != null && (regNumber == null || regNumber.isEmpty())){
+                model.setRegNumber("б/н");
+                model.setSkipRegistration(Boolean.TRUE);
+            } else {
+                model.setRegNumber(regNumber);
             }
 
             Long nomenclatureAffairDocumentId = rs.getObject("nomenclatureAffairId", Long.class);

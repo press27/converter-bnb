@@ -15,6 +15,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UploadService {
@@ -58,6 +61,21 @@ public class UploadService {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
             logger.info("Process nomenclature affair with id: " + nomenclatureAffair.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+        }
+    }
+
+    @Retryable
+    public void uploadListDocument(List<Document> documents) {
+        String url = host + "/api/migration/document-list";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(getToken());
+        HttpEntity<List<Document>> entity = new HttpEntity<>(documents, headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            String ids = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+            logger.info("Process documents with ids: " + ids + " status: " + response.getStatusCode() + " body " + response.getBody());
         }
     }
 

@@ -1,5 +1,10 @@
 package eu.iba.auto_test.converterbnb.utils;
 
+import eu.iba.auto_test.converterbnb.dao.model.AttachmentDocument;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class AttachmentUtils {
 
     public static String bytesToHex(byte[] bytes) {
@@ -26,5 +31,15 @@ public class AttachmentUtils {
             bytes[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4) + Character.digit(hex.charAt(i+1), 16));
         }
         return bytes;
+    }
+
+    public static Set<AttachmentDocument> deleteAttachmentWithNullData(Set<AttachmentDocument> attachmentDocumentSet){
+        Set<AttachmentDocument> attachmentDocuments = new HashSet<>();
+        for (AttachmentDocument attachmentDocument: attachmentDocumentSet){
+            if(attachmentDocument.getData() != null){
+                attachmentDocuments.add(attachmentDocument);
+            }
+        }
+        return attachmentDocuments;
     }
 }

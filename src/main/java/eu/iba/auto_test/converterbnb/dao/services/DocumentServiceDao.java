@@ -2,11 +2,13 @@ package eu.iba.auto_test.converterbnb.dao.services;
 
 public interface DocumentServiceDao {
 
-    void saveAll();
+    void saveAllByOne();
 
-    void saveAllV2();
+    void saveAllByList();
 
-    void saveAllV3();
+    void saveRangeByOneTestV1();
+
+    void saveRangeByListTestV1();
 //
 //    void saveOne(Long rkkId);
 

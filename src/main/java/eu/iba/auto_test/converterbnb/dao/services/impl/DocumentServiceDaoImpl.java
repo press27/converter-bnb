@@ -5,6 +5,8 @@ import eu.iba.auto_test.converterbnb.controller.data.*;
 import eu.iba.auto_test.converterbnb.dao.model.*;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.*;
 import eu.iba.auto_test.converterbnb.dao.services.*;
+import eu.iba.auto_test.converterbnb.utils.AttachmentUtils;
+import eu.iba.auto_test.converterbnb.utils.SignatureUtils;
 import eu.iba.auto_test.converterbnb.utils.TaskUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +17,6 @@ import javax.sql.DataSource;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Instant;
 import java.util.*;
 
 import static eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants.*;
@@ -52,7 +53,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
     }
 
     @Override
-    public void saveAll() {
+    public void saveAllByOne() {
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
             Long nextId = 0L;
@@ -62,7 +63,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     if (document.getId() != null) {
                         AttachmentData attachmentData = new AttachmentData();
                         attachmentData.setRkkId(document.getId());
-                        Set<AttachmentDocument> attachmentDocuments = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
+                        Set<AttachmentDocument> attachmentDocuments = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
 
                         HistoryData historyData = new HistoryData();
                         if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
@@ -72,7 +73,6 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
                         historyData.setSrcRecId(document.getId());
                         List<History> histories = historyServiceDao.findHistory(historyData);
-                        document.setCreateDate(findCreateDate(histories)); // ищем в истории дату создания если не нашли сохраняем текущую
                         HistoryDocumentData historyDocumentData = new HistoryDocumentData();
                         historyDocumentData.setRkkId(document.getId());
                         List<History> historiesDocument = historyServiceDao.findHistoryDocument(historyDocumentData);
@@ -100,7 +100,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                                         attachmentIntroductionData.setAttachType(AttachType.E);
                                         attachmentIntroductionData.setTaskId(taskId);
                                         attachmentIntroductionData.setName("Лист ознакомления");
-                                        Set<AttachmentDocument> introductionSheets = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
+                                        Set<AttachmentDocument> introductionSheets = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
                                         attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
                                     }
                                 }
@@ -144,7 +144,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
-                            List<Signature> signatures = deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
+                            List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
                             if (!signatures.isEmpty()) {
                                 attachmentDocument.setSignatures(signatures);
                             }
@@ -172,125 +172,9 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
     }
 
     @Override
-    public void saveAllV2() {
+    public void saveAllByList() {
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
-            int index = 10;
-            int count = 0;
-            Long nextId = 0L;
-            List<Document> documents = getDocs(nextId, documentCategoryConstant);
-            while (!documents.isEmpty()) {
-                for (Document document : documents) {
-                    if (document.getId() != null) {
-//                        AttachmentData attachmentData = new AttachmentData();
-//                        attachmentData.setRkkId(document.getId());
-//                        Set<AttachmentDocument> attachmentDocuments = attachmentDocumentServiceDao.findAll(attachmentData);
-
-                        HistoryData historyData = new HistoryData();
-                        if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
-                            historyData.setReferenceTypeId(3329L);
-                        } else {
-                            historyData.setReferenceTypeId(3174L);
-                        }
-                        historyData.setSrcRecId(document.getId());
-                        List<History> histories = historyServiceDao.findHistory(historyData);
-                        HistoryDocumentData historyDocumentData = new HistoryDocumentData();
-                        historyDocumentData.setRkkId(document.getId());
-                        List<History> historiesDocument = historyServiceDao.findHistoryDocument(historyDocumentData);
-                        histories.addAll(historiesDocument);
-                        histories.sort(Comparator.comparing(History::getDateAction));
-                        document.setHistories(histories); // сохраняю историю в док.
-
-                        if (documentCategoryConstant != DocumentCategoryConstants.APPEAL) { // в обращениях нет ознакомления
-                            if(document.getIntroductionIds() != null && !document.getIntroductionIds().isEmpty()) {
-                                List<Introduction> introductions = new ArrayList<>();
-                                for (Long introductionId : document.getIntroductionIds()) {
-                                    IntroductionData introductionData = new IntroductionData();
-                                    introductionData.setRkkId(document.getId());
-                                    introductionData.setIntroductionId(introductionId);
-                                    List<Introduction> introductionsIter = introductionServiceDao.findAll(introductionData);
-                                    introductions.addAll(introductionsIter);
-//                                    Set<Long> taskIntroductionIds = new HashSet<>();
-//                                    for (Introduction introduction : introductionsIter) {
-//                                        if (introduction.getTaskId() != null) {
-//                                            taskIntroductionIds.add(introduction.getTaskId());
-//                                        }
-//                                    }
-//                                    for (Long taskId : taskIntroductionIds) {
-//                                        AttachmentData attachmentIntroductionData = new AttachmentData();
-//                                        attachmentIntroductionData.setAttachType(AttachType.E);
-//                                        attachmentIntroductionData.setTaskId(taskId);
-//                                        attachmentIntroductionData.setName("Лист ознакомления");
-//                                        Set<AttachmentDocument> introductionSheets = attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData);
-//                                        attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
-//                                    }
-                                }
-                                document.setIntroductions(introductions); // сохраняю ознакомителей в док.
-                            }
-                        }
-
-                        TaskData taskData = new TaskData();
-                        taskData.setRkkId(document.getId());
-                        List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
-                        if(tasks != null && !tasks.isEmpty()) {
-                            for (Task task : tasks) {
-                                TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
-                                taskExecutorsData.setTaskId(task.getId());
-                                Set<TaskExecutors> taskExecutors = taskExecutorsServiceDao.findAll(taskExecutorsData); // исполнители поручения
-                                task.setTaskExecutors(taskExecutors);
-
-                                HistoryData historyData1 = new HistoryData();
-                                historyData1.setReferenceTypeId(3342L);
-                                historyData1.setSrcRecId(task.getId());
-                                List<History> historyTask1 = historyServiceDao.findHistory(historyData1); // история поручения
-
-                                HistoryTaskData historyTaskData = new HistoryTaskData();
-                                historyTaskData.setTaskId(task.getId());
-                                List<History> historyTask2 = historyServiceDao.findHistoryTask(historyTaskData); // история поручения
-                                historyTask1.addAll(historyTask2);
-                                historyTask1.sort(Comparator.comparing(History::getDateAction));
-                                task.setTaskHistory(historyTask1); // сохраняю историю в поручение
-                            }
-                            List<Task> treeTask = TaskUtils.getTreeTasks(tasks); // сохраняю поручения в виде дерева
-                            document.setTasks(treeTask); // сохраняю поручения в док.
-                        }
-
-//                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
-//                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
-//                        ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
-//                        if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
-//                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
-//                        }
-
-//                        for (AttachmentDocument attachmentDocument : attachmentDocuments) {
-//                            SignatureData signatureData = new SignatureData();
-//                            signatureData.setDocCardId(attachmentDocument.getDocCardId());
-//                            List<Signature> signatures = signatureServiceDao.findAll(signatureData);
-//                            if (!signatures.isEmpty()) {
-//                                attachmentDocument.setSignatures(signatures);
-//                            }
-//                        }
-
-//                        document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
-                        uploadService.uploadDocument(document);
-                        nextId = document.getId();
-                    }
-                }
-                count++;
-                documents = getDocs(nextId, documentCategoryConstant);
-                if(count == index){
-                    documents = new ArrayList<>();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void saveAllV3() {
-        List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
-        for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
-            int index = 10;
-            int count = 0;
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
@@ -298,7 +182,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     if (document.getId() != null) {
                         AttachmentData attachmentData = new AttachmentData();
                         attachmentData.setRkkId(document.getId());
-                        Set<AttachmentDocument> attachmentDocuments = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
+                        Set<AttachmentDocument> attachmentDocuments = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
 
                         HistoryData historyData = new HistoryData();
                         if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
@@ -308,7 +192,6 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
                         historyData.setSrcRecId(document.getId());
                         List<History> histories = historyServiceDao.findHistory(historyData);
-                        document.setCreateDate(findCreateDate(histories)); // ищем в истории дату создания если не нашли сохраняем текущую
                         HistoryDocumentData historyDocumentData = new HistoryDocumentData();
                         historyDocumentData.setRkkId(document.getId());
                         List<History> historiesDocument = historyServiceDao.findHistoryDocument(historyDocumentData);
@@ -336,7 +219,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                                         attachmentIntroductionData.setAttachType(AttachType.E);
                                         attachmentIntroductionData.setTaskId(taskId);
                                         attachmentIntroductionData.setName("Лист ознакомления");
-                                        Set<AttachmentDocument> introductionSheets = deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
+                                        Set<AttachmentDocument> introductionSheets = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
                                         attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
                                     }
                                 }
@@ -380,7 +263,129 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
-                            List<Signature> signatures = deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
+                            List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
+                            if (!signatures.isEmpty()) {
+                                attachmentDocument.setSignatures(signatures);
+                            }
+                        }
+
+                        document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
+
+                        List<TaskComment> comments = taskCommentServiceDao.findAllByRkkId(document.getId());
+                        if(comments != null && !comments.isEmpty()) {
+                            document.setTaskComments(comments);
+                            Set<Employee> employees = new HashSet<>();
+                            for (TaskComment taskComment : comments) {
+                                employees.add(taskComment.getAuthor());
+                            }
+                            document.getEmployeesAccess().addAll(employees);
+                        }
+
+                        saveJson(document.getId().toString(), document);
+                        nextId = document.getId();
+                    }
+                }
+                uploadService.uploadListDocument(documents);
+                documents = getDocs(nextId, documentCategoryConstant);
+            }
+        }
+    }
+
+    @Override
+    public void saveRangeByOneTestV1() {
+        List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
+        for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
+            int index = 10;
+            int count = 0;
+            Long nextId = 0L;
+            List<Document> documents = getDocs(nextId, documentCategoryConstant);
+            while (!documents.isEmpty()) {
+                for (Document document : documents) {
+                    if (document.getId() != null) {
+                        AttachmentData attachmentData = new AttachmentData();
+                        attachmentData.setRkkId(document.getId());
+                        Set<AttachmentDocument> attachmentDocuments = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
+
+                        HistoryData historyData = new HistoryData();
+                        if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
+                            historyData.setReferenceTypeId(3329L);
+                        } else {
+                            historyData.setReferenceTypeId(3174L);
+                        }
+                        historyData.setSrcRecId(document.getId());
+                        List<History> histories = historyServiceDao.findHistory(historyData);
+                        HistoryDocumentData historyDocumentData = new HistoryDocumentData();
+                        historyDocumentData.setRkkId(document.getId());
+                        List<History> historiesDocument = historyServiceDao.findHistoryDocument(historyDocumentData);
+                        histories.addAll(historiesDocument);
+                        histories.sort(Comparator.comparing(History::getDateAction));
+                        document.setHistories(histories); // сохраняю историю в док.
+
+                        if (documentCategoryConstant != DocumentCategoryConstants.APPEAL) { // в обращениях нет ознакомления
+                            if(document.getIntroductionIds() != null && !document.getIntroductionIds().isEmpty()) {
+                                List<Introduction> introductions = new ArrayList<>();
+                                for (Long introductionId : document.getIntroductionIds()) {
+                                    IntroductionData introductionData = new IntroductionData();
+                                    introductionData.setRkkId(document.getId());
+                                    introductionData.setIntroductionId(introductionId);
+                                    List<Introduction> introductionsIter = introductionServiceDao.findAll(introductionData);
+                                    introductions.addAll(introductionsIter);
+                                    Set<Long> taskIntroductionIds = new HashSet<>();
+                                    for (Introduction introduction : introductionsIter) {
+                                        if (introduction.getTaskId() != null) {
+                                            taskIntroductionIds.add(introduction.getTaskId());
+                                        }
+                                    }
+                                    for (Long taskId : taskIntroductionIds) {
+                                        AttachmentData attachmentIntroductionData = new AttachmentData();
+                                        attachmentIntroductionData.setAttachType(AttachType.E);
+                                        attachmentIntroductionData.setTaskId(taskId);
+                                        attachmentIntroductionData.setName("Лист ознакомления");
+                                        Set<AttachmentDocument> introductionSheets = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
+                                        attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
+                                    }
+                                }
+                                document.setIntroductions(introductions); // сохраняю ознакомителей в док.
+                            }
+                        }
+
+                        TaskData taskData = new TaskData();
+                        taskData.setRkkId(document.getId());
+                        List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
+                        if(tasks != null && !tasks.isEmpty()) {
+                            for (Task task : tasks) {
+                                TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
+                                taskExecutorsData.setTaskId(task.getId());
+                                Set<TaskExecutors> taskExecutors = taskExecutorsServiceDao.findAll(taskExecutorsData); // исполнители поручения
+                                task.setTaskExecutors(taskExecutors);
+
+                                HistoryData historyData1 = new HistoryData();
+                                historyData1.setReferenceTypeId(3342L);
+                                historyData1.setSrcRecId(task.getId());
+                                List<History> historyTask1 = historyServiceDao.findHistory(historyData1); // история поручения
+
+                                HistoryTaskData historyTaskData = new HistoryTaskData();
+                                historyTaskData.setTaskId(task.getId());
+                                List<History> historyTask2 = historyServiceDao.findHistoryTask(historyTaskData); // история поручения
+                                historyTask1.addAll(historyTask2);
+                                historyTask1.sort(Comparator.comparing(History::getDateAction));
+                                task.setTaskHistory(historyTask1); // сохраняю историю в поручение
+                            }
+                            List<Task> treeTask = TaskUtils.getTreeTasks(tasks); // сохраняю поручения в виде дерева
+                            document.setTasks(treeTask); // сохраняю поручения в док.
+                        }
+
+                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
+                        ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
+                        if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
+                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
+                        }
+
+                        for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                            SignatureData signatureData = new SignatureData();
+                            signatureData.setDocCardId(attachmentDocument.getDocCardId());
+                            List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
                             if (!signatures.isEmpty()) {
                                 attachmentDocument.setSignatures(signatures);
                             }
@@ -404,6 +409,132 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     }
                 }
                 count++;
+                documents = getDocs(nextId, documentCategoryConstant);
+                if(count == index){
+                    documents = new ArrayList<>();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void saveRangeByListTestV1() {
+        List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
+        for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
+            int index = 10;
+            int count = 0;
+            Long nextId = 0L;
+            List<Document> documents = getDocs(nextId, documentCategoryConstant);
+            while (!documents.isEmpty()) {
+                for (Document document : documents) {
+                    if (document.getId() != null) {
+                        AttachmentData attachmentData = new AttachmentData();
+                        attachmentData.setRkkId(document.getId());
+                        Set<AttachmentDocument> attachmentDocuments = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAll(attachmentData));
+
+                        HistoryData historyData = new HistoryData();
+                        if (documentCategoryConstant == DocumentCategoryConstants.APPEAL) {
+                            historyData.setReferenceTypeId(3329L);
+                        } else {
+                            historyData.setReferenceTypeId(3174L);
+                        }
+                        historyData.setSrcRecId(document.getId());
+                        List<History> histories = historyServiceDao.findHistory(historyData);
+                        HistoryDocumentData historyDocumentData = new HistoryDocumentData();
+                        historyDocumentData.setRkkId(document.getId());
+                        List<History> historiesDocument = historyServiceDao.findHistoryDocument(historyDocumentData);
+                        histories.addAll(historiesDocument);
+                        histories.sort(Comparator.comparing(History::getDateAction));
+                        document.setHistories(histories); // сохраняю историю в док.
+
+                        if (documentCategoryConstant != DocumentCategoryConstants.APPEAL) { // в обращениях нет ознакомления
+                            if(document.getIntroductionIds() != null && !document.getIntroductionIds().isEmpty()) {
+                                List<Introduction> introductions = new ArrayList<>();
+                                for (Long introductionId : document.getIntroductionIds()) {
+                                    IntroductionData introductionData = new IntroductionData();
+                                    introductionData.setRkkId(document.getId());
+                                    introductionData.setIntroductionId(introductionId);
+                                    List<Introduction> introductionsIter = introductionServiceDao.findAll(introductionData);
+                                    introductions.addAll(introductionsIter);
+                                    Set<Long> taskIntroductionIds = new HashSet<>();
+                                    for (Introduction introduction : introductionsIter) {
+                                        if (introduction.getTaskId() != null) {
+                                            taskIntroductionIds.add(introduction.getTaskId());
+                                        }
+                                    }
+                                    for (Long taskId : taskIntroductionIds) {
+                                        AttachmentData attachmentIntroductionData = new AttachmentData();
+                                        attachmentIntroductionData.setAttachType(AttachType.E);
+                                        attachmentIntroductionData.setTaskId(taskId);
+                                        attachmentIntroductionData.setName("Лист ознакомления");
+                                        Set<AttachmentDocument> introductionSheets = AttachmentUtils.deleteAttachmentWithNullData(attachmentDocumentServiceDao.findAllInTask(attachmentIntroductionData));
+                                        attachmentDocuments.addAll(introductionSheets); // добавляю листы ознакомления(вложение) в общий список
+                                    }
+                                }
+                                document.setIntroductions(introductions); // сохраняю ознакомителей в док.
+                            }
+                        }
+
+                        TaskData taskData = new TaskData();
+                        taskData.setRkkId(document.getId());
+                        List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
+                        if(tasks != null && !tasks.isEmpty()) {
+                            for (Task task : tasks) {
+                                TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
+                                taskExecutorsData.setTaskId(task.getId());
+                                Set<TaskExecutors> taskExecutors = taskExecutorsServiceDao.findAll(taskExecutorsData); // исполнители поручения
+                                task.setTaskExecutors(taskExecutors);
+
+                                HistoryData historyData1 = new HistoryData();
+                                historyData1.setReferenceTypeId(3342L);
+                                historyData1.setSrcRecId(task.getId());
+                                List<History> historyTask1 = historyServiceDao.findHistory(historyData1); // история поручения
+
+                                HistoryTaskData historyTaskData = new HistoryTaskData();
+                                historyTaskData.setTaskId(task.getId());
+                                List<History> historyTask2 = historyServiceDao.findHistoryTask(historyTaskData); // история поручения
+                                historyTask1.addAll(historyTask2);
+                                historyTask1.sort(Comparator.comparing(History::getDateAction));
+                                task.setTaskHistory(historyTask1); // сохраняю историю в поручение
+                            }
+                            List<Task> treeTask = TaskUtils.getTreeTasks(tasks); // сохраняю поручения в виде дерева
+                            document.setTasks(treeTask); // сохраняю поручения в док.
+                        }
+
+                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
+                        ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
+                        if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
+                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
+                        }
+
+                        for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                            SignatureData signatureData = new SignatureData();
+                            signatureData.setDocCardId(attachmentDocument.getDocCardId());
+                            List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
+                            if (!signatures.isEmpty()) {
+                                attachmentDocument.setSignatures(signatures);
+                            }
+                        }
+
+                        document.setAttachmentDocuments(attachmentDocuments); // сохраняю вложения в док.
+
+                        List<TaskComment> comments = taskCommentServiceDao.findAllByRkkId(document.getId());
+                        if(comments != null && !comments.isEmpty()) {
+                            document.setTaskComments(comments);
+                            Set<Employee> employees = new HashSet<>();
+                            for (TaskComment taskComment : comments) {
+                                employees.add(taskComment.getAuthor());
+                            }
+                            document.getEmployeesAccess().addAll(employees);
+                        }
+
+                        saveJson(document.getId().toString(), document);
+                        nextId = document.getId();
+                    }
+                }
+                count++;
+                uploadService.uploadListDocument(documents);
                 documents = getDocs(nextId, documentCategoryConstant);
                 if(count == index){
                     documents = new ArrayList<>();
@@ -568,38 +699,6 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
         }
         data.setDocCardIds(docCardIds);
         return data;
-    }
-
-    private Set<AttachmentDocument> deleteAttachmentWithNullData(Set<AttachmentDocument> attachmentDocumentSet){
-        Set<AttachmentDocument> attachmentDocuments = new HashSet<>();
-        for (AttachmentDocument attachmentDocument: attachmentDocumentSet){
-            if(attachmentDocument.getData() != null){
-                attachmentDocuments.add(attachmentDocument);
-            }
-        }
-        return attachmentDocuments;
-    }
-
-    private List<Signature> deleteSignatureWithNullData(List<Signature> signatures){
-        List<Signature> signatureList = new ArrayList<>();
-        for (Signature signature: signatures){
-            if(signature.getData() != null){
-                signatureList.add(signature);
-            }
-        }
-        return signatureList;
-    }
-
-    private Instant findCreateDate(List<History> histories) {
-        if(!histories.isEmpty()){
-            histories.sort(Comparator.comparing(History::getDateAction));
-            for (History history: histories) {
-                if(history.getAction().equals("С")){
-                    return history.getDateAction();
-                }
-            }
-        }
-        return Instant.now();
     }
 
     //TODO после всех тестов убрать со всех мест где вызывается

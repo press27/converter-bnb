@@ -17,7 +17,7 @@ import java.util.Map;
 //входящий
 public class DocumentIncomingSqlFunction extends SqlFunction<Document> {
 
-    private static final String SQL ="SELECT DISTINCT TOP(10) rkk.XRecID as id, rkk.PriznDok as documentCategoryConstants, " +
+    private static final String SQL ="SELECT DISTINCT TOP(20) rkk.XRecID as id, rkk.PriznDok as documentCategoryConstants, " +
             "rkk.Org as correspondentId, correspondent.NameAn as correspondentName, correspondent.LongString5 as correspondentFullName, " +
             "correspondent.INN as correspondentUnp, correspondent.NOVSmdoCode as correspondentSmdoCode, rkk.Dop2 as outRegNumber, rkk.Date2 as outRegDate, " +
             "rkk.Soder as shortSummary, rkk.DocumentKind as documentTypeId, dk.NameAn as documentType, rkk.Polzovatel as authorId, " +
@@ -31,6 +31,7 @@ public class DocumentIncomingSqlFunction extends SqlFunction<Document> {
             "LEFT JOIN MBAnalit na ON rkk.Delo = na.Analit and na.Vid = 3162 " +
             "LEFT JOIN MBAnalit delivery ON rkk.SposobDost = delivery.Analit and delivery.Vid = 3195 " +
             "WHERE rkk.PriznDok = 'В' AND rkk.Vid = 3174 " +
+            "AND rkk.DataTime IS NOT NULL " +
             "AND rkk.XRecID > :nextId ORDER BY rkk.XRecID ";
 
     private final DocumentIncomingRowMapper rowMapper;

@@ -17,24 +17,31 @@ public class DocumentController {
         this.documentServiceDao = documentServiceDao;
     }
 
-    @GetMapping(produces = "application/json")
+    @GetMapping(value = "/save-all-by-one", produces = "application/json")
     @Transactional(readOnly = true)
-    public ResponseEntity<?> saveAll() {
-        documentServiceDao.saveAll();
+    public ResponseEntity<?> saveAllByOne() {
+        documentServiceDao.saveAllByOne();
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/v2", produces = "application/json")
+    @GetMapping(value = "/save-all-by-list", produces = "application/json")
     @Transactional(readOnly = true)
-    public ResponseEntity<?> saveAllV2() {
-        documentServiceDao.saveAllV2();
+    public ResponseEntity<?> saveAllByList() {
+        documentServiceDao.saveAllByList();
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/v3", produces = "application/json")
+    @GetMapping(value = "/save-range-by-one-test-v1", produces = "application/json")
     @Transactional(readOnly = true)
-    public ResponseEntity<?> saveAllV3() {
-        documentServiceDao.saveAllV3();
+    public ResponseEntity<?> saveRangeByOneTestV1() {
+        documentServiceDao.saveRangeByOneTestV1();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/save-range-by-list-test-v1", produces = "application/json")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> saveRangeByListTestV1() {
+        documentServiceDao.saveRangeByListTestV1();
         return ResponseEntity.ok().build();
     }
 //

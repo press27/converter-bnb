@@ -17,7 +17,7 @@ import java.util.Map;
 //Обращения
 public class DocumentAppealSqlFunction extends SqlFunction<Document> {
 
-    private static final String SQL ="SELECT DISTINCT TOP(10) rkk.XRecID as id, rkk.Soder as shortSummary, " +
+    private static final String SQL ="SELECT DISTINCT TOP(20) rkk.XRecID as id, rkk.Soder as shortSummary, " +
             "rkk.ClaimType as citizenTypeId, ct.NameAn as citizenType, rkk.Polzovatel as authorId, " +
             "author.NameAn as authorFullName, author.Dop as authorLoginAD, rkk.Dop as regNumber, rkk.DataTime as regDate, " +
             "rkk.Soder2 as fioApplicant, rkk.Org as organizationId, citizenOrg.NameAn as organizationName, " +
@@ -32,6 +32,7 @@ public class DocumentAppealSqlFunction extends SqlFunction<Document> {
             "LEFT JOIN MBAnalit delivery ON rkk.ClaimGettingMethod = delivery.Analit and delivery.Vid = 3334 " +
             "WHERE rkk.Vid = 3329 " +
             "AND rkk.ClaimKind IS NOT NULL " +
+            "AND rkk.DataTime IS NOT NULL " +
             "AND rkk.XRecID > :nextId ORDER BY rkk.XRecID ";
 
     private final DocumentAppealRowMapper rowMapper;
