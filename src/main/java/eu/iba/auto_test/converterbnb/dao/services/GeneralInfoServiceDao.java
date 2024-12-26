@@ -6,10 +6,12 @@ import eu.iba.auto_test.converterbnb.dao.model.Document;
 
 public interface GeneralInfoServiceDao {
 
-    void findAllEmployeeReview(Document document, TaskData data);
+    void findAllEmployeeAndAttachmentReview(Document document, TaskData data);
 
-    void findAllEmployeeRegistration(Document document, TaskData data);
+    void findAllEmployeeAndAttachmentRegistration(Document document, TaskData data);
 
-    void findAllEmployeeByProcess(Document document, ProcessAttachmentTaskData data);
+    void findAllEmployeeAndAttachmentByProcess(Document document, ProcessAttachmentTaskData data);
+
+    void findAllAttachmentByTask(Document document, Long rkkId);
 
 }

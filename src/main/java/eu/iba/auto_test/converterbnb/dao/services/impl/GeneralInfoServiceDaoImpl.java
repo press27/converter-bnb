@@ -7,8 +7,11 @@ import eu.iba.auto_test.converterbnb.dao.model.*;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.*;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.model.TaskGeneral;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.model.TaskJobGeneral;
+import eu.iba.auto_test.converterbnb.dao.repository.sql.task.model.Task;
 import eu.iba.auto_test.converterbnb.dao.services.AttachmentDocumentServiceDao;
 import eu.iba.auto_test.converterbnb.dao.services.GeneralInfoServiceDao;
+import eu.iba.auto_test.converterbnb.dao.services.TaskServiceDao;
+import eu.iba.auto_test.converterbnb.utils.AttachmentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +27,17 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
 
     private final DataSource ds;
     private final AttachmentDocumentServiceDao attachmentDocumentServiceDao;
+    private final TaskServiceDao taskServiceDao;
 
     @Autowired
-    public GeneralInfoServiceDaoImpl(DataSource ds, AttachmentDocumentServiceDao attachmentDocumentServiceDao) {
+    public GeneralInfoServiceDaoImpl(DataSource ds, AttachmentDocumentServiceDao attachmentDocumentServiceDao, TaskServiceDao taskServiceDao) {
         this.ds = ds;
         this.attachmentDocumentServiceDao = attachmentDocumentServiceDao;
+        this.taskServiceDao = taskServiceDao;
     }
 
     @Override
-    public void findAllEmployeeReview(Document document, TaskData data) {
+    public void findAllEmployeeAndAttachmentReview(Document document, TaskData data) {
         Map<String, Object> param = createParamSql(data);
         List<TaskGeneral> taskParents = new ReviewTaskParentSqlFunction(ds, param).executeByNamedParam(param);
         log.info("findAllEmployeeReview -> ReviewTaskParentSqlFunction -> taskParents -> count: {}", taskParents.size());
@@ -46,7 +51,7 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
     }
 
     @Override
-    public void findAllEmployeeRegistration(Document document, TaskData data) {
+    public void findAllEmployeeAndAttachmentRegistration(Document document, TaskData data) {
         Map<String, Object> param = createParamSql(data);
         List<TaskGeneral> taskParents = new RegistrationTaskParentSqlFunction(ds, param).executeByNamedParam(param);
         log.info("findAllEmployeeRegistration -> RegistrationTaskParentSqlFunction -> taskParents -> count: {}", taskParents.size());
@@ -60,7 +65,7 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
     }
 
     @Override
-    public void findAllEmployeeByProcess(Document document, ProcessAttachmentTaskData data) {
+    public void findAllEmployeeAndAttachmentByProcess(Document document, ProcessAttachmentTaskData data) {
         Map<String, Object> param = createParamEmployeeByProcessSql(data);
         List<TaskGeneral> taskParents = new ProcessAttachmentTaskParentSqlFunction(ds, param).executeByNamedParam(param);
         log.info("findAllEmployeeByProcess -> ProcessAttachmentTaskParentSqlFunction -> taskParents -> count: {}", taskParents.size());
@@ -70,6 +75,25 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
             saveAttachment(document, attachmentDocumentServiceDao.findAllInTask(new AttachmentData(taskParent.getId(), AttachType.E)));
             getInfoTaskJob(document, taskParent.getId());
             findAllTaskChildren(document, taskParent);
+        }
+    }
+
+    @Override
+    public void findAllAttachmentByTask(Document document, Long rkkId) {
+        List<Task> tasks = taskServiceDao.findAllByRkkId(rkkId);
+        log.info("findAllAttachmentByTask -> findAllByRkkId -> tasks -> count: {}", tasks.size());
+        for (Task task : tasks) {
+            saveAttachment(document, attachmentDocumentServiceDao.findAllInTask(new AttachmentData(task.getId(), AttachType.E)));
+            findAllAttachmentTaskChildren(document, task.getId());
+        }
+    }
+
+    private void findAllAttachmentTaskChildren(Document document, Long taskParentId) {
+        List<Task> tasks = taskServiceDao.findAllChildTaskByParentTaskId(taskParentId);
+        log.info("findAllAttachmentTaskChildren -> taskServiceDao -> tasks -> count: {}", tasks.size());
+        for (Task task : tasks) {
+            saveAttachment(document, attachmentDocumentServiceDao.findAllInTask(new AttachmentData(task.getId(), AttachType.E)));
+            findAllAttachmentTaskChildren(document, task.getId());
         }
     }
 
@@ -100,7 +124,7 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
 
     private void saveAttachment(Document document, Set<AttachmentDocument> attachmentDocuments){
         if(attachmentDocuments != null){
-            document.getAttachmentDocuments().addAll(deleteAttachmentWithNullData(attachmentDocuments));
+            document.getAttachmentDocuments().addAll(AttachmentUtils.deleteAttachmentWithNullData(attachmentDocuments));
         }
     }
 
@@ -135,15 +159,5 @@ public class GeneralInfoServiceDaoImpl implements GeneralInfoServiceDao {
             param.put("rkkId", data.getRkkId());
         }
         return param;
-    }
-
-    private Set<AttachmentDocument> deleteAttachmentWithNullData(Set<AttachmentDocument> attachmentDocumentSet){
-        Set<AttachmentDocument> attachmentDocuments = new HashSet<>();
-        for (AttachmentDocument attachmentDocument: attachmentDocumentSet){
-            if(attachmentDocument.getData() != null){
-                attachmentDocuments.add(attachmentDocument);
-            }
-        }
-        return attachmentDocuments;
     }
 }

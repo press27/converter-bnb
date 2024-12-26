@@ -134,12 +134,13 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.setTasks(treeTask); // сохраняю поручения в док.
                         }
 
-                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
-                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentReview(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentRegistration(document, taskData);
                         ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
                         if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
-                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
+                            generalInfoServiceDao.findAllEmployeeAndAttachmentByProcess(document, processAttachmentTaskData);
                         }
+                        generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
@@ -253,12 +254,13 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.setTasks(treeTask); // сохраняю поручения в док.
                         }
 
-                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
-                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentReview(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentRegistration(document, taskData);
                         ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
                         if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
-                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
+                            generalInfoServiceDao.findAllEmployeeAndAttachmentByProcess(document, processAttachmentTaskData);
                         }
+                        generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
@@ -375,12 +377,13 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.setTasks(treeTask); // сохраняю поручения в док.
                         }
 
-                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
-                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentReview(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentRegistration(document, taskData);
                         ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
                         if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
-                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
+                            generalInfoServiceDao.findAllEmployeeAndAttachmentByProcess(document, processAttachmentTaskData);
                         }
+                        generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
@@ -501,12 +504,13 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.setTasks(treeTask); // сохраняю поручения в док.
                         }
 
-                        generalInfoServiceDao.findAllEmployeeReview(document, taskData);
-                        generalInfoServiceDao.findAllEmployeeRegistration(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentReview(document, taskData);
+                        generalInfoServiceDao.findAllEmployeeAndAttachmentRegistration(document, taskData);
                         ProcessAttachmentTaskData processAttachmentTaskData = getData(document.getAttachmentDocuments());
                         if (!processAttachmentTaskData.getDocCardIds().isEmpty()) {
-                            generalInfoServiceDao.findAllEmployeeByProcess(document, processAttachmentTaskData);
+                            generalInfoServiceDao.findAllEmployeeAndAttachmentByProcess(document, processAttachmentTaskData);
                         }
+                        generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
                             SignatureData signatureData = new SignatureData();
