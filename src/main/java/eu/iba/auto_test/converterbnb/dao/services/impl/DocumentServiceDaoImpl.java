@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 
 import static eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants.*;
@@ -111,8 +112,17 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         TaskData taskData = new TaskData();
                         taskData.setRkkId(document.getId());
                         List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
+                        Set<Instant> instantSet = new HashSet<>(); // даты создания поручений
+                        long indexNano = 1;
                         if(tasks != null) {
                             for (Task task : tasks) {
+                                if(instantSet.contains(task.getCreateDate())){
+                                    task.setCreateDate(task.getCreateDate().plusNanos(indexNano));
+                                    instantSet.add(task.getCreateDate());
+                                    indexNano++;
+                                } else {
+                                    instantSet.add(task.getCreateDate());
+                                }
                                 TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
                                 taskExecutorsData.setTaskId(task.getId());
                                 Set<TaskExecutors> taskExecutors = taskExecutorsServiceDao.findAll(taskExecutorsData); // исполнители поручения
@@ -231,8 +241,17 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         TaskData taskData = new TaskData();
                         taskData.setRkkId(document.getId());
                         List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
+                        Set<Instant> instantSet = new HashSet<>(); // даты создания поручений
+                        long indexNano = 1;
                         if(tasks != null && !tasks.isEmpty()) {
                             for (Task task : tasks) {
+                                if(instantSet.contains(task.getCreateDate())){
+                                    task.setCreateDate(task.getCreateDate().plusNanos(indexNano));
+                                    instantSet.add(task.getCreateDate());
+                                    indexNano++;
+                                } else {
+                                    instantSet.add(task.getCreateDate());
+                                }
                                 TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
                                 taskExecutorsData.setTaskId(task.getId());
                                 Set<TaskExecutors> taskExecutors = taskExecutorsServiceDao.findAll(taskExecutorsData); // исполнители поручения
@@ -354,8 +373,17 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         TaskData taskData = new TaskData();
                         taskData.setRkkId(document.getId());
                         List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
+                        Set<Instant> instantSet = new HashSet<>(); // даты создания поручений
+                        long indexNano = 1;
                         if(tasks != null && !tasks.isEmpty()) {
                             for (Task task : tasks) {
+                                if(instantSet.contains(task.getCreateDate())){
+                                    task.setCreateDate(task.getCreateDate().plusNanos(indexNano));
+                                    instantSet.add(task.getCreateDate());
+                                    indexNano++;
+                                } else {
+                                    instantSet.add(task.getCreateDate());
+                                }
                                 TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
                                 taskExecutorsData.setTaskId(task.getId());
                                 Set<TaskExecutors> taskExecutors = taskExecutorsServiceDao.findAll(taskExecutorsData); // исполнители поручения
@@ -481,8 +509,17 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         TaskData taskData = new TaskData();
                         taskData.setRkkId(document.getId());
                         List<Task> tasks = taskDocumentServiceDao.findAll(taskData); // поручения
+                        Set<Instant> instantSet = new HashSet<>(); // даты создания поручений
+                        long indexNano = 1;
                         if(tasks != null && !tasks.isEmpty()) {
                             for (Task task : tasks) {
+                                if(instantSet.contains(task.getCreateDate())){
+                                    task.setCreateDate(task.getCreateDate().plusNanos(indexNano));
+                                    instantSet.add(task.getCreateDate());
+                                    indexNano++;
+                                } else {
+                                    instantSet.add(task.getCreateDate());
+                                }
                                 TaskExecutorsData taskExecutorsData = new TaskExecutorsData();
                                 taskExecutorsData.setTaskId(task.getId());
                                 Set<TaskExecutors> taskExecutors = taskExecutorsServiceDao.findAll(taskExecutorsData); // исполнители поручения
