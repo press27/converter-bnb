@@ -3,21 +3,26 @@ package eu.iba.auto_test.converterbnb.controller;
 import eu.iba.auto_test.converterbnb.controller.filter.DocumentFilter;
 import eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants;
 import eu.iba.auto_test.converterbnb.dao.services.DocumentServiceDao;
+import eu.iba.auto_test.converterbnb.dao.services.DocumentServiceDaoV2;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/bnb/document")
 public class DocumentController {
 
     private final DocumentServiceDao documentServiceDao;
+    private final DocumentServiceDaoV2 documentServiceDaoV2;
 
     @Autowired
-    public DocumentController(DocumentServiceDao documentServiceDao) {
+    public DocumentController(DocumentServiceDao documentServiceDao, DocumentServiceDaoV2 documentServiceDaoV2) {
         this.documentServiceDao = documentServiceDao;
+        this.documentServiceDaoV2 = documentServiceDaoV2;
     }
 
     @GetMapping(value = "/save-all-by-one", produces = "application/json")
@@ -69,12 +74,21 @@ public class DocumentController {
         documentServiceDao.saveAllByTypeAndNextId(filter.getDocumentCategoryConstants(), filter.getNextId());
         return ResponseEntity.ok().build();
     }
-//
-//    @GetMapping(value = "/{rkkId}", produces = "application/json")
-//    @Transactional(readOnly = true)
-//    public ResponseEntity<?> saveOne(@PathVariable Long rkkId) {
-//        documentServiceDao.saveOne(rkkId);
-//        return ResponseEntity.ok().build();
-//    }
+
+    @GetMapping(value = "/save-one-by-type/{categoryConstants}/rkk-id/{rkkId}", produces = "application/json")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
+                                                    @PathVariable("rkkId") Long rkkId) {
+        documentServiceDaoV2.saveOneByTypeAndId(categoryConstants, rkkId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/save-one-by-type/{categoryConstants}/rkk-ids/{rkkIds}", produces = "application/json")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
+                                                   @PathVariable("rkkIds") List<Long> rkkIds) {
+        documentServiceDaoV2.saveOneByTypeAndIds(categoryConstants, rkkIds);
+        return ResponseEntity.ok().build();
+    }
 
 }
