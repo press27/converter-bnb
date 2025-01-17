@@ -62,7 +62,7 @@ public class DocumentIncomingOneSqlFunction extends SqlFunction<Document> {
             declareParameter(new SqlParameter("rkkId", Types.BIGINT));
         }
         if (paramMap.containsKey("rkkIds")){
-            declareParameter(new SqlParameter("rkkIds", Types.OTHER));
+            declareParameter(new SqlParameter("rkkIds", Types.BIGINT));
         }
     }
 
