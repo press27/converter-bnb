@@ -56,9 +56,9 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
     @Override
     public void saveAllByOne() {
+        log.info("Start time: {}", Instant.now());
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
-            int count = 0;
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
@@ -175,29 +175,26 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.getEmployeesAccess().addAll(employees);
                         }
 
+                        saveJson(document.getId().toString(), document);
                         try {
                             uploadService.uploadDocument(document);
                         } catch (Exception e) {
                             log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
                         }
-                        saveJson(document.getId().toString(), document);
                         nextId = document.getId();
-                        count++;
                     }
                 }
-                log.info("saved documents count: {}", count);
-                log.info("next id: {}", nextId);
-                log.info("type: {}", documentCategoryConstant);
                 documents = getDocs(nextId, documentCategoryConstant);
             }
         }
+        log.info("End time: {}", Instant.now());
     }
 
     @Override
     public void saveAllByList() {
+        log.info("Start time: {}", Instant.now());
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
-            int count = 0;
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
@@ -316,12 +313,8 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
                         saveJson(document.getId().toString(), document);
                         nextId = document.getId();
-                        count++;
                     }
                 }
-                log.info("saved documents count: {}", count);
-                log.info("next id: {}", nextId);
-                log.info("type: {}", documentCategoryConstant);
 
                 String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
                 try {
@@ -332,15 +325,16 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 documents = getDocs(nextId, documentCategoryConstant);
             }
         }
+        log.info("End time: {}", Instant.now());
     }
 
     @Override
     public void saveRangeByOneTestV1() {
+        log.info("Start time: {}", Instant.now());
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
             int index = 10;
             int iterationCount = 0;
-            int count = 0;
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
@@ -457,19 +451,15 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.getEmployeesAccess().addAll(employees);
                         }
 
+                        saveJson(document.getId().toString(), document);
                         try {
                             uploadService.uploadDocument(document);
                         } catch (Exception e) {
                             log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
                         }
-                        saveJson(document.getId().toString(), document);
                         nextId = document.getId();
-                        count++;
                     }
                 }
-                log.info("saved documents count: {}", count);
-                log.info("next id: {}", nextId);
-                log.info("type: {}", documentCategoryConstant);
                 iterationCount++;
                 documents = getDocs(nextId, documentCategoryConstant);
                 if(iterationCount == index){
@@ -477,15 +467,16 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 }
             }
         }
+        log.info("End time: {}", Instant.now());
     }
 
     @Override
     public void saveRangeByListTestV1() {
+        log.info("Start time: {}", Instant.now());
         List<DocumentCategoryConstants> documentCategoryConstants = new ArrayList<>(Arrays.asList(INTERN, INCOMING, OUTGOING, APPEAL));
         for(DocumentCategoryConstants documentCategoryConstant: documentCategoryConstants) {
             int index = 10;
             int iterationCount = 0;
-            int count = 0;
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
@@ -604,12 +595,8 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
                         saveJson(document.getId().toString(), document);
                         nextId = document.getId();
-                        count++;
                     }
                 }
-                log.info("saved documents count: {}", count);
-                log.info("next id: {}", nextId);
-                log.info("type: {}", documentCategoryConstant);
                 iterationCount++;
                 String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
                 try {
@@ -623,11 +610,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 }
             }
         }
+        log.info("End time: {}", Instant.now());
     }
 
     @Override
     public void saveAllByType(DocumentCategoryConstants documentCategoryConstants) {
-        int count = 0;
+        log.info("Start time: {}", Instant.now());
         Long nextId = 0L;
         List<Document> documents = getDocs(nextId, documentCategoryConstants);
         while (!documents.isEmpty()) {
@@ -746,11 +734,8 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
                     saveJson(document.getId().toString(), document);
                     nextId = document.getId();
-                    count++;
                 }
             }
-            log.info("saved documents count: {}", count);
-            log.info("next id: {}", nextId);
             String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
             try {
                 uploadService.uploadListDocument(documents);
@@ -759,11 +744,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             }
             documents = getDocs(nextId, documentCategoryConstants);
         }
+        log.info("End time: {}", Instant.now());
     }
 
     @Override
     public void saveAllByTypeAndNextId(DocumentCategoryConstants documentCategoryConstants, Long nextId) {
-        int count = 0;
+        log.info("Start time: {}", Instant.now());
         List<Document> documents = getDocs(nextId, documentCategoryConstants);
         while (!documents.isEmpty()) {
             for (Document document : documents) {
@@ -881,11 +867,8 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
                     saveJson(document.getId().toString(), document);
                     nextId = document.getId();
-                    count++;
                 }
             }
-            log.info("saved documents count: {}", count);
-            log.info("next id: {}", nextId);
             String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
             try {
                 uploadService.uploadListDocument(documents);
@@ -894,6 +877,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             }
             documents = getDocs(nextId, documentCategoryConstants);
         }
+        log.info("End time: {}", Instant.now());
     }
 
     private List<Document> getDocs(Long nextId, DocumentCategoryConstants documentCategoryConstants){
