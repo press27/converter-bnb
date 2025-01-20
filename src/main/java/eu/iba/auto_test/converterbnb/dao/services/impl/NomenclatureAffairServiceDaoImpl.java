@@ -3,6 +3,8 @@ package eu.iba.auto_test.converterbnb.dao.services.impl;
 import eu.iba.auto_test.converterbnb.dao.model.NomenclatureAffair;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.NomenclatureAffairSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.NomenclatureAffairServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class NomenclatureAffairServiceDaoImpl implements NomenclatureAffairServi
 
     private final DataSource ds;
     private final UploadService uploadService;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     public NomenclatureAffairServiceDaoImpl(DataSource ds, UploadService uploadService) {
@@ -30,7 +33,11 @@ public class NomenclatureAffairServiceDaoImpl implements NomenclatureAffairServi
         List<NomenclatureAffair> nomenclatureAffairs = new NomenclatureAffairSqlFunction(ds, param).executeByNamedParam(param);
         while (!nomenclatureAffairs.isEmpty()){
             for (NomenclatureAffair nomenclatureAffair : nomenclatureAffairs) {
-                uploadService.uploadNomenclatureAffair(nomenclatureAffair);
+                try {
+                    uploadService.uploadNomenclatureAffair(nomenclatureAffair);
+                } catch (Exception e) {
+                    logger.error("Process nomenclature affair with id: {} {}", nomenclatureAffair.getId(), e.getMessage(), e);
+                }
                 nextId = nomenclatureAffair.getId();
             }
             param = createParamSql(nextId);

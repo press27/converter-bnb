@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants.*;
 import static eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants.APPEAL;
@@ -174,7 +175,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.getEmployeesAccess().addAll(employees);
                         }
 
-                        uploadService.uploadDocument(document);
+                        try {
+                            uploadService.uploadDocument(document);
+                        } catch (Exception e) {
+                            log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
+                        }
                         saveJson(document.getId().toString(), document);
                         nextId = document.getId();
                         count++;
@@ -317,7 +322,13 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 log.info("saved documents count: {}", count);
                 log.info("next id: {}", nextId);
                 log.info("type: {}", documentCategoryConstant);
-                uploadService.uploadListDocument(documents);
+
+                String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                try {
+                    uploadService.uploadListDocument(documents);
+                } catch (Exception e) {
+                    log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+                }
                 documents = getDocs(nextId, documentCategoryConstant);
             }
         }
@@ -446,8 +457,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             document.getEmployeesAccess().addAll(employees);
                         }
 
+                        try {
+                            uploadService.uploadDocument(document);
+                        } catch (Exception e) {
+                            log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
+                        }
                         saveJson(document.getId().toString(), document);
-                        uploadService.uploadDocument(document);
                         nextId = document.getId();
                         count++;
                     }
@@ -596,7 +611,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 log.info("next id: {}", nextId);
                 log.info("type: {}", documentCategoryConstant);
                 iterationCount++;
-                uploadService.uploadListDocument(documents);
+                String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                try {
+                    uploadService.uploadListDocument(documents);
+                } catch (Exception e) {
+                    log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+                }
                 documents = getDocs(nextId, documentCategoryConstant);
                 if(iterationCount == index){
                     documents = new ArrayList<>();
@@ -731,7 +751,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             }
             log.info("saved documents count: {}", count);
             log.info("next id: {}", nextId);
-            uploadService.uploadListDocument(documents);
+            String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+            try {
+                uploadService.uploadListDocument(documents);
+            } catch (Exception e) {
+                log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+            }
             documents = getDocs(nextId, documentCategoryConstants);
         }
     }
@@ -861,7 +886,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             }
             log.info("saved documents count: {}", count);
             log.info("next id: {}", nextId);
-            uploadService.uploadListDocument(documents);
+            String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+            try {
+                uploadService.uploadListDocument(documents);
+            } catch (Exception e) {
+                log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+            }
             documents = getDocs(nextId, documentCategoryConstants);
         }
     }

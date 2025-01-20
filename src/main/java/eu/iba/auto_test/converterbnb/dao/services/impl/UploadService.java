@@ -16,8 +16,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UploadService {
@@ -46,7 +44,7 @@ public class UploadService {
         HttpEntity<Correspondent> entity = new HttpEntity<>(correspondent, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         if(!response.getStatusCode().is2xxSuccessful()) {
-            logger.info("Process correspondent with id: " + correspondent.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+            throw new RuntimeException("status: " + response.getStatusCode() + " " + response.getBody());
         }
     }
 
@@ -60,7 +58,7 @@ public class UploadService {
         HttpEntity<NomenclatureAffair> entity = new HttpEntity<>(nomenclatureAffair, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
-            logger.info("Process nomenclature affair with id: " + nomenclatureAffair.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+            throw new RuntimeException("status: " + response.getStatusCode() + " " + response.getBody());
         }
     }
 
@@ -74,8 +72,7 @@ public class UploadService {
         HttpEntity<List<Document>> entity = new HttpEntity<>(documents, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
-            String ids = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
-            logger.info("Process documents with ids: " + ids + " status: " + response.getStatusCode() + " body " + response.getBody());
+            throw new RuntimeException("status: " + response.getStatusCode() + " " + response.getBody());
         }
     }
 
@@ -89,7 +86,7 @@ public class UploadService {
         HttpEntity<Document> entity = new HttpEntity<>(document, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
-            logger.info("Process document with id: " + document.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+            throw new RuntimeException("status: " + response.getStatusCode() + " " + response.getBody());
         }
     }
 
@@ -103,7 +100,7 @@ public class UploadService {
         HttpEntity<DocumentLink> entity = new HttpEntity<>(documentLink, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
-            logger.info("Process document link with id: " + documentLink.getId() + " status: " + response.getStatusCode() + " body " + response.getBody());
+            throw new RuntimeException("status: " + response.getStatusCode() + " " + response.getBody());
         }
     }
 

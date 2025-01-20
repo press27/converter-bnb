@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
@@ -165,7 +166,12 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
                 }
                 document.getEmployeesAccess().addAll(employees);
             }
-            uploadService.uploadDocument(document);
+
+            try {
+                uploadService.uploadDocument(document);
+            } catch (Exception e) {
+                log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
+            }
             saveJson(document.getId().toString(), document);
             log.info("saved document id: {}", rkkId);
         }
@@ -294,7 +300,14 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
         }
         log.info("saved documents count: {}", count);
         log.info("type: {}", documentCategoryConstants);
-        uploadService.uploadListDocument(documents);
+
+
+        String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+        try {
+            uploadService.uploadListDocument(documents);
+        } catch (Exception e) {
+            log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+        }
     }
 
     private Document getDoc(Long rkkId, DocumentCategoryConstants documentCategoryConstants){

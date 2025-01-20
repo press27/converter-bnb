@@ -3,6 +3,8 @@ package eu.iba.auto_test.converterbnb.dao.services.impl;
 import eu.iba.auto_test.converterbnb.dao.model.Correspondent;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.CorrespondentSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.CorrespondentServiceDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class CorrespondentServiceDaoImpl implements CorrespondentServiceDao {
 
     private final DataSource ds;
     private final UploadService uploadService;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     public CorrespondentServiceDaoImpl(DataSource ds, UploadService uploadService) {
@@ -30,7 +33,11 @@ public class CorrespondentServiceDaoImpl implements CorrespondentServiceDao {
         List<Correspondent> correspondents = new CorrespondentSqlFunction(ds, param).executeByNamedParam(param);
         while (!correspondents.isEmpty()){
             for (Correspondent correspondent : correspondents) {
-                uploadService.uploadCorrespondent(correspondent);
+                try {
+                    uploadService.uploadCorrespondent(correspondent);
+                } catch (Exception e) {
+                    logger.error("Process correspondent with id: {} {}", correspondent.getId(), e.getMessage(), e);
+                }
                 nextId = correspondent.getId();
             }
             param = createParamSql(nextId);
