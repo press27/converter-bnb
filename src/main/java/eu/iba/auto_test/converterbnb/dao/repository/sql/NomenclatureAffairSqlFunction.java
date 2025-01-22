@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class NomenclatureAffairSqlFunction extends SqlFunction<NomenclatureAffair> {
 
-    private static final String SQL ="SELECT DISTINCT TOP(10) na.XRecID as id, na.Podr as departmentId, d.NameAn as departmentName, " +
+    private static final String SQL ="SELECT DISTINCT TOP(20) na.XRecID as id, na.Podr as departmentId, d.NameAn as departmentName, " +
             "na.Soder as nameAffair, na.FileStoragePeriod as storagePeriodId, sp.NameAn as storagePeriodName, " +
             "na.Recv as indexAffair, na.DatOpen as collectingStart, na.DatClose as collectingEnd, na.Prim as note " +
             "FROM MBAnalit na " +
