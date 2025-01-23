@@ -48,8 +48,8 @@ public class TaskRowMapper implements RowMapper<Task> {
         }
     }
 
-        private String convertStatus(String status) {
-        if(status != null) {
+    private String convertStatus(String status) {
+        if (status != null) {
             return switch (status) {
                 case "B" -> "Прекращена";
                 case "C" -> "На контроле";

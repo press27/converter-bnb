@@ -2,6 +2,7 @@ package eu.iba.auto_test.converterbnb.dao.services.impl;
 
 import eu.iba.auto_test.converterbnb.dao.model.NomenclatureAffair;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.NomenclatureAffairSqlFunction;
+import eu.iba.auto_test.converterbnb.dao.repository.sql.update.NomenclatureAffairUpdateSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.NomenclatureAffairServiceDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,25 @@ public class NomenclatureAffairServiceDaoImpl implements NomenclatureAffairServi
             }
             param = createParamSql(nextId);
             nomenclatureAffairs = new NomenclatureAffairSqlFunction(ds, param).executeByNamedParam(param);
+        }
+    }
+
+    @Override
+    public void update() {
+        Long nextId = 0L;
+        Map<String, Object> param = createParamSql(nextId);
+        List<NomenclatureAffair> nomenclatureAffairs = new NomenclatureAffairUpdateSqlFunction(ds, param).executeByNamedParam(param);
+        while (!nomenclatureAffairs.isEmpty()){
+            for (NomenclatureAffair nomenclatureAffair : nomenclatureAffairs) {
+                try {
+                    uploadService.uploadNomenclatureAffair(nomenclatureAffair);
+                } catch (Exception e) {
+                    logger.error("Process nomenclature affair with id: {} {}", nomenclatureAffair.getId(), e.getMessage(), e);
+                }
+                nextId = nomenclatureAffair.getId();
+            }
+            param = createParamSql(nextId);
+            nomenclatureAffairs = new NomenclatureAffairUpdateSqlFunction(ds, param).executeByNamedParam(param);
         }
     }
 

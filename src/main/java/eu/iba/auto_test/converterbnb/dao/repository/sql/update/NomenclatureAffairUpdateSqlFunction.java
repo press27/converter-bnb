@@ -1,4 +1,4 @@
-package eu.iba.auto_test.converterbnb.dao.repository.sql;
+package eu.iba.auto_test.converterbnb.dao.repository.sql.update;
 
 import eu.iba.auto_test.converterbnb.dao.model.NomenclatureAffair;
 import eu.iba.auto_test.converterbnb.dao.repository.mapper.NomenclatureAffairRowMapper;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Map;
 
-public class NomenclatureAffairSqlFunction extends SqlFunction<NomenclatureAffair> {
+public class NomenclatureAffairUpdateSqlFunction extends SqlFunction<NomenclatureAffair> {
 
     private static final String SQL ="SELECT DISTINCT TOP(20) na.XRecID as id, na.Podr as departmentId, d.NameAn as departmentName, " +
             "na.Soder as nameAffair, na.FileStoragePeriod as storagePeriodId, sp.NameAn as storagePeriodName, " +
@@ -22,12 +22,14 @@ public class NomenclatureAffairSqlFunction extends SqlFunction<NomenclatureAffai
             "FROM MBAnalit na " +
             "LEFT JOIN MBAnalit d on na.Podr = d.XRecID and d.Vid = 446 " +
             "LEFT JOIN MBAnalit sp on na.FileStoragePeriod = sp.XRecID and sp.Vid = 3309 " +
-            "WHERE na.Vid = 3162 AND na.DatOpen <= '2025-01-01 00:00:00.000' " +
+            "WHERE na.Vid = 3162 " +
+            "AND na.DatOpen >= '2024-01-01 00:00:00.000' " +
+            "AND na.DatOpen <= '2025-01-01 00:00:00.000' " +
             "AND na.XRecID > :nextId ORDER BY na.XRecID ";
 
     private final NomenclatureAffairRowMapper rowMapper;
 
-    public NomenclatureAffairSqlFunction(DataSource ds,  Map<String, Object> paramMap) {
+    public NomenclatureAffairUpdateSqlFunction(DataSource ds, Map<String, Object> paramMap) {
         super(ds, SQL);
         this.rowMapper = new NomenclatureAffairRowMapper();
         changeSql(paramMap);
@@ -48,6 +50,5 @@ public class NomenclatureAffairSqlFunction extends SqlFunction<NomenclatureAffai
     protected NomenclatureAffair mapRow(@NotNull ResultSet rs, int rowNum) throws SQLException {
         return rowMapper.mapRow(rs, rowNum);
     }
-
 
 }

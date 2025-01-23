@@ -7,11 +7,23 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
 public class DocumentIncomingRowMapper implements RowMapper<Document> {
+
+//    2018: 01-1-30 - 166357
+//    2019: 01-1-30 - 198985
+//    2020: 01-1-10 - 216182
+//    2021: 52-1-10 - 244582
+//    2022: 32-1-10 - 284103
+//    2023: 32-1-08 - 342703
+//    2024: 32-1-08 - 452916
+
+    private final static ZoneId ZONE_MINSK = ZoneId.of("Europe/Moscow");
 
     @Override
     public Document mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -79,6 +91,10 @@ public class DocumentIncomingRowMapper implements RowMapper<Document> {
                     nomenclatureAffairDocument.setNomenclatureAffairDate(nomenclatureAffairDate.toInstant());
                 }
                 model.setNomenclatureAffairDocument(nomenclatureAffairDocument);
+            } else {
+                if(regDate != null){
+                    saveNomenclatureAffair(model, regDate);
+                }
             }
 
             model.setInDocSigners(rs.getString("inDocSigners"));
@@ -101,6 +117,23 @@ public class DocumentIncomingRowMapper implements RowMapper<Document> {
         } catch (Exception e) {
             throw new SQLException(e);
         }
+    }
+
+    private void saveNomenclatureAffair(Document model, Timestamp regDate) {
+        Instant iRegDate = regDate.toInstant();
+        ZonedDateTime zRegDate = iRegDate.atZone(ZONE_MINSK);
+        int year = zRegDate.getYear();
+        NomenclatureAffairDocument nomenclatureAffairDocument = new NomenclatureAffairDocument();
+        switch (year) {
+            case 2018 -> nomenclatureAffairDocument.setNomenclatureAffairId(166357L);
+            case 2019 -> nomenclatureAffairDocument.setNomenclatureAffairId(198985L);
+            case 2020 -> nomenclatureAffairDocument.setNomenclatureAffairId(216182L);
+            case 2021 -> nomenclatureAffairDocument.setNomenclatureAffairId(244582L);
+            case 2022 -> nomenclatureAffairDocument.setNomenclatureAffairId(284103L);
+            case 2023 -> nomenclatureAffairDocument.setNomenclatureAffairId(342703L);
+            case 2024 -> nomenclatureAffairDocument.setNomenclatureAffairId(452916L);
+        }
+        model.setNomenclatureAffairDocument(nomenclatureAffairDocument);
     }
 
 }
