@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class CorrespondentServiceDaoImpl implements CorrespondentServiceDao {
 
     @Override
     public void saveAll() {
+        logger.info("Start time: {}", Instant.now());
         Long nextId = 0L;
         Map<String, Object> param = createParamSql(nextId);
         List<Correspondent> correspondents = new CorrespondentSqlFunction(ds, param).executeByNamedParam(param);
@@ -43,6 +45,7 @@ public class CorrespondentServiceDaoImpl implements CorrespondentServiceDao {
             param = createParamSql(nextId);
             correspondents = new CorrespondentSqlFunction(ds, param).executeByNamedParam(param);
         }
+        logger.info("End time: {}", Instant.now());
     }
 
     private Map<String, Object> createParamSql(Long nextId) {

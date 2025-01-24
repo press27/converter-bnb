@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class NomenclatureAffairServiceDaoImpl implements NomenclatureAffairServi
 
     @Override
     public void saveAll() {
+        logger.info("Start time: {}", Instant.now());
         Long nextId = 0L;
         Map<String, Object> param = createParamSql(nextId);
         List<NomenclatureAffair> nomenclatureAffairs = new NomenclatureAffairSqlFunction(ds, param).executeByNamedParam(param);
@@ -44,10 +46,12 @@ public class NomenclatureAffairServiceDaoImpl implements NomenclatureAffairServi
             param = createParamSql(nextId);
             nomenclatureAffairs = new NomenclatureAffairSqlFunction(ds, param).executeByNamedParam(param);
         }
+        logger.info("End time: {}", Instant.now());
     }
 
     @Override
     public void update() {
+        logger.info("Start time: {}", Instant.now());
         Long nextId = 0L;
         Map<String, Object> param = createParamSql(nextId);
         List<NomenclatureAffair> nomenclatureAffairs = new NomenclatureAffairUpdateSqlFunction(ds, param).executeByNamedParam(param);
@@ -63,6 +67,7 @@ public class NomenclatureAffairServiceDaoImpl implements NomenclatureAffairServi
             param = createParamSql(nextId);
             nomenclatureAffairs = new NomenclatureAffairUpdateSqlFunction(ds, param).executeByNamedParam(param);
         }
+        logger.info("End time: {}", Instant.now());
     }
 
     private Map<String, Object> createParamSql(Long nextId) {
