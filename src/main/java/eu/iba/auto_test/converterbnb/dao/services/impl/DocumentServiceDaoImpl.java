@@ -880,6 +880,41 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
         log.info("End time: {}", Instant.now());
     }
 
+    //TODO тут закончил
+    private List<List<Document>> splitIntoCollectionsBySize(List<Document> documents){
+        List<List<Document>> collection = new ArrayList<>();
+        Long overallSize = 0L;
+        Long maxSize = 100000L;
+        List<Document> listDoc = new ArrayList<>();
+        for(Document document: documents){
+            if(document.getAttachmentDocuments() != null){
+                overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
+                if(overallSize > maxSize){
+                    collection.add(listDoc);
+                    listDoc.clear();
+                }
+                overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
+                listDoc.add(document);
+            } else {
+                listDoc.add(document);
+            }
+        }
+
+        if(collection.isEmpty()){
+            collection.add(listDoc);
+        }
+
+        return collection;
+    }
+
+    private Long calculateSizeAttachments(Set<AttachmentDocument> attachmentDocuments){
+        Long size = 0L;
+        for (AttachmentDocument attachmentDocument: attachmentDocuments){
+            size = size + attachmentDocument.getSize();
+        }
+        return size;
+    }
+
     private List<Document> getDocs(Long nextId, DocumentCategoryConstants documentCategoryConstants){
         Map<String, Object> param = createParamSql(nextId);
         List<Document> documents = new ArrayList<>();
