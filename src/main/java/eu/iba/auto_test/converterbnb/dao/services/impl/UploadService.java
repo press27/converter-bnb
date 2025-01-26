@@ -27,6 +27,7 @@ public class UploadService {
     private final String password;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+
     @Autowired
     public UploadService(RestTemplate restTemplate, @Value("${edms.host:https://edms.edo.iba}") String host, @Value("${edms.login:admin}") String login, @Value("${edms.login:admin}") String password) {
         this.restTemplate = restTemplate;
