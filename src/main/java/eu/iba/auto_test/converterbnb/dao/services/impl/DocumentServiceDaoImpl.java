@@ -6,6 +6,7 @@ import eu.iba.auto_test.converterbnb.dao.model.*;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.*;
 import eu.iba.auto_test.converterbnb.dao.services.*;
 import eu.iba.auto_test.converterbnb.utils.AttachmentUtils;
+import eu.iba.auto_test.converterbnb.utils.DocumentUtils;
 import eu.iba.auto_test.converterbnb.utils.SignatureUtils;
 import eu.iba.auto_test.converterbnb.utils.TaskUtils;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
     private final SignatureServiceDao signatureServiceDao;
     private final TaskCommentServiceDao taskCommentServiceDao;
     private final UploadService uploadService;
-    private final static Long MAX_SIZE =  100000000L;
+    private final static Long MAX_SIZE =  10000000L;
 
     @Autowired
     public DocumentServiceDaoImpl(DataSource ds, AttachmentDocumentServiceDao attachmentDocumentServiceDao, HistoryServiceDao historyServiceDao, IntroductionServiceDao introductionServiceDao, TaskDocumentServiceDao taskDocumentServiceDao, TaskExecutorsServiceDao taskExecutorsServiceDao, GeneralInfoServiceDao generalInfoServiceDao, SignatureServiceDao signatureServiceDao, TaskCommentServiceDao taskCommentServiceDao, UploadService uploadService) {
@@ -63,6 +64,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
+                documents = DocumentUtils.getUniqueDocuments(documents);
                 for (Document document : documents) {
                     if (document.getId() != null) {
                         AttachmentData attachmentData = new AttachmentData();
@@ -199,6 +201,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
+                documents = DocumentUtils.getUniqueDocuments(documents);
                 List<List<Document>> collection = splitIntoCollectionsBySize(documents);
                 for (List<Document> documentList: collection) {
                     for (Document document : documentList) {
@@ -320,10 +323,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     }
 
                     String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                    Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
                     try {
                         uploadService.uploadListDocument(documents);
                     } catch (Exception e) {
-                        log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+                        log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
                     }
                 }
                 documents = getDocs(nextId, documentCategoryConstant);
@@ -342,6 +346,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
+                documents = DocumentUtils.getUniqueDocuments(documents);
                 for (Document document : documents) {
                     if (document.getId() != null) {
                         AttachmentData attachmentData = new AttachmentData();
@@ -484,6 +489,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             Long nextId = 0L;
             List<Document> documents = getDocs(nextId, documentCategoryConstant);
             while (!documents.isEmpty()) {
+                documents = DocumentUtils.getUniqueDocuments(documents);
                 List<List<Document>> collection = splitIntoCollectionsBySize(documents);
                 for (List<Document> documentList: collection) {
                     for (Document document : documentList) {
@@ -605,10 +611,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     }
                     iterationCount++;
                     String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                    Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
                     try {
                         uploadService.uploadListDocument(documents);
                     } catch (Exception e) {
-                        log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+                        log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
                     }
                 }
                 documents = getDocs(nextId, documentCategoryConstant);
@@ -626,6 +633,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
         Long nextId = 0L;
         List<Document> documents = getDocs(nextId, documentCategoryConstants);
         while (!documents.isEmpty()) {
+            documents = DocumentUtils.getUniqueDocuments(documents);
             List<List<Document>> collection = splitIntoCollectionsBySize(documents);
             for (List<Document> documentList: collection) {
                 for (Document document : documentList) {
@@ -746,10 +754,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     }
                 }
                 String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
                 try {
                     uploadService.uploadListDocument(documents);
                 } catch (Exception e) {
-                    log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+                    log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
                 }
             }
             documents = getDocs(nextId, documentCategoryConstants);
@@ -762,6 +771,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
         log.info("Start time: {}", Instant.now());
         List<Document> documents = getDocs(nextId, documentCategoryConstants);
         while (!documents.isEmpty()) {
+            documents = DocumentUtils.getUniqueDocuments(documents);
             List<List<Document>> collection = splitIntoCollectionsBySize(documents);
             for (List<Document> documentList: collection) {
                 for (Document document : documentList) {
@@ -882,10 +892,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     }
                 }
                 String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
                 try {
                     uploadService.uploadListDocument(documents);
                 } catch (Exception e) {
-                    log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+                    log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
                 }
             }
             documents = getDocs(nextId, documentCategoryConstants);
@@ -895,31 +906,29 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
 
     private List<List<Document>> splitIntoCollectionsBySize(List<Document> documents){
         List<List<Document>> collection = new ArrayList<>();
-        Long overallSize = 0L;
-        List<Document> listDoc = new ArrayList<>();
-        for(Document document: documents){
-            if(document.getAttachmentDocuments() != null){
-                overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
-                if(overallSize > MAX_SIZE){
-                    if(!listDoc.isEmpty()) {
-                        List<Document> docs = new ArrayList<>(listDoc);
-                        collection.add(docs);
-                        listDoc.clear();
+        if(!documents.isEmpty()) {
+            Long overallSize = 0L;
+            List<Document> listDoc = new ArrayList<>();
+            for (Document document : documents) {
+                if (document.getAttachmentDocuments() != null) {
+                    overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
+                    if (overallSize > MAX_SIZE) {
+                        if (!listDoc.isEmpty()) {
+                            List<Document> docs = new ArrayList<>(listDoc);
+                            collection.add(docs);
+                            listDoc.clear();
+                        }
+                        overallSize = calculateSizeAttachments(document.getAttachmentDocuments());
                     }
-                    overallSize = calculateSizeAttachments(document.getAttachmentDocuments());
+                    listDoc.add(document);
+                } else {
+                    listDoc.add(document);
                 }
-                listDoc.add(document);
-            } else {
-                listDoc.add(document);
             }
-        }
-
-        if(!listDoc.isEmpty()){
             List<Document> docs = new ArrayList<>(listDoc);
             collection.add(docs);
             listDoc.clear();
         }
-
         return collection;
     }
 

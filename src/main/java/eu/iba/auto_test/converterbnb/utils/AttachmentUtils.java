@@ -1,8 +1,10 @@
 package eu.iba.auto_test.converterbnb.utils;
 
 import eu.iba.auto_test.converterbnb.dao.model.AttachmentDocument;
+import eu.iba.auto_test.converterbnb.dao.model.Document;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AttachmentUtils {
@@ -41,5 +43,17 @@ public class AttachmentUtils {
             }
         }
         return attachmentDocuments;
+    }
+
+    public static Long calculateSizeAllAttachmentsByDocuments(List<Document> documents){
+        Long size = 0L;
+        for (Document document: documents){
+            if(document.getAttachmentDocuments() != null) {
+                for (AttachmentDocument attachmentDocument : document.getAttachmentDocuments()) {
+                    size = size + attachmentDocument.getSize();
+                }
+            }
+        }
+        return size;
     }
 }
