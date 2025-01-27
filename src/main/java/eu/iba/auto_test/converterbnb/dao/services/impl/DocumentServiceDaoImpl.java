@@ -901,7 +901,8 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
             if(document.getAttachmentDocuments() != null){
                 overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
                 if(overallSize > MAX_SIZE){
-                    collection.add(listDoc);
+                    List<Document> docs = new ArrayList<>(listDoc);
+                    collection.add(docs);
                     listDoc.clear();
                     overallSize = calculateSizeAttachments(document.getAttachmentDocuments());
                 }
@@ -912,7 +913,8 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
         }
 
         if(!listDoc.isEmpty()){
-            collection.add(listDoc);
+            List<Document> docs = new ArrayList<>(listDoc);
+            collection.add(docs);
             listDoc.clear();
         }
 
