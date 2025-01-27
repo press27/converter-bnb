@@ -70,11 +70,11 @@ public class RestTemplateConfig {
         result.setMaxTotal(maxTotalPooling);
         result.setDefaultMaxPerRoute(defaultMaxPerRoute);
         result.setDefaultSocketConfig(SocketConfig.custom()
-                .setSoTimeout(Timeout.ofMinutes(1))
+                .setSoTimeout(Timeout.ofMinutes(10))
                 .build());
         result.setDefaultConnectionConfig(ConnectionConfig.custom()
-                .setSocketTimeout(Timeout.ofMinutes(1))
-                .setConnectTimeout(Timeout.ofMinutes(1))
+                .setSocketTimeout(Timeout.ofMinutes(10))
+                .setConnectTimeout(Timeout.ofMinutes(10))
                 .setTimeToLive(TimeValue.ofMinutes(10))
                 .build());
         return result;
