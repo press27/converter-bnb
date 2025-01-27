@@ -321,9 +321,11 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
             if(document.getAttachmentDocuments() != null){
                 overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
                 if(overallSize > MAX_SIZE){
-                    List<Document> docs = new ArrayList<>(listDoc);
-                    collection.add(docs);
-                    listDoc.clear();
+                    if(!listDoc.isEmpty()) {
+                        List<Document> docs = new ArrayList<>(listDoc);
+                        collection.add(docs);
+                        listDoc.clear();
+                    }
                     overallSize = calculateSizeAttachments(document.getAttachmentDocuments());
                 }
                 listDoc.add(document);
