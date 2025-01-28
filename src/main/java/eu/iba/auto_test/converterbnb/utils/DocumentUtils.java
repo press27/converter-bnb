@@ -1,6 +1,12 @@
 package eu.iba.auto_test.converterbnb.utils;
 
+import eu.iba.auto_test.converterbnb.dao.model.Document;
 import eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DocumentUtils {
 
@@ -15,6 +21,19 @@ public class DocumentUtils {
             };
         }
         return null;
+    }
+
+    public static List<Document> getUniqueDocuments(List<Document> documents){
+        Map<Long, Document> documentMap = new HashMap<>();
+        for (Document document: documents){
+            documentMap.put(document.getId(), document);
+        }
+
+        List<Document> uniqueDocuments = new ArrayList<>();
+        for(Map.Entry<Long, Document> item : documentMap.entrySet()){
+            uniqueDocuments.add(item.getValue());
+        }
+        return uniqueDocuments;
     }
 
 }

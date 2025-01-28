@@ -9,6 +9,7 @@ import eu.iba.auto_test.converterbnb.dao.repository.sql.document_one.DocumentInt
 import eu.iba.auto_test.converterbnb.dao.repository.sql.document_one.DocumentOutgoingOneSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.*;
 import eu.iba.auto_test.converterbnb.utils.AttachmentUtils;
+import eu.iba.auto_test.converterbnb.utils.DocumentUtils;
 import eu.iba.auto_test.converterbnb.utils.SignatureUtils;
 import eu.iba.auto_test.converterbnb.utils.TaskUtils;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
     private final SignatureServiceDao signatureServiceDao;
     private final TaskCommentServiceDao taskCommentServiceDao;
     private final UploadService uploadService;
-    private final static Long MAX_SIZE =  100000000L;
+    private final static Long MAX_SIZE =  10000000L;
 
     public DocumentServiceDaoV2Impl(DataSource ds, AttachmentDocumentServiceDao attachmentDocumentServiceDao, HistoryServiceDao historyServiceDao, IntroductionServiceDao introductionServiceDao, TaskDocumentServiceDao taskDocumentServiceDao, TaskExecutorsServiceDao taskExecutorsServiceDao, GeneralInfoServiceDao generalInfoServiceDao, SignatureServiceDao signatureServiceDao, TaskCommentServiceDao taskCommentServiceDao, UploadService uploadService) {
         this.ds = ds;
@@ -182,6 +183,7 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
     public void saveOneByTypeAndIds(DocumentCategoryConstants documentCategoryConstants, List<Long> ids) {
         int count = 0;
         List<Document> documents = getDocs(ids, documentCategoryConstants);
+        documents = DocumentUtils.getUniqueDocuments(documents);
         List<List<Document>> collection = splitIntoCollectionsBySize(documents);
         for (List<Document> documentList: collection) {
             for (Document document : documentList) {
@@ -305,39 +307,40 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
             log.info("type: {}", documentCategoryConstants);
 
             String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+            Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
             try {
                 uploadService.uploadListDocument(documents);
             } catch (Exception e) {
-                log.error("Process documents with ids: {} {}", strIds, e.getMessage(), e);
+                log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
             }
         }
     }
 
     private List<List<Document>> splitIntoCollectionsBySize(List<Document> documents){
         List<List<Document>> collection = new ArrayList<>();
-        Long overallSize = 0L;
-        List<Document> listDoc = new ArrayList<>();
-        for(Document document: documents){
-            if(document.getAttachmentDocuments() != null){
-                overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
-                if(overallSize > MAX_SIZE){
-                    List<Document> docs = new ArrayList<>(listDoc);
-                    collection.add(docs);
-                    listDoc.clear();
-                    overallSize = calculateSizeAttachments(document.getAttachmentDocuments());
+        if(!documents.isEmpty()) {
+            Long overallSize = 0L;
+            List<Document> listDoc = new ArrayList<>();
+            for (Document document : documents) {
+                if (document.getAttachmentDocuments() != null) {
+                    overallSize = overallSize + calculateSizeAttachments(document.getAttachmentDocuments());
+                    if (overallSize > MAX_SIZE) {
+                        if (!listDoc.isEmpty()) {
+                            List<Document> docs = new ArrayList<>(listDoc);
+                            collection.add(docs);
+                            listDoc.clear();
+                        }
+                        overallSize = calculateSizeAttachments(document.getAttachmentDocuments());
+                    }
+                    listDoc.add(document);
+                } else {
+                    listDoc.add(document);
                 }
-                listDoc.add(document);
-            } else {
-                listDoc.add(document);
             }
-        }
-
-        if(!listDoc.isEmpty()){
             List<Document> docs = new ArrayList<>(listDoc);
             collection.add(docs);
             listDoc.clear();
         }
-
         return collection;
     }
 
