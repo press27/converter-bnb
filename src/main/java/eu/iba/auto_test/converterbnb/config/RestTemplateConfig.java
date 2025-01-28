@@ -8,6 +8,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
 import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
@@ -37,7 +38,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Конфигурация для RestTemplate
@@ -63,19 +63,21 @@ public class RestTemplateConfig {
     @Bean
     public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
-                .<ConnectionSocketFactory>create().register("https", cutstomSSLConnectionSocketFactory())
+                .<ConnectionSocketFactory>create()
+                .register("https", customSSLConnectionSocketFactory())
                 .register("http", PlainConnectionSocketFactory.getSocketFactory())
                 .build();
+
         PoolingHttpClientConnectionManager result = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
         result.setMaxTotal(maxTotalPooling);
         result.setDefaultMaxPerRoute(defaultMaxPerRoute);
         result.setDefaultSocketConfig(SocketConfig.custom()
-                .setSoTimeout(Timeout.ofMinutes(10))
+                .setSoTimeout(Timeout.ofMilliseconds(requestTimeout))
                 .build());
         result.setDefaultConnectionConfig(ConnectionConfig.custom()
-                .setSocketTimeout(Timeout.ofMinutes(10))
-                .setConnectTimeout(Timeout.ofMinutes(10))
-                .setTimeToLive(TimeValue.ofMinutes(10))
+                .setSocketTimeout(Timeout.ofMilliseconds(requestTimeout))
+                .setConnectTimeout(Timeout.ofMilliseconds(connectionTimeout))
+                .setTimeToLive(TimeValue.ofMinutes(1))
                 .build());
         return result;
     }
@@ -83,34 +85,31 @@ public class RestTemplateConfig {
     @Bean
     public RequestConfig requestConfig() {
         return RequestConfig.custom()
-                .setConnectionRequestTimeout(poolTimeout, TimeUnit.MILLISECONDS)
-                .setConnectionRequestTimeout(connectionTimeout, TimeUnit.MILLISECONDS)
+                .setConnectionRequestTimeout(Timeout.ofMilliseconds(poolTimeout))
+                .setConnectTimeout(Timeout.ofMilliseconds(connectionTimeout))
                 .build();
     }
 
     @Bean
     public HttpComponentsClientHttpRequestFactory requestFactory(CloseableHttpClient httpClient) {
-        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-        requestFactory.setHttpClient(httpClient);
-        return requestFactory;
+        return new HttpComponentsClientHttpRequestFactory(httpClient); // Упрощено создание
     }
 
     @Bean
-    public SSLConnectionSocketFactory cutstomSSLConnectionSocketFactory() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+    public SSLConnectionSocketFactory customSSLConnectionSocketFactory() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException { // Исправлено название метода
         TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
-        HostnameVerifier hostnameVerifier = (s, sslSession) -> true;
+        HostnameVerifier hostnameVerifier = NoopHostnameVerifier.INSTANCE;
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
         return new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
     }
 
     @Bean
-    public CloseableHttpClient httpClient(PoolingHttpClientConnectionManager manager, RequestConfig requestConfig) throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+    public CloseableHttpClient httpClient(PoolingHttpClientConnectionManager manager, RequestConfig requestConfig) {
         return HttpClients.custom()
                 .setConnectionManager(manager)
                 .disableRedirectHandling()
                 .setDefaultRequestConfig(requestConfig)
                 .disableAutomaticRetries()
-                .setConnectionManagerShared(true)
                 .build();
     }
 
@@ -161,6 +160,5 @@ public class RestTemplateConfig {
 
         };
     }
-
 
 }
