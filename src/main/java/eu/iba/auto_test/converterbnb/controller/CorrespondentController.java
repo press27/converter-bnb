@@ -20,7 +20,6 @@ public class CorrespondentController {
     }
 
     @GetMapping(produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?>  getCollection() {
         correspondentServiceDao.saveAll();
         return ResponseEntity.ok().build();

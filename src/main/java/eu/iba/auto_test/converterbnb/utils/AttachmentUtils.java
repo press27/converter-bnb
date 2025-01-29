@@ -56,4 +56,14 @@ public class AttachmentUtils {
         }
         return size;
     }
+
+    public static Long calculateSizeAllAttachmentsByDocument(Document document){
+        Long size = 0L;
+        if(document != null && document.getAttachmentDocuments() != null && !document.getAttachmentDocuments().isEmpty()) {
+            for (AttachmentDocument attachmentDocument : document.getAttachmentDocuments()) {
+                size = size + attachmentDocument.getSize();
+            }
+        }
+        return size;
+    }
 }

@@ -20,14 +20,12 @@ public class NomenclatureAffairController {
     }
 
     @GetMapping(produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> getCollection() {
         nomenclatureAffairServiceDao.saveAll();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/update", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> getCollectionUpdate() {
         nomenclatureAffairServiceDao.update();
         return ResponseEntity.ok().build();

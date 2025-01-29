@@ -179,10 +179,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
 
                         saveJson(document.getId().toString(), document);
+                        Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocument(document);
                         try {
                             uploadService.uploadDocument(document);
                         } catch (Exception e) {
-                            log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
+                            log.error("Process document with id: {}, size attachments: {} {}", document.getId(), size, e.getMessage(), e);
                         }
                         nextId = document.getId();
                     }
@@ -322,12 +323,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
                     }
 
-                    String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
-                    Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
+                    String strIds = documentList.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                    Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documentList);
                     try {
-                        uploadService.uploadListDocument(documents);
+                        uploadService.uploadListDocument(documentList);
                     } catch (Exception e) {
-                        log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
+                        log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                     }
                 }
                 documents = getDocs(nextId, documentCategoryConstant);
@@ -461,10 +462,11 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
 
                         saveJson(document.getId().toString(), document);
+                        Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocument(document);
                         try {
                             uploadService.uploadDocument(document);
                         } catch (Exception e) {
-                            log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
+                            log.error("Process document with id: {}, size attachments: {} {}", document.getId(), size, e.getMessage(), e);
                         }
                         nextId = document.getId();
                     }
@@ -610,12 +612,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         }
                     }
                     iterationCount++;
-                    String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
-                    Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
+                    String strIds = documentList.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                    Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documentList);
                     try {
-                        uploadService.uploadListDocument(documents);
+                        uploadService.uploadListDocument(documentList);
                     } catch (Exception e) {
-                        log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
+                        log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                     }
                 }
                 documents = getDocs(nextId, documentCategoryConstant);
@@ -753,12 +755,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         nextId = document.getId();
                     }
                 }
-                String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
-                Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
+                String strIds = documentList.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documentList);
                 try {
-                    uploadService.uploadListDocument(documents);
+                    uploadService.uploadListDocument(documentList);
                 } catch (Exception e) {
-                    log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
+                    log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                 }
             }
             documents = getDocs(nextId, documentCategoryConstants);
@@ -891,12 +893,12 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         nextId = document.getId();
                     }
                 }
-                String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
-                Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
+                String strIds = documentList.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+                Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documentList);
                 try {
-                    uploadService.uploadListDocument(documents);
+                    uploadService.uploadListDocument(documentList);
                 } catch (Exception e) {
-                    log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
+                    log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                 }
             }
             documents = getDocs(nextId, documentCategoryConstants);

@@ -169,13 +169,14 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
                 document.getEmployeesAccess().addAll(employees);
             }
 
+            Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocument(document);
             try {
+                saveJson(document.getId().toString(), document);
+                log.info("saved document id: {}", rkkId);
                 uploadService.uploadDocument(document);
             } catch (Exception e) {
-                log.error("Process document with id: {} {}", document.getId(), e.getMessage(), e);
+                log.error("Process document with id: {}, size attachments: {} {}", document.getId(), size, e.getMessage(), e);
             }
-            saveJson(document.getId().toString(), document);
-            log.info("saved document id: {}", rkkId);
         }
     }
 
@@ -306,12 +307,12 @@ public class DocumentServiceDaoV2Impl implements DocumentServiceDaoV2 {
             log.info("saved documents count: {}", count);
             log.info("type: {}", documentCategoryConstants);
 
-            String strIds = documents.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
-            Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documents);
+            String strIds = documentList.stream().map(Document::getId).map(String::valueOf).collect(Collectors.joining(", "));
+            Long size = AttachmentUtils.calculateSizeAllAttachmentsByDocuments(documentList);
             try {
-                uploadService.uploadListDocument(documents);
+                uploadService.uploadListDocument(documentList);
             } catch (Exception e) {
-                log.error("Process documents with ids: {} , package size {} {}", strIds, size,e.getMessage(), e);
+                log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size, e.getMessage(), e);
             }
         }
     }

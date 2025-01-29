@@ -26,28 +26,24 @@ public class DocumentController {
     }
 
     @GetMapping(value = "/save-all-by-one", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveAllByOne() {
         documentServiceDao.saveAllByOne();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-all-by-list", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveAllByList() {
         documentServiceDao.saveAllByList();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-range-by-one-test-v1", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveRangeByOneTestV1() {
         documentServiceDao.saveRangeByOneTestV1();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-range-by-list-test-v1", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveRangeByListTestV1() {
         documentServiceDao.saveRangeByListTestV1();
         return ResponseEntity.ok().build();
@@ -61,7 +57,6 @@ public class DocumentController {
     }
 
     @GetMapping(value = "/save-all-by-type/{categoryConstants}/next-id/{nextId}", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveAllByTypeAndNextId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
                                                     @PathVariable("nextId") Long nextId) {
         documentServiceDao.saveAllByTypeAndNextId(categoryConstants, nextId);
@@ -69,14 +64,12 @@ public class DocumentController {
     }
 
     @GetMapping(value = "/save-all-by-filter", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveAllByFilter(@Valid DocumentFilter filter) {
         documentServiceDao.saveAllByTypeAndNextId(filter.getDocumentCategoryConstants(), filter.getNextId());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-one-by-type/{categoryConstants}/rkk-id/{rkkId}", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
                                                     @PathVariable("rkkId") Long rkkId) {
         documentServiceDaoV2.saveOneByTypeAndId(categoryConstants, rkkId);
@@ -84,7 +77,6 @@ public class DocumentController {
     }
 
     @GetMapping(value = "/save-one-by-type/{categoryConstants}/rkk-ids/{rkkIds}", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
                                                    @PathVariable("rkkIds") List<Long> rkkIds) {
         documentServiceDaoV2.saveOneByTypeAndIds(categoryConstants, rkkIds);

@@ -21,7 +21,6 @@ public class DocumentLinkController {
     }
 
     @GetMapping(produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> getCollection() {
         documentLinkServiceDao.saveAll();
         return ResponseEntity.ok().build();
