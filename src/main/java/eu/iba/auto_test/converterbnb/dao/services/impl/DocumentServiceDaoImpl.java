@@ -183,6 +183,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         try {
                             uploadService.uploadDocument(document);
                         } catch (Exception e) {
+                            saveToFileErrorDocIds(document.getId().toString());
                             log.error("Process document with id: {}, size attachments: {} {}", document.getId(), size, e.getMessage(), e);
                         }
                         nextId = document.getId();
@@ -328,6 +329,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     try {
                         uploadService.uploadListDocument(documentList);
                     } catch (Exception e) {
+                        saveToFileErrorDocIds(strIds);
                         log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                     }
                 }
@@ -466,6 +468,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         try {
                             uploadService.uploadDocument(document);
                         } catch (Exception e) {
+                            saveToFileErrorDocIds(document.getId().toString());
                             log.error("Process document with id: {}, size attachments: {} {}", document.getId(), size, e.getMessage(), e);
                         }
                         nextId = document.getId();
@@ -617,6 +620,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     try {
                         uploadService.uploadListDocument(documentList);
                     } catch (Exception e) {
+                        saveToFileErrorDocIds(strIds);
                         log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                     }
                 }
@@ -760,6 +764,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 try {
                     uploadService.uploadListDocument(documentList);
                 } catch (Exception e) {
+                    saveToFileErrorDocIds(strIds);
                     log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                 }
             }
@@ -893,6 +898,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     try {
                         uploadService.uploadDocument(document);
                     } catch (Exception e) {
+                        saveToFileErrorDocIds(document.getId().toString());
                         log.error("Process document with id: {}, size attachments: {} {}", document.getId(), size, e.getMessage(), e);
                     }
                     nextId = document.getId();
@@ -1033,6 +1039,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 try {
                     uploadService.uploadListDocument(documentList);
                 } catch (Exception e) {
+                    saveToFileErrorDocIds(strIds);
                     log.error("Process documents with ids: {} , size attachments: {} {}", strIds, size,e.getMessage(), e);
                 }
             }
@@ -1123,16 +1130,15 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
         }
     }
 
-    public static void saveToFileErrorDocId(String id) {
+    public static void saveToFileErrorDocIds(String ids) {
         try {
             Path filePath = Paths.get("c:\\error-doc\\" + "error-file" + ".txt");
             if (!Files.exists(filePath.getParent())) {
                 Files.createDirectories(filePath.getParent());
             }
-            Files.writeString(filePath, id);
-            //ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
-            //Files.write(filePath, mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(request), java.nio.file.StandardOpenOption.APPEND, java.nio.file.StandardOpenOption.CREATE);
-        } catch (Exception ex){
+            String info = ids + ",";
+            Files.write(filePath, info.getBytes(), java.nio.file.StandardOpenOption.APPEND, java.nio.file.StandardOpenOption.CREATE);
+        } catch (Exception ex) {
             log.error(ex.getMessage(),ex);
         }
     }
