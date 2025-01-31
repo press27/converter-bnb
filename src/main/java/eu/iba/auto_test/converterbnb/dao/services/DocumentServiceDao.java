@@ -14,6 +14,8 @@ public interface DocumentServiceDao {
 
     void saveAllByType(DocumentCategoryConstants documentCategoryConstants);
 
+    void saveListByOneByType(DocumentCategoryConstants documentCategoryConstants);
+
     void saveAllByTypeAndNextId(DocumentCategoryConstants documentCategoryConstants, Long nextId);
 
 }

@@ -49,8 +49,13 @@ public class DocumentController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(value = "/save-list-by-one/by-type/{categoryConstants}", produces = "application/json")
+    public ResponseEntity<?> saveListByOneByType(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants) {
+        documentServiceDao.saveListByOneByType(categoryConstants);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/save-all-by-type/{categoryConstants}", produces = "application/json")
-    @Transactional(readOnly = true)
     public ResponseEntity<?> saveAllByType(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants) {
         documentServiceDao.saveAllByType(categoryConstants);
         return ResponseEntity.ok().build();

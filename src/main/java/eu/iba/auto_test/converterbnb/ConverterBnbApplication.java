@@ -4,6 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.retry.annotation.EnableRetry;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @SpringBootApplication
 @EnableRetry
 public class ConverterBnbApplication {
@@ -43,6 +47,25 @@ public class ConverterBnbApplication {
 //
 //        List<List<Document>> collection = splitIntoCollectionsBySize(documents);
 //        System.out.println("save");
+
+        /////////////////////////////
+//        Long id = 0L;
+//        for (int i = 0; i < 5; i++) {
+//            id = id + 1;
+//            try {
+//                Path filePath = Paths.get("c:\\error-doc\\" + "error-file" + ".txt");
+//                if (!Files.exists(filePath.getParent())) {
+//                    Files.createDirectories(filePath.getParent());
+//                }
+//                String str = Files.readString(filePath);
+//                Files.writeString(filePath, str + id);
+//                //ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+//                //Files.write(filePath, mapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(request), java.nio.file.StandardOpenOption.APPEND, java.nio.file.StandardOpenOption.CREATE);
+//            } catch (Exception ex) {
+//                //log.error(ex.getMessage(),ex);
+//            }
+//        }
+
 
         SpringApplication.run(ConverterBnbApplication.class, args);
     }
