@@ -20,13 +20,13 @@ public class NomenclatureAffairController {
     }
 
     @GetMapping(produces = "application/json")
-    public synchronized ResponseEntity<?> getCollection() {
+    public ResponseEntity<?> getCollection() {
         nomenclatureAffairServiceDao.saveAll();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/update", produces = "application/json")
-    public synchronized ResponseEntity<?> getCollectionUpdate() {
+    public ResponseEntity<?> getCollectionUpdate() {
         nomenclatureAffairServiceDao.update();
         return ResponseEntity.ok().build();
     }

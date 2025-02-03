@@ -20,7 +20,7 @@ public class CorrespondentController {
     }
 
     @GetMapping(produces = "application/json")
-    public synchronized ResponseEntity<?>  getCollection() {
+    public ResponseEntity<?>  getCollection() {
         correspondentServiceDao.saveAll();
         return ResponseEntity.ok().build();
     }

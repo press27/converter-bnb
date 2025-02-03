@@ -21,7 +21,7 @@ public class DocumentLinkController {
     }
 
     @GetMapping(produces = "application/json")
-    public synchronized ResponseEntity<?> getCollection() {
+    public ResponseEntity<?> getCollection() {
         documentLinkServiceDao.saveAll();
         return ResponseEntity.ok().build();
     }

@@ -26,81 +26,81 @@ public class DocumentController {
     }
 
     @GetMapping(value = "/save-all-by-one", produces = "application/json")
-    public synchronized ResponseEntity<?> saveAllByOne() {
+    public ResponseEntity<?> saveAllByOne() {
         documentServiceDao.saveAllByOne();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-all-by-list", produces = "application/json")
-    public synchronized ResponseEntity<?> saveAllByList() {
+    public ResponseEntity<?> saveAllByList() {
         documentServiceDao.saveAllByList();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-range-by-one-test-v1", produces = "application/json")
-    public synchronized ResponseEntity<?> saveRangeByOneTestV1() {
+    public ResponseEntity<?> saveRangeByOneTestV1() {
         documentServiceDao.saveRangeByOneTestV1();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-range-by-list-test-v1", produces = "application/json")
-    public synchronized ResponseEntity<?> saveRangeByListTestV1() {
+    public ResponseEntity<?> saveRangeByListTestV1() {
         documentServiceDao.saveRangeByListTestV1();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-list-appeal-by-one", produces = "application/json")
-    public synchronized ResponseEntity<?> saveListAppealByOne() {
+    public ResponseEntity<?> saveListAppealByOne() {
         documentServiceDao.saveListByOneByType(DocumentCategoryConstants.APPEAL);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-list-incoming-by-one", produces = "application/json")
-    public synchronized ResponseEntity<?> saveListIncomingByOne() {
+    public ResponseEntity<?> saveListIncomingByOne() {
         documentServiceDao.saveListByOneByType(DocumentCategoryConstants.INCOMING);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-list-intern-by-one", produces = "application/json")
-    public synchronized ResponseEntity<?> saveListInternByOne() {
+    public ResponseEntity<?> saveListInternByOne() {
         documentServiceDao.saveListByOneByType(DocumentCategoryConstants.INTERN);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-list-outgoing-by-one", produces = "application/json")
-    public synchronized ResponseEntity<?> saveListOutgoingByOne() {
+    public ResponseEntity<?> saveListOutgoingByOne() {
         documentServiceDao.saveListByOneByType(DocumentCategoryConstants.OUTGOING);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-all-by-type/{categoryConstants}", produces = "application/json")
-    public synchronized ResponseEntity<?> saveAllByType(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants) {
+    public ResponseEntity<?> saveAllByType(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants) {
         documentServiceDao.saveAllByType(categoryConstants);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-all-by-type/{categoryConstants}/next-id/{nextId}", produces = "application/json")
-    public synchronized ResponseEntity<?> saveAllByTypeAndNextId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
+    public ResponseEntity<?> saveAllByTypeAndNextId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
                                                     @PathVariable("nextId") Long nextId) {
         documentServiceDao.saveAllByTypeAndNextId(categoryConstants, nextId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-all-by-filter", produces = "application/json")
-    public synchronized ResponseEntity<?> saveAllByFilter(@Valid DocumentFilter filter) {
+    public ResponseEntity<?> saveAllByFilter(@Valid DocumentFilter filter) {
         documentServiceDao.saveAllByTypeAndNextId(filter.getDocumentCategoryConstants(), filter.getNextId());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-one-by-type/{categoryConstants}/rkk-id/{rkkId}", produces = "application/json")
-    public synchronized ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
+    public ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
                                                     @PathVariable("rkkId") Long rkkId) {
         documentServiceDaoV2.saveOneByTypeAndId(categoryConstants, rkkId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/save-one-by-type/{categoryConstants}/rkk-ids/{rkkIds}", produces = "application/json")
-    public synchronized ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
+    public ResponseEntity<?> saveOneByTypeAndRkkId(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants,
                                                    @PathVariable("rkkIds") List<Long> rkkIds) {
         documentServiceDaoV2.saveOneByTypeAndIds(categoryConstants, rkkIds);
         return ResponseEntity.ok().build();
