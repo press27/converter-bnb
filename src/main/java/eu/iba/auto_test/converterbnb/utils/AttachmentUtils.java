@@ -3,6 +3,7 @@ package eu.iba.auto_test.converterbnb.utils;
 import eu.iba.auto_test.converterbnb.dao.model.AttachmentDocument;
 import eu.iba.auto_test.converterbnb.dao.model.Document;
 
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +35,16 @@ public class AttachmentUtils {
         }
         return bytes;
     }
+
+    public static String hexToBase64(String data) {
+        try {
+            byte[] bytes = hexToByte(data);
+            return Base64.getEncoder().encodeToString(bytes);
+        } catch (Exception ex) {
+            return data;
+        }
+    }
+
 
     public static Set<AttachmentDocument> deleteAttachmentWithNullData(Set<AttachmentDocument> attachmentDocumentSet){
         Set<AttachmentDocument> attachmentDocuments = new HashSet<>();

@@ -158,6 +158,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                            attachmentDocument.setData(AttachmentUtils.hexToBase64(attachmentDocument.getData()));
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
                             List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
@@ -299,6 +300,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                             for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                                attachmentDocument.setData(AttachmentUtils.hexToBase64(attachmentDocument.getData()));
                                 SignatureData signatureData = new SignatureData();
                                 signatureData.setDocCardId(attachmentDocument.getDocCardId());
                                 List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
@@ -443,6 +445,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                            attachmentDocument.setData(AttachmentUtils.hexToBase64(attachmentDocument.getData()));
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
                             List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
@@ -590,6 +593,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                             generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                             for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                                attachmentDocument.setData(AttachmentUtils.hexToBase64(attachmentDocument.getData()));
                                 SignatureData signatureData = new SignatureData();
                                 signatureData.setDocCardId(attachmentDocument.getDocCardId());
                                 List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
@@ -735,6 +739,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                            attachmentDocument.setData(AttachmentUtils.hexToBase64(attachmentDocument.getData()));
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
                             List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
@@ -873,6 +878,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                     generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                     for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                        attachmentDocument.setData(AttachmentUtils.hexToBase64(attachmentDocument.getData()));
                         SignatureData signatureData = new SignatureData();
                         signatureData.setDocCardId(attachmentDocument.getDocCardId());
                         List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
@@ -1010,6 +1016,7 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                         generalInfoServiceDao.findAllAttachmentByTask(document, document.getId());
 
                         for (AttachmentDocument attachmentDocument : attachmentDocuments) {
+                            attachmentDocument.setData(AttachmentUtils.hexToBase64(attachmentDocument.getData()));
                             SignatureData signatureData = new SignatureData();
                             signatureData.setDocCardId(attachmentDocument.getDocCardId());
                             List<Signature> signatures = SignatureUtils.deleteSignatureWithNullData(signatureServiceDao.findAll(signatureData));
