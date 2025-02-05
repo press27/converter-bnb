@@ -73,6 +73,30 @@ public class DocumentController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(value = "/save-list-appeal-by-one/{nextId}", produces = "application/json")
+    public ResponseEntity<?> saveListAppealByOneAndNextId(@PathVariable("nextId") Long nextId) {
+        documentServiceDao.saveListByOneByTypeAndNextId(DocumentCategoryConstants.APPEAL, nextId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/save-list-incoming-by-one/{nextId}", produces = "application/json")
+    public ResponseEntity<?> saveListIncomingByOneAndNextId(@PathVariable("nextId") Long nextId) {
+        documentServiceDao.saveListByOneByTypeAndNextId(DocumentCategoryConstants.INCOMING, nextId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/save-list-intern-by-one/{nextId}", produces = "application/json")
+    public ResponseEntity<?> saveListInternByOneAndNextId(@PathVariable("nextId") Long nextId) {
+        documentServiceDao.saveListByOneByTypeAndNextId(DocumentCategoryConstants.INTERN, nextId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/save-list-outgoing-by-one/{nextId}", produces = "application/json")
+    public ResponseEntity<?> saveListOutgoingByOneAndNextId(@PathVariable("nextId") Long nextId) {
+        documentServiceDao.saveListByOneByTypeAndNextId(DocumentCategoryConstants.OUTGOING, nextId);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/save-all-by-type/{categoryConstants}", produces = "application/json")
     public ResponseEntity<?> saveAllByType(@PathVariable("categoryConstants") DocumentCategoryConstants categoryConstants) {
         documentServiceDao.saveAllByType(categoryConstants);
