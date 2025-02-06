@@ -22,7 +22,7 @@ public class NomenclatureAffairSqlFunction extends SqlFunction<NomenclatureAffai
             "FROM MBAnalit na " +
             "LEFT JOIN MBAnalit d on na.Podr = d.XRecID and d.Vid = 446 " +
             "LEFT JOIN MBAnalit sp on na.FileStoragePeriod = sp.XRecID and sp.Vid = 3309 " +
-            "WHERE na.Vid = 3162 AND na.DatOpen <= '2025-01-01 00:00:00.000' " +
+            "WHERE na.Vid = 3162 AND na.DatOpen < '2025-01-01 00:00:00.000' " +
             "AND na.XRecID > :nextId ORDER BY na.XRecID ";
 
     private final NomenclatureAffairRowMapper rowMapper;
