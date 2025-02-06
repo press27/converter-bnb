@@ -53,7 +53,7 @@ public class DocumentLinkServiceDaoImpl implements DocumentLinkServiceDao {
                 try {
                     uploadService.uploadDocumentLink(link);
                 } catch (Exception e) {
-                    logger.error("Process correspondent with id: {} {}", link.getId(), e.getMessage(), e);
+                    logger.error("Process document link with id: {} {}", link.getId(), e.getMessage(), e);
                 }
                 nextId = link.getId();
             }
