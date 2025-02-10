@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.iba.auto_test.converterbnb.controller.data.*;
 import eu.iba.auto_test.converterbnb.dao.model.*;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.*;
+import eu.iba.auto_test.converterbnb.dao.repository.sql.update.DocumentIncomingUpdateRecipientsSqlFunction;
+import eu.iba.auto_test.converterbnb.dao.repository.sql.update.NomenclatureAffairUpdateSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.*;
 import eu.iba.auto_test.converterbnb.utils.AttachmentUtils;
 import eu.iba.auto_test.converterbnb.utils.DocumentUtils;
@@ -1213,6 +1215,27 @@ public class DocumentServiceDaoImpl implements DocumentServiceDao {
                 }
             }
             documents = getDocs(nextId, documentCategoryConstants);
+        }
+        log.info("End time: {}", Instant.now());
+    }
+
+    @Override
+    public void saveDocumentCommentRecipient() {
+        log.info("Start time: {}", Instant.now());
+        Long nextId = 0L;
+        Map<String, Object> param = createParamSql(nextId);
+        List<Recipient> recipients = new DocumentIncomingUpdateRecipientsSqlFunction(ds, param).executeByNamedParam(param);
+        while (!recipients.isEmpty()){
+            for (Recipient recipient : recipients) {
+                try {
+                    uploadService.uploadRecipient(recipient);
+                } catch (Exception e) {
+                    log.error("Process document (recipient) with id: {} {}", recipient.getId(), e.getMessage(), e);
+                }
+                nextId = recipient.getId();
+            }
+            param = createParamSql(nextId);
+            recipients = new DocumentIncomingUpdateRecipientsSqlFunction(ds, param).executeByNamedParam(param);
         }
         log.info("End time: {}", Instant.now());
     }

@@ -276,4 +276,18 @@ public class DocumentController {
         }
     }
 
+    @GetMapping(value = "/save-comment-incoming-recipient", produces = "application/json")
+    public ResponseEntity<?> saveCommentIncomingRecipient() {
+        String key = "save-comment-incoming-recipient";
+        if (!acquireLock(key)) {
+            return ResponseEntity.status(429).body("Operation is already in progress");
+        }
+        try {
+            documentServiceDao.saveDocumentCommentRecipient();
+            return ResponseEntity.ok().build();
+        } finally {
+            releaseLock(key);
+        }
+    }
+
 }

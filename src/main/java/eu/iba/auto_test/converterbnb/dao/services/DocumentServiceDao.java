@@ -20,4 +20,6 @@ public interface DocumentServiceDao {
 
     void saveAllByTypeAndNextId(DocumentCategoryConstants documentCategoryConstants, Long nextId);
 
+    void saveDocumentCommentRecipient();
+
 }
