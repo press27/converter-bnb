@@ -19,6 +19,7 @@ public class DocumentLinkInRKKSqlFunction extends SqlFunction<DocumentLink> {
     private static final String SQL ="SELECT DISTINCT TOP(10) link.XRecID as id, link.RKK as docRkkLinkId " +
             "FROM MBAnalit link " +
             "WHERE link.RKK IS NOT NULL " +
+            "AND link.XRecID is not null " +
             "AND link.XRecID > :nextId ORDER BY link.XRecID ";
 
     private final DocumentLinkRKKRowMapper rowMapper;
