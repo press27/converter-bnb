@@ -13,7 +13,7 @@ public class RecipientRowMapper implements RowMapper<Recipient> {
         try {
             Recipient model = new Recipient();
             model.setId(rs.getLong("id"));
-            model.setRecipientName("recipientName");
+            model.setRecipientName(rs.getString("recipientName"));
             return model;
         } catch (Exception e) {
             throw new SQLException(e);
