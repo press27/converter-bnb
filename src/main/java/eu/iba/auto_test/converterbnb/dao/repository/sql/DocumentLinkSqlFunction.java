@@ -16,9 +16,10 @@ import java.util.Map;
 
 public class DocumentLinkSqlFunction extends SqlFunction<DocumentLink> {
 
-    private static final String SQL ="SELECT DISTINCT TOP(10) link.XRecID as id, link.RKK as docRkkId, link.RKK2 as docRkkLinkId," + //link.TipSvRKK as documentLinkTypeId " +
+    private static final String SQL ="SELECT DISTINCT TOP(20) link.XRecID as id, link.RKK as docRkkId, link.RKK2 as docRkkLinkId " +
             "FROM MBAnalit link " +
             "WHERE link.Vid = 3176 " +
+            "AND link.XRecID is not null AND link.RKK is not null AND link.RKK2 is not null " +
             "AND link.XRecID > :nextId ORDER BY link.XRecID ";
 
     private final DocumentLinkRowMapper rowMapper;
