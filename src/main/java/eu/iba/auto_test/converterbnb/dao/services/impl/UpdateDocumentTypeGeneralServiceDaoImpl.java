@@ -44,7 +44,7 @@ public class UpdateDocumentTypeGeneralServiceDaoImpl implements UpdateDocumentTy
             String strIds = documents.stream().map(UpdateDocumentType::getId).map(String::valueOf).collect(Collectors.joining(", "));
             try {
                 nextId = documents.get(documents.size() - 1).getId();
-                //uploadService.updateDocumentType(documents);
+                uploadService.updateDocumentType(documents);
             } catch (Exception e) {
                 saveToFileErrorDocIds(strIds);
                 log.error("Process documents with ids: {}, {}", strIds, e.getMessage(), e);
