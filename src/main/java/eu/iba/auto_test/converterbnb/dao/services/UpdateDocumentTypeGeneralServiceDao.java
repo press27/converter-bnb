@@ -6,4 +6,6 @@ public interface UpdateDocumentTypeGeneralServiceDao {
 
     void saveAllByType(DocumentCategoryConstants documentCategoryConstants, Integer count);
 
+    //    void saveByType(DocumentCategoryConstants documentCategoryConstants);
+
 }

@@ -77,13 +77,27 @@ public class UploadService {
     }
 
     @Retryable(maxAttempts = 20, backoff = @Backoff(delay = 5000))
-    public void updateDocumentType(List<UpdateDocumentType> documents) {
-        String url = host + "/api/migration/update-document-type";
+    public void updateDocumentTypeList(List<UpdateDocumentType> documents) {
+        String url = host + "/api/migration/update-document-type-list";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(getToken());
         HttpEntity<List<UpdateDocumentType>> entity = new HttpEntity<>(documents, headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("status: " + response.getStatusCode() + " " + response.getBody());
+        }
+    }
+
+    @Retryable(maxAttempts = 20, backoff = @Backoff(delay = 5000))
+    public void updateDocumentType(UpdateDocumentType document) {
+        String url = host + "/api/migration/update-document-type";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(getToken());
+        HttpEntity<UpdateDocumentType> entity = new HttpEntity<>(document, headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new RuntimeException("status: " + response.getStatusCode() + " " + response.getBody());

@@ -1,7 +1,9 @@
 package eu.iba.auto_test.converterbnb.dao.services.impl;
 
+import eu.iba.auto_test.converterbnb.dao.model.Correspondent;
 import eu.iba.auto_test.converterbnb.dao.model.DocumentCategoryConstants;
 import eu.iba.auto_test.converterbnb.dao.model.additional.UpdateDocumentType;
+import eu.iba.auto_test.converterbnb.dao.repository.sql.CorrespondentSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.repository.sql.UpdateDocumentTypeGeneralSqlFunction;
 import eu.iba.auto_test.converterbnb.dao.services.UpdateDocumentTypeGeneralServiceDao;
 import org.slf4j.Logger;
@@ -44,7 +46,7 @@ public class UpdateDocumentTypeGeneralServiceDaoImpl implements UpdateDocumentTy
             String strIds = documents.stream().map(UpdateDocumentType::getId).map(String::valueOf).collect(Collectors.joining(", "));
             try {
                 nextId = documents.get(documents.size() - 1).getId();
-                uploadService.updateDocumentType(documents);
+                uploadService.updateDocumentTypeList(documents);
             } catch (Exception e) {
                 saveToFileErrorDocIds(strIds);
                 log.error("Process documents with ids: {}, {}", strIds, e.getMessage(), e);
@@ -53,6 +55,27 @@ public class UpdateDocumentTypeGeneralServiceDaoImpl implements UpdateDocumentTy
         }
         log.info("End time: {}", Instant.now());
     }
+
+//    @Override
+//    public void saveByType(DocumentCategoryConstants documentCategoryConstants) {
+//        log.info("Start time: {}", Instant.now());
+//        Long nextId = 0L;
+//        Map<String, Object> param = createParamSql(nextId);
+//        List<Correspondent> correspondents = new CorrespondentSqlFunction(ds, param).executeByNamedParam(param);
+//        while (!correspondents.isEmpty()){
+//            for (Correspondent correspondent : correspondents) {
+//                try {
+//                    uploadService.uploadCorrespondent(correspondent);
+//                } catch (Exception e) {
+//                    //logger.error("Process correspondent with id: {} {}", correspondent.getId(), e.getMessage(), e);
+//                }
+//                nextId = correspondent.getId();
+//            }
+//            param = createParamSql(nextId);
+//            correspondents = new CorrespondentSqlFunction(ds, param).executeByNamedParam(param);
+//        }
+//        log.info("End time: {}", Instant.now());
+//    }
 
     private List<UpdateDocumentType> getDocs(DocumentCategoryConstants documentCategoryConstants, Long nextId, Integer count){
         Map<String, Object> param = createParamSql(documentCategoryConstants, nextId, count);
@@ -68,6 +91,12 @@ public class UpdateDocumentTypeGeneralServiceDaoImpl implements UpdateDocumentTy
         param.put("nextId", nextId);
         return param;
     }
+//
+//    private Map<String, Object> createParamSql(Long nextId) {
+//        Map<String, Object> param = new HashMap<>();
+//        param.put("nextId", nextId);
+//        return param;
+//    }
 
     private String getTypeDoc(DocumentCategoryConstants documentCategoryConstants){
         if(documentCategoryConstants == DocumentCategoryConstants.INCOMING){
