@@ -37,13 +37,16 @@ public class UpdateCitizenTypeServiceDaoImpl implements UpdateCitizenTypeService
     public void saveAll(Integer count) {
         log.info("Start time: {}", Instant.now());
         Long nextId = 0L;
+        int index = 0;
         List<UpdateDocumentType> documents = getDocs(nextId, count);
         while (!documents.isEmpty()) {
             documents = getUnique(documents);
             String strIds = documents.stream().map(UpdateDocumentType::getId).map(String::valueOf).collect(Collectors.joining(", "));
             try {
                 nextId = documents.get(documents.size() - 1).getId();
+                index = index + documents.size() - 1;
                 uploadService.updateDocumentTypeList(documents);
+                log.info("Processed APPEAL: {}", index);
             } catch (Exception e) {
                 saveToFileErrorDocIds(strIds);
                 log.error("Process documents with ids: {}, {}", strIds, e.getMessage(), e);
